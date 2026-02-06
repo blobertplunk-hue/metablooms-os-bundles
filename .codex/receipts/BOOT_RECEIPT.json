@@ -1,0 +1,44 @@
+{
+  "receipt_type": "BOOT",
+  "boot_version": "v1",
+  "repository": "metablooms-os-bundles",
+  "boot_file": ".codex/kernel/BOOT.md",
+  "boot_file_sha256": "9f605e667ff19d3c47b6bdd7e563f2e7ae05b67701f8f3f8d5e3de2dceb0783c",
+  "governance_frameworks": [
+    "Kernel Law",
+    "DeltaGate",
+    "SEE",
+    "RRP",
+    "ECL",
+    "CDR"
+  ],
+  "canonical_paths": {
+    "kernel": ".codex/kernel/",
+    "receipts": ".codex/receipts/",
+    "artifacts": ".codex/artifacts/",
+    "schemas": ".codex/schemas/",
+    "policies": ".codex/policies/",
+    "research": ".codex/research/",
+    "bundles": "os_bundles/"
+  },
+  "bundle_categories": [
+    "os_bundle",
+    "os_bundle_part",
+    "chat_export",
+    "chat_export_part",
+    "driver",
+    "utility",
+    "educational",
+    "non_project",
+    "ship_bundle",
+    "recovery",
+    "uploader",
+    "misc_archive"
+  ],
+  "lfs_gaps_at_boot": [
+    "*.part* not tracked",
+    "*.rtf not tracked"
+  ],
+  "created_utc": "2026-02-06T00:00:00Z",
+  "status": "EMITTED"
+}
