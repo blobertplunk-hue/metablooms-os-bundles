@@ -67,6 +67,41 @@ CDR has Seven Pillars:
 
 Full specification: `.codex/policies/CDR_v2.md`
 
+## Internal Bundle Architecture
+
+OS bundles are not opaque blobs. Later bundles contain a learning
+pipeline with internal structure:
+
+```
+Metablooms_OS/
+├── tools/
+│   ├── audit/
+│   │   ├── fs_root_guard.py        # Pre-extraction write verification
+│   │   └── rca_auto_trigger.py     # Auto-trigger RCA on failure events
+│   └── rca/
+│       ├── run_rca.py              # Root cause analysis engine
+│       └── emit_learning_from_rca.py # Emits structured learning events
+├── events/
+│   └── LEARNING_EVENTS.ndjson      # Queryable event log
+├── audit/
+│   └── LEARNING_PIPELINE_RECEIPT.json
+└── ... (OS content)
+```
+
+The learning pipeline implements a deterministic loop:
+failure → event → RCA → root cause → structural fix → learning event.
+
+Learning events are first-class evidence for the SEE Engine
+(source type: `BUNDLE_INTERNAL_EVENTS`). They provide stronger
+lineage evidence than filename inference — a bundle declaring
+"I fixed what was wrong in my predecessor" via a ratified corrective
+action event is direct proof of supersession.
+
+Bundles predating the learning pipeline will not have this structure.
+
+Full specification: `.codex/policies/LEARNING_PIPELINE_v1.md`
+Event schema: `.codex/schemas/LEARNING_EVENT.schema.json`
+
 ## Bundle Classification Taxonomy
 
 The agent must classify every file in `os_bundles/` using these categories:

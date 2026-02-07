@@ -1,0 +1,512 @@
+{
+  "lineage_version": "1.0",
+  "generated_utc": "2026-02-07T00:00:00Z",
+  "chains": [
+    {
+      "chain_id": "PASS3_INCREMENTAL",
+      "description": "Date-prefixed Jan 17 incremental PLUS chain. Each bundle extends the previous by appending a new PLUS segment, building up from PASS3 BYTE_TRUTH through PORTABILITY and FILE_HANDLING.",
+      "bundles": [
+        {
+          "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Initial PASS3 BYTE_TRUTH V2 with PHASE1 OS BASELINE V1. Origin of the incremental chain."
+        },
+        {
+          "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_DELTA_SEE_UBIQUITY_V1_FULL.zip",
+          "order": 2,
+          "relationship": "EXTENDED",
+          "parent_filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1.zip",
+          "delta_description": "Extends parent with DELTA_SEE_UBIQUITY_V1_FULL — adds SEE ubiquity layer."
+        },
+        {
+          "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0.zip",
+          "order": 3,
+          "relationship": "EXTENDED",
+          "parent_filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1.zip",
+          "delta_description": "Extends parent with SEE_LOOP_P0 — adds SEE loop at phase 0. Parallel branch from same parent as file 2 (DELTA_SEE_UBIQUITY)."
+        },
+        {
+          "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1.zip",
+          "order": 4,
+          "relationship": "EXTENDED",
+          "parent_filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0.zip",
+          "delta_description": "Extends parent with SECURITY_AXIS_P0 and RESOURCE_CONCURRENCY_SCHEMA_V1."
+        },
+        {
+          "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1_PLUS_PORTABILITY_CONFIG_DEPENDENCY_V1.zip",
+          "order": 5,
+          "relationship": "EXTENDED",
+          "parent_filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1.zip",
+          "delta_description": "Extends parent with PORTABILITY_CONFIG_DEPENDENCY_V1."
+        },
+        {
+          "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1_PLUS_PORTABILITY_CONFIG_DEPENDENCY_V1_PLUS_FILE_HANDLING_P0_V1.zip",
+          "order": 6,
+          "relationship": "EXTENDED",
+          "parent_filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1_PLUS_PORTABILITY_CONFIG_DEPENDENCY_V1.zip",
+          "delta_description": "Extends parent with FILE_HANDLING_P0_V1. Terminal node of the incremental chain."
+        }
+      ]
+    },
+    {
+      "chain_id": "PASS3_EXTENSIONS",
+      "description": "Standalone PASS3 extensions without date prefix. These branch from the PASS3 lineage but lack explicit PLUS-chain lineage to the date-prefixed files. Relationship to PASS3_INCREMENTAL chain is inferred from shared PASS3 root.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_PASS3_PLUS_FILE_HANDLING_GATE_P0_V1.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "PASS3 with FILE_HANDLING_GATE_P0_V1. Likely derived from a PASS3 base (inferred), but no explicit parent in filename. Treated as chain origin."
+        },
+        {
+          "filename": "MetaBlooms_OS_PASS3_PLUS_PHASEC3_MATERIALIZED_V1.zip",
+          "order": 2,
+          "relationship": "EXTENDED",
+          "parent_filename": "MetaBlooms_OS_PASS3_PLUS_FILE_HANDLING_GATE_P0_V1.zip",
+          "delta_description": "PASS3 with PHASEC3_MATERIALIZED_V1. Order relative to siblings is inferred (not certain); grouped here as PASS3 extensions."
+        },
+        {
+          "filename": "MetaBlooms_OS_PASS3_PLUS_SHIPPING_PROCEDURE_V1.zip",
+          "order": 3,
+          "relationship": "EXTENDED",
+          "parent_filename": "MetaBlooms_OS_PASS3_PLUS_PHASEC3_MATERIALIZED_V1.zip",
+          "delta_description": "PASS3 with SHIPPING_PROCEDURE_V1. Possibly a peer rather than descendant of order 2; exact parent is inferred."
+        }
+      ]
+    },
+    {
+      "chain_id": "WHOLEOS_GOVERNANCE",
+      "description": "WHOLEOS governance chain from Jan 17-18, focused on SEE/MMD/ECL invariants and auto-audit.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_PLUS_AUTO_MMD_CONTRACT_AUDIT_V1_2026-01-17_PLUS_DELTA_SEE_MMD_ECL_2026-01-18_P1.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "WHOLEOS with AUTO_MMD_CONTRACT_AUDIT from Jan 17, extended with DELTA_SEE_MMD_ECL on Jan 18 at P1. Origin of governance chain (dated earlier: Jan 17)."
+        },
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_PLUS_SEE_MMD_ECL_INVARIANTS_V1_2026-01-18.zip",
+          "order": 2,
+          "relationship": "EXTENDED",
+          "parent_filename": "MetaBlooms_OS_WHOLEOS_PLUS_AUTO_MMD_CONTRACT_AUDIT_V1_2026-01-17_PLUS_DELTA_SEE_MMD_ECL_2026-01-18_P1.zip",
+          "delta_description": "Consolidates SEE/MMD/ECL invariants into V1. Extends the audit+delta bundle. Relationship inferred from date progression and shared WHOLEOS+SEE_MMD_ECL naming."
+        }
+      ]
+    },
+    {
+      "chain_id": "WHOLEOS_CANONICAL",
+      "description": "WHOLEOS canonical chain from Jan 21. Starts with PAYLOAD_APPLIED, then fixes and wiring.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_PAYLOAD_APPLIED_ACCEPT_OK.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "WHOLEOS CANONICAL with payload applied and acceptance confirmed. Origin of the Jan 21 canonical chain."
+        },
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_RUNTIMEENTRYPOINT_FIX.zip",
+          "order": 2,
+          "relationship": "PATCHED",
+          "parent_filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_PAYLOAD_APPLIED_ACCEPT_OK.zip",
+          "delta_description": "Fixes runtime entry point issue. Supersedes parent."
+        },
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED.zip",
+          "order": 3,
+          "relationship": "REMEDIATED",
+          "parent_filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_RUNTIMEENTRYPOINT_FIX.zip",
+          "delta_description": "P0-level fix remediated. Supersedes parent."
+        },
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED__WIRED_2026-01-21.zip",
+          "order": 4,
+          "relationship": "WIRED",
+          "parent_filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED.zip",
+          "delta_description": "Wired version of the remediated P0 fix. Extends parent with integration wiring."
+        }
+      ]
+    },
+    {
+      "chain_id": "WHOLEOS_RUNTIME_GOVERNANCE",
+      "description": "WHOLEOS runtime full governance chain, V2 to V3, Jan 21.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_RUNTIME_FULL_GOVERNANCE_V2_CANONICAL_20260121.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "WHOLEOS runtime full governance V2 canonical. Origin of governance runtime chain."
+        },
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_RUNTIME_FULL_GOVERNANCE_V3_CANONICAL_20260121.zip",
+          "order": 2,
+          "relationship": "REBUILT",
+          "parent_filename": "MetaBlooms_OS_WHOLEOS_RUNTIME_FULL_GOVERNANCE_V2_CANONICAL_20260121.zip",
+          "delta_description": "Rebuilt as V3 of runtime governance. Supersedes V2."
+        }
+      ]
+    },
+    {
+      "chain_id": "WHOLEOS_BASELINE_REBUILD",
+      "description": "WHOLEOS BASELINE v1.2 rebuild chain, from initial rebuild through SHA fix repair.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "WHOLEOS BASELINE v1.2 rebuilt with P0 SEE/MMD/ECL and BOOT_OK confirmation. Origin of baseline rebuild chain."
+        },
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2.zip",
+          "order": 2,
+          "relationship": "PATCHED",
+          "parent_filename": "MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK.zip",
+          "delta_description": "Repaired with SHA fix v2. Supersedes parent. NOTE: A duplicate exists as 'MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2 (1).zip'."
+        }
+      ]
+    },
+    {
+      "chain_id": "CANONICAL_P0_P1_MASTERY",
+      "description": "CANONICAL P0/P1 mastery chain. Progresses from initial mastery content through patching, integration, and full wiring.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "CANONICAL P0/P1 mastery V1 content. Origin of mastery chain."
+        },
+        {
+          "filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT__PATCHED_20260122.zip",
+          "order": 2,
+          "relationship": "PATCHED",
+          "parent_filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT.zip",
+          "delta_description": "Patched on Jan 22. Supersedes parent."
+        },
+        {
+          "filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_INTEGRATED.zip",
+          "order": 3,
+          "relationship": "INTEGRATED",
+          "parent_filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT__PATCHED_20260122.zip",
+          "delta_description": "Mastery components integrated. Extends patched parent."
+        },
+        {
+          "filename": "MetaBlooms_OS_CANONICAL_P0_P1_FULLY_WIRED.zip",
+          "order": 4,
+          "relationship": "WIRED",
+          "parent_filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_INTEGRATED.zip",
+          "delta_description": "Fully wired version of P0/P1 canonical. All components connected."
+        }
+      ]
+    },
+    {
+      "chain_id": "CHASSISGATE",
+      "description": "CHASSISGATE chain from Jan 27. Initial reissue followed by BTS fix.",
+      "bundles": [
+        {
+          "filename": "Metablooms_OS_FULL_P0_ENFORCED_CHASSISGATE_REISSUE_20260127T120832Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Full P0 CHASSISGATE reissue. Origin of CHASSISGATE chain."
+        },
+        {
+          "filename": "Metablooms_OS_FULL_P0_ENFORCED_CHASSISGATE_BTSFIX_20260127T123419Z.zip",
+          "order": 2,
+          "relationship": "PATCHED",
+          "parent_filename": "Metablooms_OS_FULL_P0_ENFORCED_CHASSISGATE_REISSUE_20260127T120832Z.zip",
+          "delta_description": "BTS fix applied to CHASSISGATE. Supersedes parent."
+        }
+      ]
+    },
+    {
+      "chain_id": "EXECUTION_ENFORCED",
+      "description": "EXECUTION_ENFORCED chain from Jan 27. Initial enforcement then reshipped.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_FULL_P0_EXECUTION_ENFORCED_20260127T134057Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Full P0 execution enforcement. Origin of execution chain."
+        },
+        {
+          "filename": "MetaBlooms_OS_FULL_P0_EXECUTION_ENFORCED_RESHIPPED_20260127T134913Z.zip",
+          "order": 2,
+          "relationship": "REISSUED",
+          "parent_filename": "MetaBlooms_OS_FULL_P0_EXECUTION_ENFORCED_20260127T134057Z.zip",
+          "delta_description": "Reshipped version of execution enforced bundle. Supersedes parent."
+        }
+      ]
+    },
+    {
+      "chain_id": "JAN27_RAPID_ITERATION",
+      "description": "Rapid-fire single-shot bundles from Jan 27 afternoon (14:24-15:09 UTC). Time-ordered sequence of fixes, patches, and enablements. Each likely supersedes the previous based on timestamp progression, though explicit parent-child is inferred.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_FIXED_20260127T142423Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Fixed bundle. Origin of rapid iteration sequence (inferred from earliest timestamp)."
+        },
+        {
+          "filename": "MetaBlooms_OS_EXECUTED_20260127T142924Z.zip",
+          "order": 2,
+          "relationship": "REBUILT",
+          "parent_filename": "MetaBlooms_OS_FIXED_20260127T142423Z.zip",
+          "delta_description": "Executed/verified build. Follows FIXED by ~5 minutes. Parent relationship inferred from timestamp."
+        },
+        {
+          "filename": "MetaBlooms_OS_SHIP_GATED_20260127T143236Z.zip",
+          "order": 3,
+          "relationship": "EXTENDED",
+          "parent_filename": "MetaBlooms_OS_EXECUTED_20260127T142924Z.zip",
+          "delta_description": "Ship-gated release candidate. Parent inferred from timestamp sequence."
+        },
+        {
+          "filename": "MetaBlooms_OS_PATCHED_UX_P0_20260127T143734Z.zip",
+          "order": 4,
+          "relationship": "PATCHED",
+          "parent_filename": "MetaBlooms_OS_SHIP_GATED_20260127T143236Z.zip",
+          "delta_description": "UX P0 patch applied. Supersedes ship-gated parent. Parent inferred."
+        },
+        {
+          "filename": "MetaBlooms_OS_RCA_ENABLED_20260127T144654Z.zip",
+          "order": 5,
+          "relationship": "EXTENDED",
+          "parent_filename": "MetaBlooms_OS_PATCHED_UX_P0_20260127T143734Z.zip",
+          "delta_description": "Root cause analysis instrumentation enabled. Parent inferred from timestamp."
+        },
+        {
+          "filename": "MetaBlooms_OS_TRACE_DRIFT_ENABLED_20260127T144920Z.zip",
+          "order": 6,
+          "relationship": "EXTENDED",
+          "parent_filename": "MetaBlooms_OS_RCA_ENABLED_20260127T144654Z.zip",
+          "delta_description": "Trace drift detection enabled. Parent inferred from timestamp (~2 min after RCA)."
+        },
+        {
+          "filename": "MetaBlooms_OS_FULL_UIUX_ENFORCED_20260127T150901Z.zip",
+          "order": 7,
+          "relationship": "EXTENDED",
+          "parent_filename": "MetaBlooms_OS_TRACE_DRIFT_ENABLED_20260127T144920Z.zip",
+          "delta_description": "Full UI/UX enforcement applied. Terminal node of rapid iteration chain. Parent inferred."
+        }
+      ]
+    },
+    {
+      "chain_id": "JAN27_WORKING_SNAPSHOT",
+      "description": "Working OS and canonical snapshot pair from Jan 27 evening. Same timestamp suggests these are parallel exports of the same state.",
+      "bundles": [
+        {
+          "filename": "Metablooms_OS_working_os_20260127T190025Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Working OS snapshot. Same timestamp as canonical_snapshot; this is the raw working copy."
+        },
+        {
+          "filename": "Metablooms_OS_canonical_snapshot_20260127T190025Z.zip",
+          "order": 2,
+          "relationship": "FROZEN",
+          "parent_filename": "Metablooms_OS_working_os_20260127T190025Z.zip",
+          "delta_description": "Canonical snapshot frozen from the working OS at the same timestamp. Relationship inferred from identical timestamps and naming."
+        }
+      ]
+    },
+    {
+      "chain_id": "EXPORT_CHAIN",
+      "description": "Export chain from Jan 28-29. Starts with chat deltas export, progresses through plain exports to exports with chat index.",
+      "bundles": [
+        {
+          "filename": "Metablooms_OS_WITH_CHAT_DELTAS_20260128T140143Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "OS export bundled with chat deltas. Origin of export chain."
+        },
+        {
+          "filename": "Metablooms_OS_EXPORT_20260128T220638Z.zip",
+          "order": 2,
+          "relationship": "REBUILT",
+          "parent_filename": "Metablooms_OS_WITH_CHAT_DELTAS_20260128T140143Z.zip",
+          "delta_description": "Clean OS export (Jan 28 evening). Rebuilt from chat-deltas version. Parent inferred from date."
+        },
+        {
+          "filename": "Metablooms_OS_EXPORT_20260129T060025Z.zip",
+          "order": 3,
+          "relationship": "REBUILT",
+          "parent_filename": "Metablooms_OS_EXPORT_20260128T220638Z.zip",
+          "delta_description": "Updated OS export (Jan 29 morning). Supersedes previous export."
+        },
+        {
+          "filename": "Metablooms_OS_EXPORT_WITH_CHAT_INDEX_20260129T060156Z.zip",
+          "order": 4,
+          "relationship": "EXTENDED",
+          "parent_filename": "Metablooms_OS_EXPORT_20260129T060025Z.zip",
+          "delta_description": "Export extended with chat index. Produced ~90 seconds after the plain export. NOTE: A duplicate exists as 'Metablooms_OS_EXPORT_WITH_CHAT_INDEX_20260129T060156Z (1).zip'."
+        }
+      ]
+    },
+    {
+      "chain_id": "FROZEN_EXPORTS",
+      "description": "FROZEN_FULL_EXPORT progression from unversioned through V3.",
+      "bundles": [
+        {
+          "filename": "Metablooms_OS_FROZEN_FULL_EXPORT.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Initial frozen full export. Origin of frozen chain."
+        },
+        {
+          "filename": "Metablooms_OS_FROZEN_FULL_EXPORT_V2_WITH_PROJECTS.zip",
+          "order": 2,
+          "relationship": "EXTENDED",
+          "parent_filename": "Metablooms_OS_FROZEN_FULL_EXPORT.zip",
+          "delta_description": "V2 frozen export extended with project files."
+        },
+        {
+          "filename": "Metablooms_OS_FROZEN_FULL_EXPORT_V3.zip",
+          "order": 3,
+          "relationship": "REBUILT",
+          "parent_filename": "Metablooms_OS_FROZEN_FULL_EXPORT_V2_WITH_PROJECTS.zip",
+          "delta_description": "V3 frozen export. Supersedes V2."
+        }
+      ]
+    },
+    {
+      "chain_id": "VALIDATED_EXPORT",
+      "description": "VALIDATED_EXPORT bundle with its multi-part segments. The .part files are segments of the same archive, not separate bundles.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_VALIDATED_EXPORT.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Validated export bundle. The segmented parts (.part1, .part2) are split pieces of this same archive for upload purposes."
+        }
+      ]
+    },
+    {
+      "chain_id": "WHOLEOS_STANDALONE",
+      "description": "Standalone WHOLEOS bundles that do not clearly chain to other WHOLEOS entries.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_WHOLEOS_CBPPP_BOOT_HARDENED_20260121.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "WHOLEOS with CBPPP boot hardening. Standalone governance hardening bundle, Jan 21."
+        },
+        {
+          "filename": "MetaBlooms_OS_V1_WHOLEOS_REPAIRED.zip",
+          "order": 2,
+          "relationship": "PATCHED",
+          "parent_filename": "MetaBlooms_OS_WHOLEOS_CBPPP_BOOT_HARDENED_20260121.zip",
+          "delta_description": "V1 WHOLEOS repaired. Exact parent uncertain; grouped here as the other standalone WHOLEOS. Parent relationship is inferred."
+        }
+      ]
+    },
+    {
+      "chain_id": "COMPLETE_BUNDLE",
+      "description": "Single complete OS bundle snapshot from Jan 24.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_COMPLETE_OS_BUNDLE_20260124T234508Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Complete OS bundle snapshot. Standalone, no known descendants."
+        }
+      ]
+    },
+    {
+      "chain_id": "REHYDRATED",
+      "description": "Rehydrated canonical P0 bundle from Jan 24.",
+      "bundles": [
+        {
+          "filename": "Metablooms_OS_CANONICAL_P0_REHYDRATED_CLEAN_MB-BOOT-20260124T191416Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Canonical P0 rehydrated clean build with MB-BOOT. Standalone bundle."
+        }
+      ]
+    },
+    {
+      "chain_id": "FULL_CANONICAL_REBUILT",
+      "description": "Full canonical rebuild from Jan 28.",
+      "bundles": [
+        {
+          "filename": "MetaBlooms_OS_FULL_CANONICAL_REBUILT_20260128T164100Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "Full canonical rebuilt bundle. Standalone rebuild snapshot."
+        }
+      ]
+    },
+    {
+      "chain_id": "LTS",
+      "description": "Long-term support release from Jan 29.",
+      "bundles": [
+        {
+          "filename": "Metablooms_OS_v1.3_LTS_FULLFIX_20260129T064552Z.zip",
+          "order": 1,
+          "relationship": "ORIGIN",
+          "parent_filename": null,
+          "delta_description": "v1.3 LTS with full fix applied. Standalone long-term support release."
+        }
+      ]
+    }
+  ],
+  "orphans": [
+    "MetaBlooms_OS_VALIDATED_EXPORT.zip.part1",
+    "MetaBlooms_OS_VALIDATED_EXPORT.zip.part2",
+    "MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2 (1).zip",
+    "Metablooms_OS_EXPORT_WITH_CHAT_INDEX_20260129T060156Z (1).zip",
+    "3 ELAR Resource_ Annotated Example of the Teacher Model Prompt - Poetry_.zip",
+    "591.44-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+    "Archive 2.zip",
+    "CHAT7_FULL_MNT_DATA_EXPORT.part001",
+    "CHAT7_FULL_MNT_DATA_EXPORT.part002",
+    "CHAT7_FULL_MNT_DATA_EXPORT.part003",
+    "CHAT7_FULL_MNT_DATA_EXPORT.part004",
+    "CHAT7_FULL_MNT_DATA_EXPORT.part005",
+    "CHAT7_FULL_MNT_DATA_EXPORT.part006",
+    "CHAT7_FULL_MNT_DATA_EXPORT.part007",
+    "CHAT7_FULL_MNT_DATA_EXPORT.part008",
+    "CHAT_DELTA_EVIDENCE_PART2.zip",
+    "GitHubDesktopSetup-x64.exe",
+    "Lesson plans 1_19-1_23.rtf",
+    "MB_CHAT3_MNT_DATA_PART1_20260121T185046Z.zip",
+    "MB_CHAT3_MNT_DATA_PART2_20260121T185046Z.zip",
+    "MB_CHAT3_MNT_DATA_PART2_20260121T185046Z (1).zip",
+    "MB_CHAT6_MNTDATA_CHUNK002_20260121.zip",
+    "MB_CHAT6_MNTDATA_CHUNK004_20260121.zip",
+    "MB_CHAT6_MNTDATA_PART02_20260121.zip",
+    "MB_SHIP_BUNDLE_20260122.zip",
+    "MF642CMFDriverV6405W64.exe",
+    "MetaBlooms_GitHubUploader_RunPack_20260124T224700Z_PATCHED (2).zip",
+    "MetaBlooms_Jan19-23_NON_OS_CONTENT.zip",
+    "MetaBlooms_NON_PROJECT_FILES_PART1.zip",
+    "MetaBlooms_NON_PROJECT_FILES_PART2.zip",
+    "MetaBlooms_NON_PROJECT_FILES_PART3.zip",
+    "MetaBlooms_NON_PROJECT_FILES_PART4.zip",
+    "NVIDIA_app_v11.0.5.420.exe",
+    "chat_4_RETRY_full_mnt_data_20260121_185205.zip.part001",
+    "chat_4_RETRY_full_mnt_data_20260121_185205.zip.part002",
+    "drive-download-20260104T232014Z-1-001.zip",
+    "git_uploader_bundle_reupload_20260127T145213Z (2).zip",
+    "gpg4win-5.0.0.exe",
+    "payload_recovery_EXPECTED_FIRST_boot_surface.zip",
+    "winmfscanutilityv12102.exe"
+  ]
+}

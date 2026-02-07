@@ -272,6 +272,50 @@ Every piece of evidence gathered by SEE must be tagged with exactly one source t
 }
 ```
 
+### 1.10 BUNDLE_INTERNAL_EVENTS -- Learning and Failure Events from Inside Bundles
+
+**What it covers:** Structured events emitted by the OS learning pipeline inside bundles — failure events (`EVT_FAIL_*`), learning events (`EVT_LEARNING_*`), RCA reports, guard installation records, and corrective action attestations.
+
+**What this changes:** OS bundles are not opaque blobs. They contain internal architecture: `tools/audit/`, `tools/rca/`, `events/`, and `audit/` directories. The learning pipeline inside the bundle emits queryable NDJSON events that record what failed, why, what changed, and whether the change prevented recurrence.
+
+**How it works:**
+- Extract or read `events/LEARNING_EVENTS.ndjson` from inside the bundle
+- Parse each line as a JSON event per `LEARNING_EVENT.schema.json`
+- Query events by type: `EVT_FAIL_*` for failure history, `EVT_LEARNING_*` for structural changes
+- Cross-reference `payload.supersedes_bundle` to establish lineage evidence
+
+**Availability requirement:** Bundle must be extractable and must contain `events/LEARNING_EVENTS.ndjson`. Bundles predating the learning pipeline will not have this directory.
+
+**Produces evidence for:**
+- LINEAGE claims (which bundle supersedes which — stronger than filename inference)
+- BEHAVIORAL claims (what the system actually does differently now)
+- INTEGRITY claims (guards verify preconditions before extraction)
+- TEMPORAL claims (event timestamps establish ordering)
+
+**Quality rank:** DIRECT_OBSERVATION — these are machine-emitted, timestamped, tied to specific RCA reports. This is the highest quality evidence for behavioral claims.
+
+**Key event types for SEE:**
+
+| Event Type | What It Proves |
+|---|---|
+| `EVT_LEARNING_ROOT_CAUSE_IDENTIFIED` | A specific failure was investigated and understood |
+| `EVT_LEARNING_CORRECTIVE_ACTION_RATIFIED` | A structural fix was applied — proves supersession |
+| `EVT_LEARNING_GUARD_INSTALLED` | A prevention mechanism now exists |
+| `EVT_FAIL_*` with `prevented_by` field | A guard caught a failure — proves the learning loop works |
+
+**Example evidence record:**
+```json
+{
+  "source_type": "BUNDLE_INTERNAL_EVENTS",
+  "operation": "query events/LEARNING_EVENTS.ndjson WHERE event_type = EVT_LEARNING_CORRECTIVE_ACTION_RATIFIED",
+  "result": "1 event found: fs_root_guard.py installed as corrective action for EVT_FAIL_WRITE_PERMISSION",
+  "timestamp_utc": "2026-02-07T13:56:32Z"
+}
+```
+
+**Schema reference:** `.codex/schemas/LEARNING_EVENT.schema.json`
+**Policy reference:** `.codex/policies/LEARNING_PIPELINE_v1.md`
+
 ---
 
 ## 2. METHOD SELECTION LOGIC
@@ -930,7 +974,7 @@ SEE produces four primary artifacts per run. All are written to `.codex/research
           },
           "source_type": {
             "type": "string",
-            "enum": ["LOCAL_FS", "GIT_HISTORY", "LFS_METADATA", "SCHEMA_VALIDATION", "HASH_VERIFICATION", "WEB_SEARCH", "WEB_FETCH", "PRIOR_ARTIFACTS", "CROSS_REFERENCE"]
+            "enum": ["LOCAL_FS", "GIT_HISTORY", "LFS_METADATA", "SCHEMA_VALIDATION", "HASH_VERIFICATION", "WEB_SEARCH", "WEB_FETCH", "PRIOR_ARTIFACTS", "CROSS_REFERENCE", "BUNDLE_INTERNAL_EVENTS"]
           },
           "operation": {
             "type": "string",

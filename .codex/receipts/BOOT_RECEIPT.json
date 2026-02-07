@@ -3,7 +3,7 @@
   "boot_version": "v1.1",
   "repository": "metablooms-os-bundles",
   "boot_file": ".codex/kernel/BOOT.md",
-  "boot_file_sha256": "245ce8c7ae690986cb07144cfc2757b557874aa022006a0c586aeeb3b332fb3c",
+  "boot_file_sha256": "ea395bda503e8251228d9e412384b6613fdb73921884c3239210488eacfda099",
   "governance_frameworks": [
     "Kernel Law",
     "DeltaGate",
@@ -18,13 +18,15 @@
     "SEE": ".codex/policies/SEE_ENGINE_v1.md",
     "CDR": ".codex/policies/CDR_v2.md",
     "Lifecycle": ".codex/policies/BUNDLE_LIFECYCLE_v1.md",
+    "Learning Pipeline": ".codex/policies/LEARNING_PIPELINE_v1.md",
     "Super-Prompt": ".codex/policies/SUPER_PROMPT_v2.3.md"
   },
   "schemas": {
     "BUNDLE_ENTRY": ".codex/schemas/BUNDLE_ENTRY.schema.json",
     "BUNDLE_LINEAGE": ".codex/schemas/BUNDLE_LINEAGE.schema.json",
     "MMD_REPORT": ".codex/schemas/MMD_REPORT.schema.json",
-    "TURN_RECEIPT": ".codex/schemas/TURN_RECEIPT.schema.json"
+    "TURN_RECEIPT": ".codex/schemas/TURN_RECEIPT.schema.json",
+    "LEARNING_EVENT": ".codex/schemas/LEARNING_EVENT.schema.json"
   },
   "canonical_paths": {
     "kernel": ".codex/kernel/",

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "LEARNING_EVENT.schema.json",
+  "title": "Learning Event",
+  "description": "Schema for structured learning and failure events emitted by the OS learning pipeline. Each event is one line in an NDJSON file.",
+  "type": "object",
+  "required": ["event_id", "event_type", "timestamp_utc", "source"],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Unique identifier for this event instance (e.g., EVT_LEARNING_ROOT_CAUSE_IDENTIFIED_20260207T135632Z)"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "EVT_FAIL_EXTRACTION",
+        "EVT_FAIL_WRITE_PERMISSION",
+        "EVT_FAIL_HASH_MISMATCH",
+        "EVT_FAIL_SCHEMA_VIOLATION",
+        "EVT_FAIL_MISSING_DEPENDENCY",
+        "EVT_FAIL_RCA_INCONCLUSIVE",
+        "EVT_FAIL_GOVERNANCE_VIOLATION",
+        "EVT_LEARNING_ROOT_CAUSE_IDENTIFIED",
+        "EVT_LEARNING_CORRECTIVE_ACTION_RATIFIED",
+        "EVT_LEARNING_GUARD_INSTALLED",
+        "EVT_LEARNING_INVARIANT_ADDED",
+        "EVT_LEARNING_METHOD_DEPRIORITIZED",
+        "EVT_LEARNING_SOURCE_DEMOTED"
+      ],
+      "description": "The event type from the defined taxonomy"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this event was emitted"
+    },
+    "source": {
+      "type": "object",
+      "required": ["component"],
+      "properties": {
+        "component": {
+          "type": "string",
+          "description": "The tool or module that emitted this event (e.g., rca_auto_trigger.py, emit_learning_from_rca.py)"
+        },
+        "bundle": {
+          "type": ["string", "null"],
+          "description": "The OS bundle this event originated from, if applicable"
+        },
+        "rca_report": {
+          "type": ["string", "null"],
+          "description": "Path to the RCA report that triggered this learning event"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-specific data",
+      "properties": {
+        "root_cause": {
+          "type": ["string", "null"],
+          "description": "For EVT_LEARNING_ROOT_CAUSE_IDENTIFIED: what was the root cause"
+        },
+        "corrective_action": {
+          "type": ["string", "null"],
+          "description": "For EVT_LEARNING_CORRECTIVE_ACTION_RATIFIED: what structural fix was applied"
+        },
+        "guard_path": {
+          "type": ["string", "null"],
+          "description": "For EVT_LEARNING_GUARD_INSTALLED: path to the guard script"
+        },
+        "guard_sha256": {
+          "type": ["string", "null"],
+          "description": "SHA-256 of the installed guard"
+        },
+        "failure_context": {
+          "type": ["string", "null"],
+          "description": "For EVT_FAIL_*: what was happening when the failure occurred"
+        },
+        "prevented_by": {
+          "type": ["string", "null"],
+          "description": "If this failure was caught by a guard, which guard"
+        },
+        "supersedes_bundle": {
+          "type": ["string", "null"],
+          "description": "The bundle where the original failure occurred (for lineage evidence)"
+        }
+      }
+    },
+    "sha256": {
+      "type": ["string", "null"],
+      "description": "SHA-256 of the artifact this event references (guard, fix, report)"
+    }
+  }
+}
