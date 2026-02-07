@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "TURN_RECEIPT.schema.json",
+  "title": "Turn Receipt",
+  "description": "Schema for end-of-turn execution receipts",
+  "type": "object",
+  "required": ["receipt_type", "boot_receipt_sha", "generated_utc", "artifacts_emitted", "mmd_outcome", "environment", "enforcement"],
+  "properties": {
+    "receipt_type": { "const": "TURN" },
+    "boot_receipt_sha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of BOOT_RECEIPT.json at session start"
+    },
+    "generated_utc": { "type": "string", "format": "date-time" },
+    "task_input_summary": { "type": "string" },
+    "phases_executed": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of MPP phases that were executed"
+    },
+    "artifacts_emitted": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path"],
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "claim_evidence_summary": {
+      "type": "object",
+      "properties": {
+        "total_claims": { "type": "integer" },
+        "confirmed": { "type": "integer" },
+        "supported": { "type": "integer" },
+        "partial": { "type": "integer" },
+        "unsupported": { "type": "integer" }
+      }
+    },
+    "mmd_outcome": {
+      "type": "string",
+      "enum": ["PASS", "PASS_WITH_WARNINGS", "FAIL"]
+    },
+    "rrp_summary": {
+      "type": "object",
+      "properties": {
+        "iterations": { "type": "integer" },
+        "defects_found": { "type": "integer" },
+        "defects_fixed": { "type": "integer" },
+        "known_defects_remaining": { "type": "integer" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "filesystem_write": { "type": "boolean" },
+        "web_access": { "type": "string" },
+        "real_hashing_available": { "type": "boolean" },
+        "git_lfs_available": { "type": "boolean" },
+        "shell_access": { "type": "boolean" }
+      }
+    },
+    "enforcement": {
+      "type": "object",
+      "properties": {
+        "external_verifier_present": { "type": "string" },
+        "ci_pipeline_present": { "type": "string" },
+        "human_admission_authority_present": { "type": "string" },
+        "mode": {
+          "type": "string",
+          "enum": ["FULL_ENFORCEMENT", "EVIDENCE_ONLY"]
+        }
+      }
+    },
+    "self_verification": {
+      "type": "string",
+      "enum": ["PASS", "FAIL"]
+    },
+    "known_defects": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

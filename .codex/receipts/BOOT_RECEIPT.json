@@ -1,9 +1,9 @@
 {
   "receipt_type": "BOOT",
-  "boot_version": "v1",
+  "boot_version": "v1.1",
   "repository": "metablooms-os-bundles",
   "boot_file": ".codex/kernel/BOOT.md",
-  "boot_file_sha256": "9f605e667ff19d3c47b6bdd7e563f2e7ae05b67701f8f3f8d5e3de2dceb0783c",
+  "boot_file_sha256": "56393f26753213ba857b1ad6b8b9ca79a174048166644b5fba9bd35b5af0278e",
   "governance_frameworks": [
     "Kernel Law",
     "DeltaGate",
@@ -12,6 +12,18 @@
     "ECL",
     "CDR"
   ],
+  "policy_documents": {
+    "DeltaGate": ".codex/policies/DELTAGATE_v1.md",
+    "RRP": ".codex/policies/RRP_v1.md",
+    "SEE": ".codex/policies/SEE_ENGINE_v1.md",
+    "Super-Prompt": ".codex/policies/SUPER_PROMPT_v2.3.md"
+  },
+  "schemas": {
+    "BUNDLE_ENTRY": ".codex/schemas/BUNDLE_ENTRY.schema.json",
+    "BUNDLE_LINEAGE": ".codex/schemas/BUNDLE_LINEAGE.schema.json",
+    "MMD_REPORT": ".codex/schemas/MMD_REPORT.schema.json",
+    "TURN_RECEIPT": ".codex/schemas/TURN_RECEIPT.schema.json"
+  },
   "canonical_paths": {
     "kernel": ".codex/kernel/",
     "receipts": ".codex/receipts/",
@@ -35,10 +47,12 @@
     "uploader",
     "misc_archive"
   ],
-  "lfs_gaps_at_boot": [
-    "*.part* not tracked",
-    "*.rtf not tracked"
+  "lfs_gaps_at_boot": [],
+  "lfs_gaps_resolved": [
+    "*.part[0-9]* — added to .gitattributes",
+    "*.rtf — added to .gitattributes"
   ],
   "created_utc": "2026-02-06T00:00:00Z",
+  "updated_utc": "2026-02-07T00:00:00Z",
   "status": "EMITTED"
 }

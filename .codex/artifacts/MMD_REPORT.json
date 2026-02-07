@@ -1,0 +1,394 @@
+{
+  "report_version": "1.0",
+  "generated_utc": "2026-02-06T00:00:00Z",
+  "total_findings": 38,
+  "summary": {
+    "critical": 5,
+    "high": 11,
+    "medium": 13,
+    "low": 7,
+    "info": 2
+  },
+  "findings": [
+    {
+      "id": "MMD-001",
+      "severity": "HIGH",
+      "category": "STALE_ARTIFACT",
+      "title": "BOOT.md falsely claims *.part* and *.rtf are missing from .gitattributes",
+      "description": "BOOT.md line 142-143 states '*.part* (segmented archives — CURRENTLY MISSING, must be added)' and '*.rtf (educational content — CURRENTLY MISSING, must be added)'. However, .gitattributes lines 13-14 already contain '*.part[0-9]* filter=lfs diff=lfs merge=lfs -text' and '*.rtf filter=lfs diff=lfs merge=lfs -text'. BOOT.md is stale and presents false information about the current state of the repository.",
+      "affected_files": [".codex/kernel/BOOT.md", ".gitattributes"],
+      "recommendation": "Remove the 'CURRENTLY MISSING, must be added' annotations from BOOT.md lines 142-143 and mark them as present. Add a staleness-detection mechanism or timestamp to BOOT.md so drift is detectable.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-002",
+      "severity": "HIGH",
+      "category": "STALE_ARTIFACT",
+      "title": "BOOT_RECEIPT.json records resolved LFS gaps with no update mechanism",
+      "description": "BOOT_RECEIPT.json field 'lfs_gaps_at_boot' records ['*.part* not tracked', '*.rtf not tracked']. These gaps have since been resolved in .gitattributes. The receipt reflects a prior state. There is no mechanism defined anywhere in the governance system (BOOT.md, super-prompt, or any policy) for updating, superseding, or annotating receipts when the conditions they recorded change. Receipts are write-once but the system has no concept of receipt amendment or succession.",
+      "affected_files": [".codex/receipts/BOOT_RECEIPT.json", ".codex/kernel/BOOT.md"],
+      "recommendation": "Define a receipt lifecycle policy: either (a) receipts are immutable snapshots and a new BOOT_RECEIPT.json is emitted when BOOT.md changes, with the old receipt archived under a timestamped name, or (b) receipts gain 'amendments' array fields for post-hoc corrections. Publish this policy as .codex/policies/RECEIPT_LIFECYCLE.md.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-003",
+      "severity": "HIGH",
+      "category": "STALE_ARTIFACT",
+      "title": "BUNDLE_CATALOG.json reports 13 LFS-untracked files that are now tracked",
+      "description": "BUNDLE_CATALOG.json summary.lfs_untracked_count is 13 and summary.lfs_tracking_gaps lists three gap patterns. The .gitattributes now covers all these extensions. Additionally, 13 individual catalog entries have 'lfs_tracked: false' (8 CHAT7 .part files, 2 chat_4 .zip.part files, 2 MetaBlooms_OS_VALIDATED_EXPORT .zip.part files, and 1 .rtf file). These entries are factually incorrect about current LFS tracking status. The catalog has no auto-refresh mechanism.",
+      "affected_files": [".codex/artifacts/BUNDLE_CATALOG.json", ".gitattributes"],
+      "recommendation": "Regenerate BUNDLE_CATALOG.json with correct lfs_tracked values. Add a 'last_validated_utc' timestamp to the catalog summary and define a staleness threshold policy.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-004",
+      "severity": "MEDIUM",
+      "category": "SCOPE_GAP",
+      "title": "TASK_INPUT in super-prompt is hardcoded with no substitution mechanism",
+      "description": "SUPER_PROMPT_v2.2.md lines 54-68 contain a hardcoded TASK_INPUT that says 'Analyze all files in os_bundles/'. CLAUDE.md line 53 says 'Copy that prompt into your AI tool of choice' and line 54 says 'Fill in the TASK_INPUT section with your specific task'. However, the TASK_INPUT section is already filled in with a specific task, and there is no placeholder syntax, variable interpolation, or clear demarcation indicating which text is the template and which is the specific task instance. A user wanting a different task must guess which lines to replace.",
+      "affected_files": [".codex/policies/SUPER_PROMPT_v2.2.md", "CLAUDE.md"],
+      "recommendation": "Either (a) extract the TASK_INPUT content to a separate file (.codex/policies/TASK_INPUT.md) that the prompt includes by reference, or (b) wrap the substitutable section with clear delimiters like '--- BEGIN TASK_INPUT ---' and '--- END TASK_INPUT ---' with a documented replacement protocol.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-005",
+      "severity": "CRITICAL",
+      "category": "MISSING_SCHEMA",
+      "title": "Six receipt types have no JSON schema definitions",
+      "description": "BOOT.md lines 155-161 list seven receipt files in the canonical directory structure: BOOT_RECEIPT.json, TURN_RECEIPT.json, ENFORCEMENT_CAPABILITY.json, ENVIRONMENT_DECLARATION.json, EVALUATION_REPORT.json, REWRITE_REPORT.json, and SELF_VERIFICATION.json. Only BUNDLE_ENTRY.schema.json exists in .codex/schemas/. The super-prompt defines inline schema fragments for ENFORCEMENT_CAPABILITY (lines 82-88), ENVIRONMENT_DECLARATION (lines 103-109), and SELF_VERIFICATION (lines 267-278), but these are embedded in prose, not in a formal JSON Schema file. TURN_RECEIPT, EVALUATION_REPORT, and REWRITE_REPORT have NO schema at all — only prose descriptions of expected fields. Without formal schemas, validation in Phase 6 (self-verification) cannot programmatically check schema compliance for most receipts.",
+      "affected_files": [".codex/schemas/BUNDLE_ENTRY.schema.json", ".codex/policies/SUPER_PROMPT_v2.2.md", ".codex/kernel/BOOT.md"],
+      "recommendation": "Create formal JSON Schema files for each receipt type: BOOT_RECEIPT.schema.json, TURN_RECEIPT.schema.json, ENFORCEMENT_CAPABILITY.schema.json, ENVIRONMENT_DECLARATION.schema.json, EVALUATION_REPORT.schema.json, REWRITE_REPORT.schema.json, SELF_VERIFICATION.schema.json. Place all under .codex/schemas/.",
+      "effort": "HIGH"
+    },
+    {
+      "id": "MMD-006",
+      "severity": "CRITICAL",
+      "category": "MISSING_SCHEMA",
+      "title": "MMD_REPORT.json has no schema in the governance system",
+      "description": "The super-prompt Phase 2 (line 195) says 'Emit: .codex/artifacts/MMD_REPORT.json' but no schema is defined anywhere in the governance system for this artifact. The user of this report had to supply the schema externally. Any agent executing the super-prompt would have to invent a structure, making reports non-comparable across sessions.",
+      "affected_files": [".codex/policies/SUPER_PROMPT_v2.2.md", ".codex/schemas/"],
+      "recommendation": "Create .codex/schemas/MMD_REPORT.schema.json defining severity levels, category taxonomy, finding structure, and summary aggregation rules.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-007",
+      "severity": "CRITICAL",
+      "category": "MISSING_SCHEMA",
+      "title": "CLAIM_REGISTRY.json has no schema definition",
+      "description": "The super-prompt Phase 0 (line 150) mandates emitting .codex/artifacts/CLAIM_REGISTRY.json with stable claim_ids, but defines no schema for it. There is no specification of what a claim_id looks like, what fields a claim entry contains, how evidence states are represented, or how NON_CLAIM entries differ structurally from real claims.",
+      "affected_files": [".codex/policies/SUPER_PROMPT_v2.2.md", ".codex/schemas/"],
+      "recommendation": "Create .codex/schemas/CLAIM_REGISTRY.schema.json specifying claim_id format, claim types (factual, comparative, prescriptive, architectural, design), evidence states, and the NON_CLAIM marker structure.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-008",
+      "severity": "MISSING_SCHEMA",
+      "category": "MISSING_SCHEMA",
+      "title": "SEE_QUERY_LOG.json and SOURCE_LEDGER.json have no schemas",
+      "description": "The super-prompt Phase 1 (lines 173-174) mandates emitting .codex/research/SEE_QUERY_LOG.json and .codex/research/SOURCE_LEDGER.json but defines no schema for either. There is no specification of query structure, source metadata, acceptance/rejection criteria fields, or how to link queries to claims.",
+      "affected_files": [".codex/policies/SUPER_PROMPT_v2.2.md", ".codex/schemas/"],
+      "recommendation": "Create .codex/schemas/SEE_QUERY_LOG.schema.json and .codex/schemas/SOURCE_LEDGER.schema.json.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-009",
+      "severity": "HIGH",
+      "category": "EVIDENCE_GAP",
+      "title": "SEE is a description, not an engine — no operational specification",
+      "description": "SEE (Search for Evidence Engine) is described in BOOT.md lines 40-43 and super-prompt lines 156-177 as 'search the web and log queries' with a SOURCE-LIMITED MODE fallback. However, there is no specification of: (1) method selection logic — when to use web search vs filesystem inspection vs git history vs LFS metadata inspection, (2) source quality ranking — how to determine if a source is authoritative, (3) evidence strength classification — no taxonomy of evidence strength (e.g., direct observation, inferred, hearsay, uncorroborated), (4) conflict resolution — what happens when two sources disagree, (5) search completeness criteria — when has enough evidence been gathered, (6) self-improvement — no feedback loop from evaluation to improve future searches.",
+      "affected_files": [".codex/kernel/BOOT.md", ".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Create .codex/policies/SEE_SPECIFICATION.md defining method selection heuristics, source quality tiers, evidence strength taxonomy, conflict resolution protocol, and completeness criteria.",
+      "effort": "HIGH"
+    },
+    {
+      "id": "MMD-010",
+      "severity": "HIGH",
+      "category": "CONVERGENCE_GAP",
+      "title": "RRP has no iteration limit, convergence test, or defect-introduction guard",
+      "description": "RRP (Recursive Refinement Protocol) described in BOOT.md line 46 and super-prompt Phases 4-5 (lines 228-251) specifies BUILD → EVALUATE → REWRITE but defines: (1) no maximum iteration count — an agent could loop indefinitely, (2) no convergence test — no metric for determining when refinement has stabilized, (3) no regression guard — if REWRITE introduces new defects, the cycle could diverge rather than converge, (4) no monotonic improvement requirement — nothing prevents quality from oscillating, (5) no escape hatch — no mechanism for an agent to declare 'refinement is not converging' and halt gracefully.",
+      "affected_files": [".codex/kernel/BOOT.md", ".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Add to RRP specification: max_iterations (suggest 3), a defect-count-must-decrease invariant, a convergence test (zero new defects in EVALUATE), and a REFINEMENT_DIVERGENCE fail-closed condition.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-011",
+      "severity": "HIGH",
+      "category": "UNDEFINED_PROCESS",
+      "title": "DeltaGate admission process is undefined",
+      "description": "DeltaGate is described in BOOT.md lines 36-38 and super-prompt lines 300-313. It says 'changes require explicit admission' and the agent 'may PROPOSE changes. It may NOT declare them accepted.' However: (1) there is no definition of what constitutes a 'change' vs a 'new artifact' (is emitting BUNDLE_CATALOG.json a change or a new artifact?), (2) the admission authority is undefined — 'human operator or external CI system' is mentioned in passing but not formalized, (3) there is no admission request format — how does an agent package a proposal for admission?, (4) there is no admission response format — how does an authority communicate accept/reject?, (5) admission decisions are not recorded in any defined artifact.",
+      "affected_files": [".codex/kernel/BOOT.md", ".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Create .codex/policies/DELTAGATE.md defining: change taxonomy (new artifact, modification, deletion, config change), admission request schema (ADMISSION_REQUEST.schema.json), admission response schema, and the audit trail format.",
+      "effort": "HIGH"
+    },
+    {
+      "id": "MMD-012",
+      "severity": "MEDIUM",
+      "category": "SELF_REFERENCE",
+      "title": "Forbidden language list conflicts with governance documents and bundle filenames",
+      "description": "The forbidden language list (super-prompt lines 319-324) includes 'enforced', 'verified', 'running', 'active', 'wired', 'booted', 'compliant', 'guaranteed'. However: (1) BOOT.md version qualifier table (lines 83, 99-101) defines MASTERY_ENFORCED, EXECUTION_ENFORCED, UIUX_ENFORCED as legitimate qualifiers, (2) BUNDLE_CATALOG.json contains these qualifiers in entries (e.g., 'EXECUTION_ENFORCED' in version_qualifiers arrays), (3) bundle filenames in os_bundles/ contain 'ENFORCED', 'WIRED', 'VALIDATED' — the catalog must reference these filenames exactly, (4) the super-prompt itself says 'unless quoting the forbidden list itself' but catalog entries are quoting filenames, not the forbidden list. The scope of the forbidden language rule is ambiguous: does it apply only to agent prose, or to structured data fields that must faithfully record reality?",
+      "affected_files": [".codex/policies/SUPER_PROMPT_v2.2.md", ".codex/kernel/BOOT.md", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Clarify the forbidden language scope: (a) define that forbidden language applies only to agent-generated prose and status declarations, NOT to filename fields, version_qualifier enums, or other fields that must faithfully represent existing data, (b) add an explicit exemption clause for structured data fields that mirror filesystem reality.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-013",
+      "severity": "HIGH",
+      "category": "VERSIONING_GAP",
+      "title": "No versioning or migration strategy for governance artifacts",
+      "description": "BOOT.md is labeled 'BOOT v1' (line 1) and the super-prompt is 'v2.2' (line 2), but there is no versioning strategy defined for the governance system itself: (1) if BOOT.md changes, what happens to existing BOOT_RECEIPT.json files that reference a now-stale boot_file_sha256?, (2) there is no migration path defined — how does an agent operating under BOOT v1 transition to BOOT v2?, (3) BOOT_RECEIPT.json records boot_version: 'v1' but the super-prompt records its own version independently — no compatibility matrix exists, (4) there is no deprecation policy for old governance versions, (5) schema changes (BUNDLE_ENTRY.schema.json) have no versioning — the $id is just the filename with no version number.",
+      "affected_files": [".codex/kernel/BOOT.md", ".codex/receipts/BOOT_RECEIPT.json", ".codex/schemas/BUNDLE_ENTRY.schema.json", ".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Create .codex/policies/GOVERNANCE_VERSIONING.md defining: semantic versioning for all governance artifacts, a compatibility matrix between BOOT versions and prompt versions, a migration protocol for receipt archives, and schema versioning rules (add 'version' to $id URIs).",
+      "effort": "HIGH"
+    },
+    {
+      "id": "MMD-014",
+      "severity": "MEDIUM",
+      "category": "LINEAGE_GAP",
+      "title": "Bundle schema has no lineage field to track bundle evolution",
+      "description": "BUNDLE_ENTRY.schema.json defines metadata for each file but has no field to record that one bundle is derived from another. For example, MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT__PATCHED_20260122.zip is clearly a patched version of MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT.zip, but there is no way to record this relationship. Similarly, FROZEN_FULL_EXPORT V1, V2, V3 form a clear succession with no recorded lineage. This makes it impossible to answer 'what bundle did this one evolve from?' or 'what bundles supersede this one?'",
+      "affected_files": [".codex/schemas/BUNDLE_ENTRY.schema.json", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Add to BUNDLE_ENTRY.schema.json: 'parent_bundle' (string|null, filename of predecessor), 'superseded_by' (string|null, filename of successor), and 'lineage_notes' (string|null, explanation of relationship). Populate for all bundles where lineage is inferable from naming.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-015",
+      "severity": "LOW",
+      "category": "VERSIONING_GAP",
+      "title": "No CHANGELOG or evolution log for the governance system",
+      "description": "The governance system has undergone at least one evolution (the super-prompt is at v2.2, implying v1.0, v2.0, v2.1 existed). There is no CHANGELOG recording what changed between versions, why changes were made, or what issues prompted them. This makes it impossible to understand the design rationale behind the current governance state.",
+      "affected_files": [".codex/"],
+      "recommendation": "Create .codex/CHANGELOG.md recording governance evolution history, or add a 'changelog' section to BOOT.md.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-016",
+      "severity": "MEDIUM",
+      "category": "MISSING_SCHEMA",
+      "title": "CDR decision records have no schema",
+      "description": "CDR (Coding Done Right) described in BOOT.md lines 54-56 and super-prompt lines 203-218 mandates that every decision must include WHY, WHAT constraints, and HOW it could fail. But there is no schema for decision records, no defined artifact for collecting them, and no specification of where CDR records are stored. Are they inline in other artifacts? A separate file? Fields in receipts?",
+      "affected_files": [".codex/kernel/BOOT.md", ".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Create .codex/schemas/CDR_DECISION.schema.json defining fields: decision_id, context, decision, rationale_why, constraints_what, failure_modes_how. Define whether CDR records live in their own artifact or are embedded in others.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-017",
+      "severity": "HIGH",
+      "category": "MISSING_POLICY",
+      "title": "No standalone policy documents exist for DeltaGate, Kernel Law, RRP, ECL, or CDR",
+      "description": "BOOT.md references six governance frameworks (Kernel Law, DeltaGate, SEE, RRP, ECL, CDR) and the canonical directory structure includes '.codex/policies/' as a directory. However, the only file in .codex/policies/ is SUPER_PROMPT_v2.2.md. All framework definitions exist only as brief prose paragraphs in BOOT.md (3-4 lines each) or as embedded sections in the super-prompt. There are no standalone, referenceable policy documents. This means framework definitions are scattered across two files with no single source of truth for any one framework.",
+      "affected_files": [".codex/policies/", ".codex/kernel/BOOT.md", ".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Create standalone policy files: .codex/policies/KERNEL_LAW.md, .codex/policies/DELTAGATE.md, .codex/policies/SEE.md, .codex/policies/RRP.md, .codex/policies/ECL.md, .codex/policies/CDR.md. Each should be the canonical definition, with BOOT.md and the super-prompt referencing them by path.",
+      "effort": "HIGH"
+    },
+    {
+      "id": "MMD-018",
+      "severity": "LOW",
+      "category": "NAMING_GAP",
+      "title": "MetaBlooms_Jan19-23_NON_OS_CONTENT.zip classification is ambiguous",
+      "description": "The catalog classifies MetaBlooms_Jan19-23_NON_OS_CONTENT.zip as 'non_project' but it does not follow the MetaBlooms_NON_PROJECT_FILES_PART* naming pattern. It uses 'NON_OS_CONTENT' instead of 'NON_PROJECT_FILES'. The catalog notes suggest it is 'likely educational/lesson plan adjacent' which would make it 'educational' category, not 'non_project'. The taxonomy in BOOT.md maps 'non_project' to 'MetaBlooms_NON_PROJECT_FILES_*' patterns, which this file does not match.",
+      "affected_files": [".codex/artifacts/BUNDLE_CATALOG.json", ".codex/kernel/BOOT.md"],
+      "recommendation": "Either (a) add 'NON_OS_CONTENT' as an explicit pattern under the non_project category in BOOT.md, (b) reclassify to 'educational' if contents are educational, or (c) create a new 'non_os_content' category. Document the decision with CDR rationale.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-019",
+      "severity": "MEDIUM",
+      "category": "NAMING_GAP",
+      "title": "Third-party binary naming has no governance",
+      "description": "591.44-desktop-win10-win11-64bit-international-nsd-dch-whql.exe is an NVIDIA driver whose filename follows NVIDIA's own naming convention, not any MetaBlooms convention. Similarly, MF642CMFDriverV6405W64.exe, winmfscanutilityv12102.exe, GitHubDesktopSetup-x64.exe, gpg4win-5.0.0.exe, and NVIDIA_app_v11.0.5.420.exe all use their upstream vendor naming. BOOT.md's naming convention section covers only OS bundles and chat exports. There is no policy for whether third-party binaries should be renamed to follow a convention, left as-is, or given a wrapper/alias.",
+      "affected_files": [".codex/kernel/BOOT.md", "CLAUDE.md"],
+      "recommendation": "Add a 'Third-Party Binary Naming Policy' section to BOOT.md stating either: (a) third-party binaries retain their upstream filename, (b) they are renamed to a MetaBlooms convention with an alias file or notes field recording the original name, or (c) a vendor prefix convention is adopted.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-020",
+      "severity": "CRITICAL",
+      "category": "STALE_ARTIFACT",
+      "title": "Six receipt files in canonical directory structure do not exist on disk",
+      "description": "BOOT.md lines 155-161 list seven receipt files in the canonical directory structure. Only BOOT_RECEIPT.json exists on disk. Missing: TURN_RECEIPT.json, ENFORCEMENT_CAPABILITY.json, ENVIRONMENT_DECLARATION.json, EVALUATION_REPORT.json, REWRITE_REPORT.json, SELF_VERIFICATION.json. These files are mandated outputs of the Mandatory Process Pipeline (super-prompt Phases -1 through 7). Their absence means no governed execution session has completed successfully, yet the catalog and governance artifacts exist as if they were produced by such a session.",
+      "affected_files": [".codex/receipts/", ".codex/kernel/BOOT.md", ".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Either: (a) complete a full governed execution session to produce all required receipts, or (b) acknowledge in BOOT.md that the canonical directory structure describes the target state, not the current state, and add a 'current vs target' distinction.",
+      "effort": "HIGH"
+    },
+    {
+      "id": "MMD-021",
+      "severity": "MEDIUM",
+      "category": "STALE_ARTIFACT",
+      "title": "Research directory is empty — no SEE_QUERY_LOG.json or SOURCE_LEDGER.json",
+      "description": "BOOT.md canonical directory structure (lines 171-172) lists .codex/research/SEE_QUERY_LOG.json and .codex/research/SOURCE_LEDGER.json. The .codex/research/ directory exists but is empty. These are mandatory Phase 1 outputs per the super-prompt. Their absence indicates SEE has never been executed, yet the catalog was somehow produced.",
+      "affected_files": [".codex/research/", ".codex/kernel/BOOT.md"],
+      "recommendation": "Same as MMD-020. The research artifacts should be produced as part of a complete governed session, or the canonical directory structure should distinguish expected-from-session vs always-present artifacts.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-022",
+      "severity": "MEDIUM",
+      "category": "STALE_ARTIFACT",
+      "title": "CLAIM_REGISTRY.json and PROPOSED_STRUCTURE.md do not exist",
+      "description": "BOOT.md canonical directory structure (lines 164-166) lists .codex/artifacts/CLAIM_REGISTRY.json, .codex/artifacts/MMD_REPORT.json, and .codex/artifacts/PROPOSED_STRUCTURE.md. Only BUNDLE_CATALOG.json existed prior to this report. CLAIM_REGISTRY.json is a mandatory Phase 0 output. PROPOSED_STRUCTURE.md is conditional. Their absence reinforces that no complete governed session has been executed.",
+      "affected_files": [".codex/artifacts/", ".codex/kernel/BOOT.md"],
+      "recommendation": "See MMD-020. Additionally, mark conditional artifacts (like PROPOSED_STRUCTURE.md which is only 'if reorganization warranted') distinctly from mandatory artifacts in the canonical structure.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-023",
+      "severity": "MEDIUM",
+      "category": "NAMING_GAP",
+      "title": "Inconsistent casing: MetaBlooms vs Metablooms across bundle filenames",
+      "description": "OS bundles use two different casings: 'MetaBlooms' (capital B) for 34 files and 'Metablooms' (lowercase b) for 18 files. The CLAUDE.md acknowledges this ('alt casing') but BOOT.md's naming convention only shows 'MetaBlooms_OS_*' and 'Metablooms_OS_*' in the taxonomy without declaring which is canonical. The schema has no 'canonical_casing' or 'casing_variant' field.",
+      "affected_files": [".codex/kernel/BOOT.md", "CLAUDE.md", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Declare which casing is canonical in BOOT.md (suggest 'MetaBlooms' based on majority usage). Add a 'casing_variant' boolean or 'canonical_name' field to BUNDLE_ENTRY.schema.json for files that deviate.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-024",
+      "severity": "LOW",
+      "category": "NAMING_GAP",
+      "title": "Double underscores in bundle filenames violate implicit naming convention",
+      "description": "Two bundle filenames contain double underscores: MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT__PATCHED_20260122.zip and MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED__WIRED_2026-01-21.zip. The naming convention uses single underscores as separators. Double underscores suggest a manual concatenation artifact. The catalog notes this but the naming convention in BOOT.md does not define or forbid double underscores.",
+      "affected_files": [".codex/kernel/BOOT.md", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Add to the naming convention: single underscore is the only valid separator. Document the two existing double-underscore files as known exceptions. Consider adding a 'naming_violations' field to the schema.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-025",
+      "severity": "MEDIUM",
+      "category": "LINEAGE_GAP",
+      "title": "Orphaned parts: CHAT_DELTA_EVIDENCE_PART2.zip exists without PART1",
+      "description": "CHAT_DELTA_EVIDENCE_PART2.zip is present in the repository but CHAT_DELTA_EVIDENCE_PART1.zip is not. The catalog notes field acknowledges this ('part 1 not present in repo'). Similarly, MB_CHAT6_MNTDATA_CHUNK002 exists but CHUNK001 and CHUNK003 are missing. There is no governance policy for handling orphaned parts — no requirement to document why parts are missing, whether they existed and were removed, or whether the remaining parts are usable independently.",
+      "affected_files": [".codex/artifacts/BUNDLE_CATALOG.json", ".codex/kernel/BOOT.md"],
+      "recommendation": "Add a 'completeness_status' field to BUNDLE_ENTRY.schema.json for segmented archives: COMPLETE (all parts present), PARTIAL (some parts missing), ORPHANED (sole remaining part). Add a governance policy for orphaned parts requiring a notes explanation.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-026",
+      "severity": "LOW",
+      "category": "LINEAGE_GAP",
+      "title": "Two files share identical timestamp suggesting same-source divergence",
+      "description": "Metablooms_OS_canonical_snapshot_20260127T190025Z.zip and Metablooms_OS_working_os_20260127T190025Z.zip share the exact same timestamp (20260127T190025Z). This implies they were created simultaneously from the same source state but represent different views ('canonical' vs 'working'). There is no mechanism to record this relationship — they appear as unrelated files that happen to share a timestamp.",
+      "affected_files": [".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Add a 'related_bundles' array field to BUNDLE_ENTRY.schema.json for recording bundles that share a timestamp, source, or other logical relationship. Populate for these two files.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-027",
+      "severity": "MEDIUM",
+      "category": "SCOPE_GAP",
+      "title": "No integrity verification beyond file size in catalog",
+      "description": "BUNDLE_ENTRY.schema.json includes 'size_bytes' but no hash field (SHA-256, MD5, or any checksum). For LFS-tracked files, the LFS pointer contains an OID hash, but this is not extracted into the catalog. For non-LFS files (the 13 large binaries that were not tracked at catalog creation time), there is no recorded integrity information at all. The super-prompt Phase 7 says TURN_RECEIPT should include 'SHA-256 hash of each artifact' but this applies only to governance artifacts, not to os_bundles/ binaries.",
+      "affected_files": [".codex/schemas/BUNDLE_ENTRY.schema.json", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Add 'sha256' (string|null) and 'lfs_oid' (string|null) fields to BUNDLE_ENTRY.schema.json. Populate lfs_oid from LFS pointer files. For non-pointer files, compute and record sha256.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-028",
+      "severity": "CRITICAL",
+      "category": "UNDEFINED_PROCESS",
+      "title": "FAIL CLOSED is undefined — no specification of what halt behavior looks like",
+      "description": "The super-prompt uses 'FAIL CLOSED' 8 times (lines 22, 48, 71, 153, 177, 198-199, 281, 340) as the response to various error conditions. However, FAIL CLOSED is never defined: (1) Does the agent stop all output immediately? (2) Does it emit a partial receipt first? (3) Does it emit a dedicated FAILURE_RECEIPT? (4) What information must the failure include? (5) Can a FAIL CLOSED state be recovered from, or must a new session start? (6) If FAIL CLOSED happens in Phase 3, are artifacts from Phases 0-2 considered valid? The super-prompt says Phase 6 'If overall = FAIL → FAIL CLOSED with receipt explaining why' — this is the only instance that mentions a receipt, but it is unclear if this applies to all FAIL CLOSED triggers.",
+      "affected_files": [".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Create .codex/policies/FAIL_CLOSED.md defining: what constitutes a FAIL CLOSED state, what artifacts must be emitted upon failure (FAILURE_RECEIPT.json with schema), whether partial-session artifacts are valid, and recovery procedures.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-029",
+      "severity": "MEDIUM",
+      "category": "SCOPE_GAP",
+      "title": "No deprecation or archival policy for old bundles",
+      "description": "The repository contains 90 files including clear evolutionary chains (FROZEN_FULL_EXPORT V1, V2, V3; RUNTIME_FULL_GOVERNANCE V2, V3; various PATCHED/REMEDIATED/REPAIRED iterations). There is no policy for: (1) when an older bundle is superseded and should be considered deprecated, (2) whether deprecated bundles should be removed, archived, or just flagged, (3) whether FROZEN bundles can ever be removed (the qualifier implies immutability), (4) disk/LFS quota management as bundles accumulate.",
+      "affected_files": [".codex/kernel/BOOT.md", "CLAUDE.md"],
+      "recommendation": "Create .codex/policies/BUNDLE_LIFECYCLE.md defining bundle states (active, deprecated, archived, frozen), transition rules, and retention policies. Add 'lifecycle_status' to BUNDLE_ENTRY.schema.json.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-030",
+      "severity": "HIGH",
+      "category": "UNDEFINED_PROCESS",
+      "title": "Phase criticality threshold is undefined — no criteria for CRITICAL vs non-critical gaps",
+      "description": "Super-prompt Phase 2 (lines 198-200) says 'If CRITICAL gaps exist → FAIL CLOSED' and 'NON-CRITICAL gaps → flag and continue.' But there is no definition anywhere of what makes a gap CRITICAL vs non-critical. This is left entirely to agent judgment, which contradicts the governance system's explicit goal of removing agent discretion. An agent could classify all gaps as non-critical to avoid halting, or classify all gaps as critical and always halt.",
+      "affected_files": [".codex/policies/SUPER_PROMPT_v2.2.md"],
+      "recommendation": "Define criticality criteria in the MMD specification. Suggested: CRITICAL = any gap that could cause data loss, silent corruption, or makes the system unable to meet its stated purpose. HIGH = significant functionality gap. MEDIUM = reduces quality but system functions. LOW = cosmetic or informational.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-031",
+      "severity": "MEDIUM",
+      "category": "SCOPE_GAP",
+      "title": "BUNDLE_CATALOG.json has no schema — only BUNDLE_ENTRY has one",
+      "description": "BUNDLE_ENTRY.schema.json defines the structure of individual entries, but there is no schema for the catalog document itself (BUNDLE_CATALOG.json). The catalog has top-level fields: catalog_version, generated_utc, total_files, summary (with by_category, total_size_bytes, total_size_human, lfs_tracked_count, lfs_untracked_count, lfs_tracking_gaps), and entries array. None of these top-level fields are schema-validated. An agent could omit the summary or add arbitrary top-level fields.",
+      "affected_files": [".codex/schemas/BUNDLE_ENTRY.schema.json", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Create .codex/schemas/BUNDLE_CATALOG.schema.json that defines the top-level structure and references BUNDLE_ENTRY.schema.json for the entries array items.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-032",
+      "severity": "LOW",
+      "category": "SCOPE_GAP",
+      "title": "BUNDLE_ENTRY.schema.json allows additional properties by default",
+      "description": "The schema does not set 'additionalProperties: false' at the top level. This means any entry could include arbitrary extra fields without violating the schema. While flexible, this undermines the schema's purpose as a structural contract.",
+      "affected_files": [".codex/schemas/BUNDLE_ENTRY.schema.json"],
+      "recommendation": "Add '\"additionalProperties\": false' to the schema, or explicitly document that additional properties are intentionally allowed and specify a convention for using them.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-033",
+      "severity": "MEDIUM",
+      "category": "STALE_ARTIFACT",
+      "title": "CLAUDE.md category counts do not match BUNDLE_CATALOG.json",
+      "description": "CLAUDE.md line 106 says os_bundle count is '~55' but the catalog has 52. CLAUDE.md line 113 says non_project count is 4 but the catalog has 5. CLAUDE.md line 116 says uploader count is 1 but the catalog has 2. CLAUDE.md line 110 says driver count is 3 but the catalog has 4. These discrepancies suggest CLAUDE.md was written from a different source than the catalog, or one was updated without the other.",
+      "affected_files": ["CLAUDE.md", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Reconcile CLAUDE.md counts with BUNDLE_CATALOG.json. Consider auto-generating the counts section from the catalog to prevent future drift.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-034",
+      "severity": "HIGH",
+      "category": "SCOPE_GAP",
+      "title": "Duplicate files have no resolution policy",
+      "description": "The catalog identifies 4 duplicate files (browser re-download suffix (1) or (2)): MB_CHAT3_MNT_DATA_PART2_20260121T185046Z (1).zip, MetaBlooms_GitHubUploader_RunPack_20260124T224700Z_PATCHED (2).zip, MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2 (1).zip, Metablooms_OS_EXPORT_WITH_CHAT_INDEX_20260129T060156Z (1).zip, and git_uploader_bundle_reupload_20260127T145213Z (2).zip. These are flagged via is_duplicate but there is no policy for: (1) whether duplicates should be removed, (2) how to verify they are actually identical to the non-suffixed version, (3) who has authority to delete them, (4) whether DeltaGate admission is required for deletion.",
+      "affected_files": [".codex/kernel/BOOT.md", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Create a duplicate resolution policy: verify byte-identical status (or LFS OID match), record verification in catalog, propose deletion through DeltaGate admission process.",
+      "effort": "MEDIUM"
+    },
+    {
+      "id": "MMD-035",
+      "severity": "MEDIUM",
+      "category": "NAMING_GAP",
+      "title": "Mixed segmentation naming within same chat export (CHUNK vs PART)",
+      "description": "MB_CHAT6 data is segmented using two different naming patterns: MB_CHAT6_MNTDATA_CHUNK002, MB_CHAT6_MNTDATA_CHUNK004 (CHUNK pattern) and MB_CHAT6_MNTDATA_PART02 (PART pattern). These coexist in the same segment_group 'MB_CHAT6_MNTDATA'. The naming convention in BOOT.md and CLAUDE.md does not address when to use CHUNK vs PART, or whether they represent different segmentation strategies for the same data.",
+      "affected_files": [".codex/kernel/BOOT.md", "CLAUDE.md", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Document the distinction between CHUNK and PART naming in the chat export naming convention. If they represent the same data segmented differently, flag one series as deprecated.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-036",
+      "severity": "HIGH",
+      "category": "SCOPE_GAP",
+      "title": "BOOT.md hardcodes bundle count as 90 with no auto-update",
+      "description": "BOOT.md line 25 states 'Bundle count: 90 files in os_bundles/'. This is a hardcoded value that will become stale whenever files are added or removed. There is no mechanism to detect this drift. The catalog also hardcodes total_files: 90. Both documents will silently lie about the repository state after any file change.",
+      "affected_files": [".codex/kernel/BOOT.md", ".codex/artifacts/BUNDLE_CATALOG.json"],
+      "recommendation": "Either (a) remove the hardcoded count from BOOT.md and make it a derived value agents must compute at runtime, or (b) add a validation step that compares the stated count against actual file count and flags mismatches.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-037",
+      "severity": "INFO",
+      "category": "SCOPE_GAP",
+      "title": "LFS pattern *.part[0-9]* may not match *.zip.part001 as expected",
+      "description": "The .gitattributes pattern '*.part[0-9]*' is intended to catch segmented archives. For files like CHAT7_FULL_MNT_DATA_EXPORT.part001, this works (extension is .part001, matches *.part[0-9]*). For files like chat_4_RETRY_full_mnt_data_20260121_185205.zip.part001, the extension is .zip.part001 — Git's gitattributes pattern matching treats the entire path segment, so '*.part[0-9]*' should match because the filename ends with characters matching the glob. However, this is a subtle edge case that depends on Git's glob implementation and could break on some Git versions.",
+      "affected_files": [".gitattributes"],
+      "recommendation": "Test the pattern explicitly with 'git check-attr filter -- os_bundles/chat_4_RETRY_full_mnt_data_20260121_185205.zip.part001'. If it does not match, add an explicit '*.zip.part[0-9]*' pattern. Document the tested behavior.",
+      "effort": "LOW"
+    },
+    {
+      "id": "MMD-038",
+      "severity": "INFO",
+      "category": "SCOPE_GAP",
+      "title": "No .codex/.gitkeep or directory preservation mechanism for empty directories",
+      "description": "The .codex/research/ directory is empty. Git does not track empty directories. If this directory is committed, it relies on there being at least one file or a .gitkeep placeholder. If the directory is lost, the canonical directory structure in BOOT.md becomes aspirational rather than real. Similarly, .codex/policies/ has only one file — removing it would lose the directory.",
+      "affected_files": [".codex/research/", ".codex/policies/"],
+      "recommendation": "Add .gitkeep files to directories that must exist but may be empty, or document that directory creation is part of the bootstrap process.",
+      "effort": "LOW"
+    }
+  ]
+}

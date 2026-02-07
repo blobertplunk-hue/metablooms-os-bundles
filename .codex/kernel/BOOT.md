@@ -22,7 +22,7 @@ This governance applies to:
 | Owner               | blobertplunk-hue                         |
 | Type                | Binary artifact storage (Git LFS)        |
 | Source code          | None — this repo stores only binaries and documentation |
-| Bundle count         | 90 files in `os_bundles/`               |
+| Bundle count         | See BUNDLE_CATALOG.json for current count |
 | Governance root      | `.codex/`                               |
 
 ## Governance Frameworks Referenced
@@ -139,8 +139,8 @@ MUST appear in `.gitattributes`:
 - `*.exe`, `*.dmg`
 - `*.gguf`, `*.safetensors`, `*.pt`, `*.onnx`
 - `*.db`
-- `*.part*` (segmented archives — **CURRENTLY MISSING, must be added**)
-- `*.rtf` (educational content — **CURRENTLY MISSING, must be added**)
+- `*.part[0-9]*` (segmented archives)
+- `*.rtf` (educational content)
 
 ## Canonical Directory Structure
 
@@ -172,6 +172,42 @@ metablooms-os-bundles/
 │       └── SOURCE_LEDGER.json
 └── os_bundles/                       # Binary artifacts (90 files)
 ```
+
+## Standalone Policy Documents
+
+Each governance framework has a detailed policy specification:
+
+| Framework  | Policy Document                            |
+|------------|--------------------------------------------|
+| DeltaGate  | `.codex/policies/DELTAGATE_v1.md`          |
+| RRP        | `.codex/policies/RRP_v1.md`                |
+| SEE        | `.codex/policies/SEE_ENGINE_v1.md`         |
+
+Frameworks without standalone docs (Kernel Law, ECL, CDR) are defined
+in this file. They may be extracted to standalone docs in future versions.
+
+## Forbidden Language Scope
+
+The forbidden language list (enforced, verified, running, active, wired,
+booted, compliant, guaranteed) applies ONLY to **agent-emitted output**.
+
+It does NOT apply to:
+- Bundle filenames (e.g., `MASTERY_ENFORCED` is a valid qualifier)
+- Governance documents quoting the forbidden list itself
+- Historical references in receipts
+
+## FAIL CLOSED Definition
+
+When the prompt says "FAIL CLOSED," the agent MUST:
+
+1. Stop the current phase immediately
+2. Emit a receipt explaining:
+   - Which phase failed
+   - Why it failed
+   - What was completed before failure
+3. Write the receipt to `.codex/receipts/FAIL_RECEIPT.json`
+4. Do NOT continue to subsequent phases
+5. Do NOT emit a TURN_RECEIPT (the FAIL_RECEIPT replaces it)
 
 ## Boot Contract
 

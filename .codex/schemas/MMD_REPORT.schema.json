@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "MMD_REPORT.schema.json",
+  "title": "MMD Report",
+  "description": "Schema for Missing Middle Detector reports",
+  "type": "object",
+  "required": ["report_version", "generated_utc", "total_findings", "summary", "findings"],
+  "properties": {
+    "report_version": {
+      "type": "string",
+      "description": "Schema version for this report format"
+    },
+    "generated_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when report was generated"
+    },
+    "total_findings": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "summary": {
+      "type": "object",
+      "required": ["critical", "high", "medium", "low", "info"],
+      "properties": {
+        "critical": { "type": "integer", "minimum": 0 },
+        "high": { "type": "integer", "minimum": 0 },
+        "medium": { "type": "integer", "minimum": 0 },
+        "low": { "type": "integer", "minimum": 0 },
+        "info": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "severity", "category", "title", "description", "affected_files", "recommendation", "effort"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^MMD-[0-9]{3}$",
+            "description": "Stable identifier for this finding"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "STALE_ARTIFACT",
+              "MISSING_SCHEMA",
+              "UNDEFINED_PROCESS",
+              "MISSING_POLICY",
+              "NAMING_GAP",
+              "LINEAGE_GAP",
+              "VERSIONING_GAP",
+              "SCOPE_GAP",
+              "SELF_REFERENCE",
+              "CONVERGENCE_GAP",
+              "EVIDENCE_GAP",
+              "DUPLICATE_ARTIFACT",
+              "ORPHANED_PART",
+              "LFS_GAP",
+              "TEMPLATE_GAP",
+              "INTEGRATION_GAP"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the gap or issue"
+          },
+          "affected_files": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "recommendation": {
+            "type": "string"
+          },
+          "effort": {
+            "type": "string",
+            "enum": ["LOW", "MEDIUM", "HIGH"]
+          }
+        }
+      }
+    }
+  }
+}

@@ -19,13 +19,9 @@
     },
     "total_size_bytes": 1131543593,
     "total_size_human": "~1.05 GiB",
-    "lfs_tracked_count": 77,
-    "lfs_untracked_count": 13,
-    "lfs_tracking_gaps": [
-      "*.part* (affects 10 chat_export_part files)",
-      "*.rtf (affects 1 educational file)",
-      "*.zip.part* (affects 2 os_bundle_part files)"
-    ]
+    "lfs_tracked_count": 90,
+    "lfs_untracked_count": 0,
+    "lfs_tracking_gaps": []
   },
   "entries": [
     {
@@ -37,8 +33,13 @@
       "date_prefix": "2026-01-17",
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["BASELINE"],
-      "feature_chain": ["PASS3_BYTE_TRUTH_V2", "PHASE1_OS_BASELINE_V1"],
+      "version_qualifiers": [
+        "BASELINE"
+      ],
+      "feature_chain": [
+        "PASS3_BYTE_TRUTH_V2",
+        "PHASE1_OS_BASELINE_V1"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -54,8 +55,14 @@
       "date_prefix": "2026-01-17",
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["BASELINE"],
-      "feature_chain": ["PASS3_BYTE_TRUTH_V2", "PHASE1_OS_BASELINE_V1", "DELTA_SEE_UBIQUITY_V1_FULL"],
+      "version_qualifiers": [
+        "BASELINE"
+      ],
+      "feature_chain": [
+        "PASS3_BYTE_TRUTH_V2",
+        "PHASE1_OS_BASELINE_V1",
+        "DELTA_SEE_UBIQUITY_V1_FULL"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -71,8 +78,14 @@
       "date_prefix": "2026-01-17",
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["BASELINE"],
-      "feature_chain": ["PASS3_BYTE_TRUTH_V2", "PHASE1_OS_BASELINE_V1", "SEE_LOOP_P0"],
+      "version_qualifiers": [
+        "BASELINE"
+      ],
+      "feature_chain": [
+        "PASS3_BYTE_TRUTH_V2",
+        "PHASE1_OS_BASELINE_V1",
+        "SEE_LOOP_P0"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -88,8 +101,16 @@
       "date_prefix": "2026-01-17",
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["BASELINE"],
-      "feature_chain": ["PASS3_BYTE_TRUTH_V2", "PHASE1_OS_BASELINE_V1", "SEE_LOOP_P0", "SECURITY_AXIS_P0", "RESOURCE_CONCURRENCY_SCHEMA_V1"],
+      "version_qualifiers": [
+        "BASELINE"
+      ],
+      "feature_chain": [
+        "PASS3_BYTE_TRUTH_V2",
+        "PHASE1_OS_BASELINE_V1",
+        "SEE_LOOP_P0",
+        "SECURITY_AXIS_P0",
+        "RESOURCE_CONCURRENCY_SCHEMA_V1"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -105,8 +126,17 @@
       "date_prefix": "2026-01-17",
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["BASELINE"],
-      "feature_chain": ["PASS3_BYTE_TRUTH_V2", "PHASE1_OS_BASELINE_V1", "SEE_LOOP_P0", "SECURITY_AXIS_P0", "RESOURCE_CONCURRENCY_SCHEMA_V1", "PORTABILITY_CONFIG_DEPENDENCY_V1"],
+      "version_qualifiers": [
+        "BASELINE"
+      ],
+      "feature_chain": [
+        "PASS3_BYTE_TRUTH_V2",
+        "PHASE1_OS_BASELINE_V1",
+        "SEE_LOOP_P0",
+        "SECURITY_AXIS_P0",
+        "RESOURCE_CONCURRENCY_SCHEMA_V1",
+        "PORTABILITY_CONFIG_DEPENDENCY_V1"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -122,8 +152,18 @@
       "date_prefix": "2026-01-17",
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["BASELINE"],
-      "feature_chain": ["PASS3_BYTE_TRUTH_V2", "PHASE1_OS_BASELINE_V1", "SEE_LOOP_P0", "SECURITY_AXIS_P0", "RESOURCE_CONCURRENCY_SCHEMA_V1", "PORTABILITY_CONFIG_DEPENDENCY_V1", "FILE_HANDLING_P0_V1"],
+      "version_qualifiers": [
+        "BASELINE"
+      ],
+      "feature_chain": [
+        "PASS3_BYTE_TRUTH_V2",
+        "PHASE1_OS_BASELINE_V1",
+        "SEE_LOOP_P0",
+        "SECURITY_AXIS_P0",
+        "RESOURCE_CONCURRENCY_SCHEMA_V1",
+        "PORTABILITY_CONFIG_DEPENDENCY_V1",
+        "FILE_HANDLING_P0_V1"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -186,7 +226,7 @@
       "category": "chat_export_part",
       "extension": ".part001",
       "size_bytes": 104857600,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -203,7 +243,7 @@
       "category": "chat_export_part",
       "extension": ".part002",
       "size_bytes": 104857600,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -220,7 +260,7 @@
       "category": "chat_export_part",
       "extension": ".part003",
       "size_bytes": 104857600,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -237,7 +277,7 @@
       "category": "chat_export_part",
       "extension": ".part004",
       "size_bytes": 104857600,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -254,7 +294,7 @@
       "category": "chat_export_part",
       "extension": ".part005",
       "size_bytes": 104857600,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -271,7 +311,7 @@
       "category": "chat_export_part",
       "extension": ".part006",
       "size_bytes": 104857600,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -288,7 +328,7 @@
       "category": "chat_export_part",
       "extension": ".part007",
       "size_bytes": 104857600,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -305,7 +345,7 @@
       "category": "chat_export_part",
       "extension": ".part008",
       "size_bytes": 35531819,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -356,7 +396,7 @@
       "category": "educational",
       "extension": ".rtf",
       "size_bytes": 28014058,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -530,7 +570,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260124T224700Z",
       "phase": null,
-      "version_qualifiers": ["PATCHED"],
+      "version_qualifiers": [
+        "PATCHED"
+      ],
       "feature_chain": [],
       "is_duplicate": true,
       "part_number": null,
@@ -632,7 +674,10 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P1",
-      "version_qualifiers": ["CANONICAL", "FULLY_WIRED"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "FULLY_WIRED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -649,7 +694,10 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P1",
-      "version_qualifiers": ["CANONICAL", "MASTERY_ENFORCED"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "MASTERY_ENFORCED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -666,7 +714,11 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P1",
-      "version_qualifiers": ["CANONICAL", "MASTERY_ENFORCED", "PATCHED"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "MASTERY_ENFORCED",
+        "PATCHED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -683,7 +735,10 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P1",
-      "version_qualifiers": ["CANONICAL", "MASTERY_INTEGRATED"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "MASTERY_INTEGRATED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -717,7 +772,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T142423Z",
       "phase": null,
-      "version_qualifiers": ["FIXED"],
+      "version_qualifiers": [
+        "FIXED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -734,7 +791,10 @@
       "date_prefix": null,
       "timestamp_iso": "20260128T164100Z",
       "phase": null,
-      "version_qualifiers": ["CANONICAL", "REBUILT"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "REBUILT"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -751,7 +811,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T134057Z",
       "phase": "P0",
-      "version_qualifiers": ["EXECUTION_ENFORCED"],
+      "version_qualifiers": [
+        "EXECUTION_ENFORCED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -768,7 +830,10 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T134913Z",
       "phase": "P0",
-      "version_qualifiers": ["EXECUTION_ENFORCED", "RESHIPPED"],
+      "version_qualifiers": [
+        "EXECUTION_ENFORCED",
+        "RESHIPPED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -785,7 +850,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T150901Z",
       "phase": null,
-      "version_qualifiers": ["UIUX_ENFORCED"],
+      "version_qualifiers": [
+        "UIUX_ENFORCED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -803,7 +870,10 @@
       "timestamp_iso": null,
       "phase": "P0",
       "version_qualifiers": [],
-      "feature_chain": ["PASS3", "FILE_HANDLING_GATE_P0_V1"],
+      "feature_chain": [
+        "PASS3",
+        "FILE_HANDLING_GATE_P0_V1"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -820,7 +890,10 @@
       "timestamp_iso": null,
       "phase": null,
       "version_qualifiers": [],
-      "feature_chain": ["PASS3", "PHASEC3_MATERIALIZED_V1"],
+      "feature_chain": [
+        "PASS3",
+        "PHASEC3_MATERIALIZED_V1"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -837,7 +910,10 @@
       "timestamp_iso": null,
       "phase": null,
       "version_qualifiers": [],
-      "feature_chain": ["PASS3", "SHIPPING_PROCEDURE_V1"],
+      "feature_chain": [
+        "PASS3",
+        "SHIPPING_PROCEDURE_V1"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -853,7 +929,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T143734Z",
       "phase": "P0",
-      "version_qualifiers": ["PATCHED"],
+      "version_qualifiers": [
+        "PATCHED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -870,7 +948,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T144654Z",
       "phase": null,
-      "version_qualifiers": ["RCA_ENABLED"],
+      "version_qualifiers": [
+        "RCA_ENABLED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -887,7 +967,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T143236Z",
       "phase": null,
-      "version_qualifiers": ["SHIP_GATED"],
+      "version_qualifiers": [
+        "SHIP_GATED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -904,7 +986,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T144920Z",
       "phase": null,
-      "version_qualifiers": ["TRACE_DRIFT_ENABLED"],
+      "version_qualifiers": [
+        "TRACE_DRIFT_ENABLED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -921,7 +1005,9 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["REPAIRED"],
+      "version_qualifiers": [
+        "REPAIRED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -938,7 +1024,9 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["VALIDATED_EXPORT"],
+      "version_qualifiers": [
+        "VALIDATED_EXPORT"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -951,11 +1039,13 @@
       "category": "os_bundle_part",
       "extension": ".zip.part1",
       "size_bytes": 95898025,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["VALIDATED_EXPORT"],
+      "version_qualifiers": [
+        "VALIDATED_EXPORT"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": 1,
@@ -968,11 +1058,13 @@
       "category": "os_bundle_part",
       "extension": ".zip.part2",
       "size_bytes": 95898024,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["VALIDATED_EXPORT"],
+      "version_qualifiers": [
+        "VALIDATED_EXPORT"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": 2,
@@ -989,7 +1081,10 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["BASELINE", "REBUILT"],
+      "version_qualifiers": [
+        "BASELINE",
+        "REBUILT"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1006,7 +1101,11 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["BASELINE", "REBUILT", "REPAIRED"],
+      "version_qualifiers": [
+        "BASELINE",
+        "REBUILT",
+        "REPAIRED"
+      ],
       "feature_chain": [],
       "is_duplicate": true,
       "part_number": null,
@@ -1023,7 +1122,11 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["BASELINE", "REBUILT", "REPAIRED"],
+      "version_qualifiers": [
+        "BASELINE",
+        "REBUILT",
+        "REPAIRED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1040,7 +1143,10 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["CANONICAL", "REMEDIATED"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "REMEDIATED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1057,7 +1163,11 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": "P0",
-      "version_qualifiers": ["CANONICAL", "REMEDIATED", "WIRED"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "REMEDIATED",
+        "WIRED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1074,7 +1184,9 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["CANONICAL"],
+      "version_qualifiers": [
+        "CANONICAL"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1091,7 +1203,10 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["CANONICAL", "FIXED"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "FIXED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1108,7 +1223,10 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["CBPPP", "BOOT_HARDENED"],
+      "version_qualifiers": [
+        "CBPPP",
+        "BOOT_HARDENED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1126,7 +1244,11 @@
       "timestamp_iso": null,
       "phase": "P1",
       "version_qualifiers": [],
-      "feature_chain": ["WHOLEOS", "AUTO_MMD_CONTRACT_AUDIT_V1_2026-01-17", "DELTA_SEE_MMD_ECL_2026-01-18_P1"],
+      "feature_chain": [
+        "WHOLEOS",
+        "AUTO_MMD_CONTRACT_AUDIT_V1_2026-01-17",
+        "DELTA_SEE_MMD_ECL_2026-01-18_P1"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -1143,7 +1265,10 @@
       "timestamp_iso": null,
       "phase": null,
       "version_qualifiers": [],
-      "feature_chain": ["WHOLEOS", "SEE_MMD_ECL_INVARIANTS_V1_2026-01-18"],
+      "feature_chain": [
+        "WHOLEOS",
+        "SEE_MMD_ECL_INVARIANTS_V1_2026-01-18"
+      ],
       "is_duplicate": false,
       "part_number": null,
       "part_total": null,
@@ -1159,7 +1284,9 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["CANONICAL"],
+      "version_qualifiers": [
+        "CANONICAL"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1176,7 +1303,9 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["CANONICAL"],
+      "version_qualifiers": [
+        "CANONICAL"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1193,7 +1322,10 @@
       "date_prefix": null,
       "timestamp_iso": "20260124T191416Z",
       "phase": "P0",
-      "version_qualifiers": ["CANONICAL", "REHYDRATED"],
+      "version_qualifiers": [
+        "CANONICAL",
+        "REHYDRATED"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1278,7 +1410,9 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["FROZEN_FULL_EXPORT"],
+      "version_qualifiers": [
+        "FROZEN_FULL_EXPORT"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1295,7 +1429,9 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["FROZEN_FULL_EXPORT"],
+      "version_qualifiers": [
+        "FROZEN_FULL_EXPORT"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1312,7 +1448,9 @@
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
-      "version_qualifiers": ["FROZEN_FULL_EXPORT"],
+      "version_qualifiers": [
+        "FROZEN_FULL_EXPORT"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1329,7 +1467,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T123419Z",
       "phase": "P0",
-      "version_qualifiers": ["CHASSISGATE"],
+      "version_qualifiers": [
+        "CHASSISGATE"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1346,7 +1486,10 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T120832Z",
       "phase": "P0",
-      "version_qualifiers": ["CHASSISGATE", "REISSUE"],
+      "version_qualifiers": [
+        "CHASSISGATE",
+        "REISSUE"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1380,7 +1523,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260127T190025Z",
       "phase": null,
-      "version_qualifiers": ["CANONICAL"],
+      "version_qualifiers": [
+        "CANONICAL"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1397,7 +1542,9 @@
       "date_prefix": null,
       "timestamp_iso": "20260129T064552Z",
       "phase": null,
-      "version_qualifiers": ["LTS"],
+      "version_qualifiers": [
+        "LTS"
+      ],
       "feature_chain": [],
       "is_duplicate": false,
       "part_number": null,
@@ -1444,7 +1591,7 @@
       "category": "chat_export_part",
       "extension": ".zip.part001",
       "size_bytes": 94371840,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,
@@ -1461,7 +1608,7 @@
       "category": "chat_export_part",
       "extension": ".zip.part002",
       "size_bytes": 47816350,
-      "lfs_tracked": false,
+      "lfs_tracked": true,
       "date_prefix": null,
       "timestamp_iso": null,
       "phase": null,

@@ -16,11 +16,18 @@ metablooms-os-bundles/
 │   ├── receipts/                     # Execution receipts
 │   │   └── BOOT_RECEIPT.json         # Boot acknowledgment receipt
 │   ├── artifacts/                    # Generated outputs
-│   │   └── BUNDLE_CATALOG.json       # Full catalog of all 90 files
+│   │   ├── BUNDLE_CATALOG.json       # Full catalog of all 90 files
+│   │   └── MMD_REPORT.json           # Missing Middle Detection report
 │   ├── schemas/                      # JSON schemas
-│   │   └── BUNDLE_ENTRY.schema.json  # Per-file metadata schema
+│   │   ├── BUNDLE_ENTRY.schema.json  # Per-file metadata schema
+│   │   ├── BUNDLE_LINEAGE.schema.json # Bundle evolution tracking
+│   │   ├── MMD_REPORT.schema.json    # MMD report structure
+│   │   └── TURN_RECEIPT.schema.json  # Turn receipt structure
 │   ├── policies/                     # Governance policies
-│   │   └── SUPER_PROMPT_v2.2.md      # Governed execution prompt
+│   │   ├── SUPER_PROMPT_v2.3.md      # Governed execution prompt
+│   │   ├── DELTAGATE_v1.md           # Change admission policy
+│   │   ├── RRP_v1.md                 # Recursive refinement protocol
+│   │   └── SEE_ENGINE_v1.md          # Search for Evidence Engine spec
 │   └── research/                     # Evidence artifacts
 └── os_bundles/                       # Binary artifacts (90 files)
     ├── MetaBlooms_OS_*.zip           # OS bundle snapshots (~50 files)
@@ -50,7 +57,7 @@ This repository uses a structured governance framework under `.codex/`. See `.co
 
 ### Running a Governed Session
 
-1. The execution prompt is at `.codex/policies/SUPER_PROMPT_v2.2.md`
+1. The execution prompt is at `.codex/policies/SUPER_PROMPT_v2.3.md`
 2. Copy that prompt into your AI tool of choice
 3. Fill in the `TASK_INPUT` section with your specific task
 4. The agent will execute the Mandatory Process Pipeline (phases -1 through 7)
@@ -103,17 +110,17 @@ OS bundles follow a structured naming pattern:
 
 | Category          | Pattern                              | Count |
 |-------------------|--------------------------------------|-------|
-| `os_bundle`       | `MetaBlooms_OS_*.zip`                | ~55   |
-| `os_bundle_part`  | `*.zip.part*`                        | 4     |
+| `os_bundle`       | `MetaBlooms_OS_*.zip`                | 52    |
+| `os_bundle_part`  | `*.zip.part*`                        | 2     |
 | `chat_export`     | `MB_CHAT*_*.zip`, `CHAT_DELTA_*`     | 7     |
 | `chat_export_part`| `CHAT*_FULL_*.part*`                 | 10    |
-| `driver`          | NVIDIA, printer, GPU scan .exe       | 3     |
+| `driver`          | NVIDIA, printer, GPU scan .exe       | 4     |
 | `utility`         | GitHubDesktop, gpg4win .exe          | 2     |
 | `educational`     | ELAR resource, Lesson plans          | 2     |
-| `non_project`     | `MetaBlooms_NON_PROJECT_FILES_*`     | 4     |
+| `non_project`     | `MetaBlooms_NON_PROJECT_FILES_*`     | 5     |
 | `ship_bundle`     | `MB_SHIP_BUNDLE_*`                   | 1     |
 | `recovery`        | `payload_recovery_*`                 | 1     |
-| `uploader`        | `*uploader*`, `*RunPack*`            | 1     |
+| `uploader`        | `*uploader*`, `*RunPack*`            | 2     |
 | `misc_archive`    | `Archive*.zip`, `drive-download-*`   | 2     |
 
 Full catalog with per-file metadata: `.codex/artifacts/BUNDLE_CATALOG.json`
