@@ -97,10 +97,44 @@ def check_mb_inv_bundle_internals_v1():
         )
 
 
+def check_mb_inv_maturity_pipeline_v1():
+    """
+    MB_INV_MATURITY_PIPELINE_V1: Maturity pipeline must be enforced.
+    Checks:
+    1. ARTIFACT_MATURITY.json exists
+    2. ARTIFACT_MATURITY_v1.md policy exists
+    3. run_maturity_gate.py validator exists
+    4. MATURITY gate is registered in master runner
+    """
+    global checked
+    checked += 1
+
+    maturity_tracker = ROOT / ".codex" / "artifacts" / "ARTIFACT_MATURITY.json"
+    maturity_policy = ROOT / ".codex" / "policies" / "ARTIFACT_MATURITY_v1.md"
+    maturity_gate = ROOT / ".codex" / "validators" / "run_maturity_gate.py"
+    master_runner = ROOT / ".codex" / "validators" / "run_governance_gate.py"
+
+    if not maturity_tracker.exists():
+        failures.append("  MB_INV_MATURITY_PIPELINE_V1: ARTIFACT_MATURITY.json not found")
+        return
+    if not maturity_policy.exists():
+        failures.append("  MB_INV_MATURITY_PIPELINE_V1: ARTIFACT_MATURITY_v1.md not found")
+        return
+    if not maturity_gate.exists():
+        failures.append("  MB_INV_MATURITY_PIPELINE_V1: run_maturity_gate.py not found")
+        return
+
+    # Check MATURITY gate is registered
+    runner_content = master_runner.read_text()
+    if '"MATURITY"' not in runner_content:
+        failures.append("  MB_INV_MATURITY_PIPELINE_V1: MATURITY gate not registered in master runner")
+
+
 # Registry of invariant checkers
 INVARIANT_CHECKERS = {
     "MB_INV_NLQ_REQUIRED_V1": check_mb_inv_nlq_required_v1,
     "MB_INV_BUNDLE_INTERNALS_AS_EVIDENCE_V1": check_mb_inv_bundle_internals_v1,
+    "MB_INV_MATURITY_PIPELINE_V1": check_mb_inv_maturity_pipeline_v1,
 }
 
 

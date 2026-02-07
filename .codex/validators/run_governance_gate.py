@@ -26,6 +26,7 @@ GATES = [
     ("LFS_GAP", "run_lfs_gap_gate.py", 12),
     ("FORBIDDEN_LANGUAGE", "run_forbidden_language_gate.py", 13),
     ("INVARIANT", "run_invariant_gate.py", 14),
+    ("MATURITY", "run_maturity_gate.py", 15),
 ]
 
 # Gates that can be skipped with --quick

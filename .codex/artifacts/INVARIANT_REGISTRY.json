@@ -26,6 +26,18 @@
       "evidence_sources": ["PRIOR_ARTIFACTS", "SCHEMA_VALIDATION", "BUNDLE_INTERNAL_EVENTS"],
       "status": "ACTIVE",
       "created_utc": "2026-02-07T00:00:00Z"
+    },
+    {
+      "invariant_id": "MB_INV_MATURITY_PIPELINE_V1",
+      "severity": "P0",
+      "title": "Every governance artifact must progress through DRAFT \u2192 VALIDATED \u2192 ENFORCED",
+      "description": "Every artifact in the governance system must be registered in ARTIFACT_MATURITY.json with a claimed maturity stage (DRAFT, VALIDATED, or ENFORCED). The claimed stage must be mechanically provable: DRAFT requires file existence, VALIDATED requires a schema or structural check that passes, ENFORCED requires a validator wired into the pre-commit gate. False maturity claims block commits.",
+      "rationale": "Without this invariant, specifications accumulate without enforcement. The gap between what is claimed and what is checked grows silently. This invariant ensures that every artifact either admits it is unvalidated (DRAFT) or proves its claimed maturity with mechanical evidence.",
+      "mbql_check": "CHECK INVARIANT MB_INV_MATURITY_PIPELINE_V1",
+      "verification_method": "Run .codex/validators/run_maturity_gate.py. It checks: (1) every tracked artifact's claimed maturity is provable, (2) summary counts match actual counts, (3) no governance artifacts exist that are untracked.",
+      "evidence_sources": ["LOCAL_FS", "SCHEMA_VALIDATION", "PRIOR_ARTIFACTS"],
+      "status": "ACTIVE",
+      "created_utc": "2026-02-07T00:00:00Z"
     }
   ]
 }
