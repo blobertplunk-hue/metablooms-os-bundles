@@ -21,7 +21,14 @@
     "total_size_human": "~1.05 GiB",
     "lfs_tracked_count": 90,
     "lfs_untracked_count": 0,
-    "lfs_tracking_gaps": []
+    "lfs_tracking_gaps": [],
+    "by_lifecycle_status": {
+      "ACTIVE": 74,
+      "ORPHANED": 1,
+      "DUPLICATE": 3,
+      "SUPERSEDED": 5,
+      "FROZEN": 7
+    }
   },
   "entries": [
     {
@@ -44,7 +51,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Earliest date-prefixed bundle."
+      "notes": "LFS pointer (133 bytes). Earliest date-prefixed bundle.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_DELTA_SEE_UBIQUITY_V1_FULL.zip",
@@ -67,7 +76,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Adds DELTA_SEE_UBIQUITY to baseline."
+      "notes": "LFS pointer (133 bytes). Adds DELTA_SEE_UBIQUITY to baseline.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0.zip",
@@ -90,7 +101,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Adds SEE_LOOP at P0."
+      "notes": "LFS pointer (133 bytes). Adds SEE_LOOP at P0.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1.zip",
@@ -115,7 +128,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Adds SECURITY_AXIS and RESOURCE_CONCURRENCY."
+      "notes": "LFS pointer (133 bytes). Adds SECURITY_AXIS and RESOURCE_CONCURRENCY.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1_PLUS_PORTABILITY_CONFIG_DEPENDENCY_V1.zip",
@@ -141,7 +156,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Adds PORTABILITY_CONFIG_DEPENDENCY."
+      "notes": "LFS pointer (133 bytes). Adds PORTABILITY_CONFIG_DEPENDENCY.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1_PLUS_PORTABILITY_CONFIG_DEPENDENCY_V1_PLUS_FILE_HANDLING_P0_V1.zip",
@@ -168,7 +185,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Longest feature chain in the date-prefixed series. Adds FILE_HANDLING."
+      "notes": "LFS pointer (133 bytes). Longest feature chain in the date-prefixed series. Adds FILE_HANDLING.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "3 ELAR Resource_ Annotated Example of the Teacher Model Prompt - Poetry_.zip",
@@ -185,7 +204,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). ELAR (English Language Arts and Reading) educational resource."
+      "notes": "LFS pointer (134 bytes). ELAR (English Language Arts and Reading) educational resource.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "591.44-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
@@ -202,7 +223,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). NVIDIA GPU driver version 591.44 for Windows 10/11 64-bit (DCH/WHQL certified)."
+      "notes": "LFS pointer (134 bytes). NVIDIA GPU driver version 591.44 for Windows 10/11 64-bit (DCH/WHQL certified).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Archive 2.zip",
@@ -219,7 +242,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Unnamed archive with no classification metadata."
+      "notes": "LFS pointer (133 bytes). Unnamed archive with no classification metadata.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT7_FULL_MNT_DATA_EXPORT.part001",
@@ -236,7 +261,9 @@
       "part_number": 1,
       "part_total": 8,
       "segment_group": "CHAT7_FULL_MNT_DATA_EXPORT",
-      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap)."
+      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT7_FULL_MNT_DATA_EXPORT.part002",
@@ -253,7 +280,9 @@
       "part_number": 2,
       "part_total": 8,
       "segment_group": "CHAT7_FULL_MNT_DATA_EXPORT",
-      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap)."
+      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT7_FULL_MNT_DATA_EXPORT.part003",
@@ -270,7 +299,9 @@
       "part_number": 3,
       "part_total": 8,
       "segment_group": "CHAT7_FULL_MNT_DATA_EXPORT",
-      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap)."
+      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT7_FULL_MNT_DATA_EXPORT.part004",
@@ -287,7 +318,9 @@
       "part_number": 4,
       "part_total": 8,
       "segment_group": "CHAT7_FULL_MNT_DATA_EXPORT",
-      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap)."
+      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT7_FULL_MNT_DATA_EXPORT.part005",
@@ -304,7 +337,9 @@
       "part_number": 5,
       "part_total": 8,
       "segment_group": "CHAT7_FULL_MNT_DATA_EXPORT",
-      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap)."
+      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT7_FULL_MNT_DATA_EXPORT.part006",
@@ -321,7 +356,9 @@
       "part_number": 6,
       "part_total": 8,
       "segment_group": "CHAT7_FULL_MNT_DATA_EXPORT",
-      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap)."
+      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT7_FULL_MNT_DATA_EXPORT.part007",
@@ -338,7 +375,9 @@
       "part_number": 7,
       "part_total": 8,
       "segment_group": "CHAT7_FULL_MNT_DATA_EXPORT",
-      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap)."
+      "notes": "100 MiB segment. NOT tracked by LFS (.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT7_FULL_MNT_DATA_EXPORT.part008",
@@ -355,7 +394,9 @@
       "part_number": 8,
       "part_total": 8,
       "segment_group": "CHAT7_FULL_MNT_DATA_EXPORT",
-      "notes": "Final segment (~33.9 MiB, smaller than preceding 100 MiB parts). NOT tracked by LFS (.part* extension gap)."
+      "notes": "Final segment (~33.9 MiB, smaller than preceding 100 MiB parts). NOT tracked by LFS (.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "CHAT_DELTA_EVIDENCE_PART2.zip",
@@ -372,7 +413,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Chat delta evidence archive, part 2 (part 1 not present in repo)."
+      "notes": "LFS pointer (134 bytes). Chat delta evidence archive, part 2 (part 1 not present in repo).",
+      "lifecycle_status": "ORPHANED",
+      "superseded_by": null
     },
     {
       "filename": "GitHubDesktopSetup-x64.exe",
@@ -389,7 +432,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). GitHub Desktop installer for x64 Windows."
+      "notes": "LFS pointer (134 bytes). GitHub Desktop installer for x64 Windows.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Lesson plans 1_19-1_23.rtf",
@@ -406,7 +451,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "~26.7 MiB RTF file. NOT tracked by LFS (*.rtf extension gap). Lesson plans for Jan 19-23."
+      "notes": "~26.7 MiB RTF file. NOT tracked by LFS (*.rtf extension gap). Lesson plans for Jan 19-23.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MB_CHAT3_MNT_DATA_PART1_20260121T185046Z.zip",
@@ -423,7 +470,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MB_CHAT3_MNT_DATA",
-      "notes": "LFS pointer (133 bytes). Chat 3 maintenance data, part 1 of 2."
+      "notes": "LFS pointer (133 bytes). Chat 3 maintenance data, part 1 of 2.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MB_CHAT3_MNT_DATA_PART2_20260121T185046Z (1).zip",
@@ -440,7 +489,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MB_CHAT3_MNT_DATA",
-      "notes": "LFS pointer (133 bytes). Duplicate of PART2 (browser re-download suffix)."
+      "notes": "LFS pointer (133 bytes). Duplicate of PART2 (browser re-download suffix).",
+      "lifecycle_status": "DUPLICATE",
+      "superseded_by": null
     },
     {
       "filename": "MB_CHAT3_MNT_DATA_PART2_20260121T185046Z.zip",
@@ -457,7 +508,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MB_CHAT3_MNT_DATA",
-      "notes": "LFS pointer (133 bytes). Chat 3 maintenance data, part 2 of 2."
+      "notes": "LFS pointer (133 bytes). Chat 3 maintenance data, part 2 of 2.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MB_CHAT6_MNTDATA_CHUNK002_20260121.zip",
@@ -474,7 +527,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MB_CHAT6_MNTDATA",
-      "notes": "LFS pointer (133 bytes). Chat 6 chunk 002 (chunk 001 and 003 not present)."
+      "notes": "LFS pointer (133 bytes). Chat 6 chunk 002 (chunk 001 and 003 not present).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MB_CHAT6_MNTDATA_CHUNK004_20260121.zip",
@@ -491,7 +546,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MB_CHAT6_MNTDATA",
-      "notes": "LFS pointer (133 bytes). Chat 6 chunk 004."
+      "notes": "LFS pointer (133 bytes). Chat 6 chunk 004.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MB_CHAT6_MNTDATA_PART02_20260121.zip",
@@ -508,7 +565,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MB_CHAT6_MNTDATA",
-      "notes": "LFS pointer (133 bytes). Chat 6 part 02 (alternate segmentation to chunk series)."
+      "notes": "LFS pointer (133 bytes). Chat 6 part 02 (alternate segmentation to chunk series).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MB_SHIP_BUNDLE_20260122.zip",
@@ -525,7 +584,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Ship bundle dated 2026-01-22."
+      "notes": "LFS pointer (133 bytes). Ship bundle dated 2026-01-22.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MF642CMFDriverV6405W64.exe",
@@ -542,7 +603,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Canon MF642C multifunction printer driver v6405 for Windows x64."
+      "notes": "LFS pointer (134 bytes). Canon MF642C multifunction printer driver v6405 for Windows x64.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_COMPLETE_OS_BUNDLE_20260124T234508Z.zip",
@@ -559,7 +622,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Complete OS bundle snapshot."
+      "notes": "LFS pointer (133 bytes). Complete OS bundle snapshot.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_GitHubUploader_RunPack_20260124T224700Z_PATCHED (2).zip",
@@ -578,7 +643,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (135 bytes). GitHub uploader run-pack, patched. Duplicate download suffix (2)."
+      "notes": "LFS pointer (135 bytes). GitHub uploader run-pack, patched. Duplicate download suffix (2). Filename has (2) suffix but original not in repo \u2014 sole surviving copy.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_Jan19-23_NON_OS_CONTENT.zip",
@@ -595,7 +662,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Non-OS content for Jan 19-23 period (likely educational/lesson plan adjacent)."
+      "notes": "LFS pointer (133 bytes). Non-OS content for Jan 19-23 period (likely educational/lesson plan adjacent).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_NON_PROJECT_FILES_PART1.zip",
@@ -612,7 +681,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MetaBlooms_NON_PROJECT_FILES",
-      "notes": "LFS pointer (134 bytes). Non-project files, part 1 of 4."
+      "notes": "LFS pointer (134 bytes). Non-project files, part 1 of 4.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_NON_PROJECT_FILES_PART2.zip",
@@ -629,7 +700,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MetaBlooms_NON_PROJECT_FILES",
-      "notes": "LFS pointer (134 bytes). Non-project files, part 2 of 4."
+      "notes": "LFS pointer (134 bytes). Non-project files, part 2 of 4.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_NON_PROJECT_FILES_PART3.zip",
@@ -646,7 +719,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MetaBlooms_NON_PROJECT_FILES",
-      "notes": "LFS pointer (134 bytes). Non-project files, part 3 of 4."
+      "notes": "LFS pointer (134 bytes). Non-project files, part 3 of 4.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_NON_PROJECT_FILES_PART4.zip",
@@ -663,7 +738,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MetaBlooms_NON_PROJECT_FILES",
-      "notes": "LFS pointer (134 bytes). Non-project files, part 4 of 4."
+      "notes": "LFS pointer (134 bytes). Non-project files, part 4 of 4.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_CANONICAL_P0_P1_FULLY_WIRED.zip",
@@ -683,7 +760,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Canonical P0+P1 fully wired release."
+      "notes": "LFS pointer (133 bytes). Canonical P0+P1 fully wired release.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT.zip",
@@ -703,7 +782,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Canonical P0+P1 with mastery enforcement, V1 content."
+      "notes": "LFS pointer (133 bytes). Canonical P0+P1 with mastery enforcement, V1 content.",
+      "lifecycle_status": "SUPERSEDED",
+      "superseded_by": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT__PATCHED_20260122.zip"
     },
     {
       "filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT__PATCHED_20260122.zip",
@@ -724,7 +805,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Patched on 2026-01-22. Note double underscore before PATCHED."
+      "notes": "LFS pointer (133 bytes). Patched on 2026-01-22. Note double underscore before PATCHED.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_INTEGRATED.zip",
@@ -744,7 +827,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Canonical P0+P1 with mastery integrated."
+      "notes": "LFS pointer (133 bytes). Canonical P0+P1 with mastery integrated.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_EXECUTED_20260127T142924Z.zip",
@@ -761,7 +846,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Executed OS snapshot."
+      "notes": "LFS pointer (134 bytes). Executed OS snapshot.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_FIXED_20260127T142423Z.zip",
@@ -780,7 +867,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Bug-fixed OS snapshot."
+      "notes": "LFS pointer (134 bytes). Bug-fixed OS snapshot.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_FULL_CANONICAL_REBUILT_20260128T164100Z.zip",
@@ -800,7 +889,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Full canonical rebuild."
+      "notes": "LFS pointer (134 bytes). Full canonical rebuild.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_FULL_P0_EXECUTION_ENFORCED_20260127T134057Z.zip",
@@ -819,7 +910,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Full P0 with execution enforcement."
+      "notes": "LFS pointer (134 bytes). Full P0 with execution enforcement.",
+      "lifecycle_status": "SUPERSEDED",
+      "superseded_by": "MetaBlooms_OS_FULL_P0_EXECUTION_ENFORCED_RESHIPPED_20260127T134913Z.zip"
     },
     {
       "filename": "MetaBlooms_OS_FULL_P0_EXECUTION_ENFORCED_RESHIPPED_20260127T134913Z.zip",
@@ -839,7 +932,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Reshipped version of execution-enforced P0 bundle."
+      "notes": "LFS pointer (134 bytes). Reshipped version of execution-enforced P0 bundle.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_FULL_UIUX_ENFORCED_20260127T150901Z.zip",
@@ -858,7 +953,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Full OS with UI/UX enforcement."
+      "notes": "LFS pointer (134 bytes). Full OS with UI/UX enforcement.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_PASS3_PLUS_FILE_HANDLING_GATE_P0_V1.zip",
@@ -878,7 +975,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Pass 3 with file handling gate at P0."
+      "notes": "LFS pointer (133 bytes). Pass 3 with file handling gate at P0.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_PASS3_PLUS_PHASEC3_MATERIALIZED_V1.zip",
@@ -898,7 +997,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Pass 3 with phase C3 materialized."
+      "notes": "LFS pointer (133 bytes). Pass 3 with phase C3 materialized.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_PASS3_PLUS_SHIPPING_PROCEDURE_V1.zip",
@@ -918,7 +1019,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Pass 3 with shipping procedure."
+      "notes": "LFS pointer (133 bytes). Pass 3 with shipping procedure.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_PATCHED_UX_P0_20260127T143734Z.zip",
@@ -937,7 +1040,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). UX-patched P0 bundle."
+      "notes": "LFS pointer (134 bytes). UX-patched P0 bundle.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_RCA_ENABLED_20260127T144654Z.zip",
@@ -956,7 +1061,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Root cause analysis instrumentation enabled."
+      "notes": "LFS pointer (134 bytes). Root cause analysis instrumentation enabled.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_SHIP_GATED_20260127T143236Z.zip",
@@ -975,7 +1082,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Production-ready, gated for release."
+      "notes": "LFS pointer (134 bytes). Production-ready, gated for release.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_TRACE_DRIFT_ENABLED_20260127T144920Z.zip",
@@ -994,7 +1103,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Trace drift detection enabled."
+      "notes": "LFS pointer (134 bytes). Trace drift detection enabled.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_V1_WHOLEOS_REPAIRED.zip",
@@ -1013,7 +1124,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Whole-OS V1 repaired build."
+      "notes": "LFS pointer (133 bytes). Whole-OS V1 repaired build.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_VALIDATED_EXPORT.zip",
@@ -1032,7 +1145,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": "MetaBlooms_OS_VALIDATED_EXPORT",
-      "notes": "LFS pointer (134 bytes). QA-verified export. Has companion .zip.part1 and .zip.part2 segments."
+      "notes": "LFS pointer (134 bytes). QA-verified export. Has companion .zip.part1 and .zip.part2 segments.",
+      "lifecycle_status": "FROZEN",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_VALIDATED_EXPORT.zip.part1",
@@ -1051,7 +1166,9 @@
       "part_number": 1,
       "part_total": 2,
       "segment_group": "MetaBlooms_OS_VALIDATED_EXPORT",
-      "notes": "~91.5 MiB segment. NOT tracked by LFS (*.zip.part* extension gap)."
+      "notes": "~91.5 MiB segment. NOT tracked by LFS (*.zip.part* extension gap).",
+      "lifecycle_status": "FROZEN",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_VALIDATED_EXPORT.zip.part2",
@@ -1070,7 +1187,9 @@
       "part_number": 2,
       "part_total": 2,
       "segment_group": "MetaBlooms_OS_VALIDATED_EXPORT",
-      "notes": "~91.5 MiB segment. NOT tracked by LFS (*.zip.part* extension gap). 1 byte smaller than part1."
+      "notes": "~91.5 MiB segment. NOT tracked by LFS (*.zip.part* extension gap). 1 byte smaller than part1.",
+      "lifecycle_status": "FROZEN",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK.zip",
@@ -1090,7 +1209,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Whole-OS baseline v1.2, P0 SEE/MMD/ECL rebuilt with boot OK."
+      "notes": "LFS pointer (133 bytes). Whole-OS baseline v1.2, P0 SEE/MMD/ECL rebuilt with boot OK.",
+      "lifecycle_status": "SUPERSEDED",
+      "superseded_by": "MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2.zip"
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2 (1).zip",
@@ -1111,7 +1232,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Duplicate of SHAFIX_v2 (browser re-download suffix). SHA fix v2 applied."
+      "notes": "LFS pointer (133 bytes). Duplicate of SHAFIX_v2 (browser re-download suffix). SHA fix v2 applied.",
+      "lifecycle_status": "DUPLICATE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2.zip",
@@ -1132,7 +1255,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Whole-OS baseline v1.2, repaired with SHA fix v2."
+      "notes": "LFS pointer (133 bytes). Whole-OS baseline v1.2, repaired with SHA fix v2.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED.zip",
@@ -1152,7 +1277,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Canonical whole-OS from 2026-01-21, P0 fix remediated."
+      "notes": "LFS pointer (133 bytes). Canonical whole-OS from 2026-01-21, P0 fix remediated.",
+      "lifecycle_status": "SUPERSEDED",
+      "superseded_by": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED__WIRED_2026-01-21.zip"
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED__WIRED_2026-01-21.zip",
@@ -1173,7 +1300,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Wired variant of P0FIX_REMEDIATED. Note double underscore before WIRED."
+      "notes": "LFS pointer (133 bytes). Wired variant of P0FIX_REMEDIATED. Note double underscore before WIRED.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_PAYLOAD_APPLIED_ACCEPT_OK.zip",
@@ -1192,7 +1321,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Canonical whole-OS with payload applied and accepted."
+      "notes": "LFS pointer (133 bytes). Canonical whole-OS with payload applied and accepted.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_RUNTIMEENTRYPOINT_FIX.zip",
@@ -1212,7 +1343,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Canonical whole-OS with runtime entry point fix."
+      "notes": "LFS pointer (133 bytes). Canonical whole-OS with runtime entry point fix.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_CBPPP_BOOT_HARDENED_20260121.zip",
@@ -1232,7 +1365,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). CBPPP boot-hardened whole-OS from 2026-01-21."
+      "notes": "LFS pointer (133 bytes). CBPPP boot-hardened whole-OS from 2026-01-21.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_PLUS_AUTO_MMD_CONTRACT_AUDIT_V1_2026-01-17_PLUS_DELTA_SEE_MMD_ECL_2026-01-18_P1.zip",
@@ -1253,7 +1388,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Whole-OS with auto MMD contract audit plus delta SEE/MMD/ECL at P1."
+      "notes": "LFS pointer (133 bytes). Whole-OS with auto MMD contract audit plus delta SEE/MMD/ECL at P1.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_PLUS_SEE_MMD_ECL_INVARIANTS_V1_2026-01-18.zip",
@@ -1273,7 +1410,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Whole-OS with SEE/MMD/ECL invariants V1."
+      "notes": "LFS pointer (133 bytes). Whole-OS with SEE/MMD/ECL invariants V1.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_RUNTIME_FULL_GOVERNANCE_V2_CANONICAL_20260121.zip",
@@ -1292,7 +1431,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Whole-OS runtime full governance V2, canonical."
+      "notes": "LFS pointer (133 bytes). Whole-OS runtime full governance V2, canonical.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "MetaBlooms_OS_WHOLEOS_RUNTIME_FULL_GOVERNANCE_V3_CANONICAL_20260121.zip",
@@ -1311,7 +1452,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Whole-OS runtime full governance V3, canonical. Supersedes V2."
+      "notes": "LFS pointer (133 bytes). Whole-OS runtime full governance V3, canonical. Supersedes V2.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_CANONICAL_P0_REHYDRATED_CLEAN_MB-BOOT-20260124T191416Z.zip",
@@ -1331,7 +1474,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Canonical P0 rehydrated clean build. Note lowercase 'etablooms' casing variant."
+      "notes": "LFS pointer (133 bytes). Canonical P0 rehydrated clean build. Note lowercase 'etablooms' casing variant.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_EXPORT_20260128T220638Z.zip",
@@ -1348,7 +1493,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). OS export snapshot."
+      "notes": "LFS pointer (134 bytes). OS export snapshot.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_EXPORT_20260129T060025Z.zip",
@@ -1365,7 +1512,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). OS export snapshot, ~8 hours after previous export."
+      "notes": "LFS pointer (134 bytes). OS export snapshot, ~8 hours after previous export.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_EXPORT_WITH_CHAT_INDEX_20260129T060156Z (1).zip",
@@ -1382,7 +1531,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Duplicate of EXPORT_WITH_CHAT_INDEX (browser re-download suffix)."
+      "notes": "LFS pointer (134 bytes). Duplicate of EXPORT_WITH_CHAT_INDEX (browser re-download suffix).",
+      "lifecycle_status": "DUPLICATE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_EXPORT_WITH_CHAT_INDEX_20260129T060156Z.zip",
@@ -1399,7 +1550,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). OS export with chat index included."
+      "notes": "LFS pointer (134 bytes). OS export with chat index included.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_FROZEN_FULL_EXPORT.zip",
@@ -1418,7 +1571,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Immutable full export snapshot, V1."
+      "notes": "LFS pointer (133 bytes). Immutable full export snapshot, V1.",
+      "lifecycle_status": "FROZEN",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_FROZEN_FULL_EXPORT_V2_WITH_PROJECTS.zip",
@@ -1437,7 +1592,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Frozen full export V2, includes project files."
+      "notes": "LFS pointer (134 bytes). Frozen full export V2, includes project files.",
+      "lifecycle_status": "FROZEN",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_FROZEN_FULL_EXPORT_V3.zip",
@@ -1456,7 +1613,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Frozen full export V3. Latest in frozen export series."
+      "notes": "LFS pointer (133 bytes). Frozen full export V3. Latest in frozen export series.",
+      "lifecycle_status": "FROZEN",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_FULL_P0_ENFORCED_CHASSISGATE_BTSFIX_20260127T123419Z.zip",
@@ -1475,7 +1634,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Full P0 enforced with chassis gate and BTS fix."
+      "notes": "LFS pointer (134 bytes). Full P0 enforced with chassis gate and BTS fix.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_FULL_P0_ENFORCED_CHASSISGATE_REISSUE_20260127T120832Z.zip",
@@ -1495,7 +1656,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Reissued chassis gate P0 bundle. Timestamp precedes BTSFIX variant."
+      "notes": "LFS pointer (134 bytes). Reissued chassis gate P0 bundle. Timestamp precedes BTSFIX variant.",
+      "lifecycle_status": "SUPERSEDED",
+      "superseded_by": "Metablooms_OS_FULL_P0_ENFORCED_CHASSISGATE_BTSFIX_20260127T123419Z.zip"
     },
     {
       "filename": "Metablooms_OS_WITH_CHAT_DELTAS_20260128T140143Z.zip",
@@ -1512,7 +1675,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). OS bundle with chat deltas included."
+      "notes": "LFS pointer (134 bytes). OS bundle with chat deltas included.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_canonical_snapshot_20260127T190025Z.zip",
@@ -1531,7 +1696,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Canonical snapshot. Note lowercase naming convention."
+      "notes": "LFS pointer (134 bytes). Canonical snapshot. Note lowercase naming convention.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_v1.3_LTS_FULLFIX_20260129T064552Z.zip",
@@ -1550,7 +1717,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Long-term support v1.3 full fix. Latest timestamped OS bundle."
+      "notes": "LFS pointer (134 bytes). Long-term support v1.3 full fix. Latest timestamped OS bundle.",
+      "lifecycle_status": "FROZEN",
+      "superseded_by": null
     },
     {
       "filename": "Metablooms_OS_working_os_20260127T190025Z.zip",
@@ -1567,7 +1736,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). Working OS snapshot. Same timestamp as canonical_snapshot."
+      "notes": "LFS pointer (134 bytes). Working OS snapshot. Same timestamp as canonical_snapshot.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "NVIDIA_app_v11.0.5.420.exe",
@@ -1584,7 +1755,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (134 bytes). NVIDIA App v11.0.5.420 companion utility for GPU management."
+      "notes": "LFS pointer (134 bytes). NVIDIA App v11.0.5.420 companion utility for GPU management.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "chat_4_RETRY_full_mnt_data_20260121_185205.zip.part001",
@@ -1601,7 +1774,9 @@
       "part_number": 1,
       "part_total": 2,
       "segment_group": "chat_4_RETRY_full_mnt_data_20260121_185205",
-      "notes": "~90 MiB segment. NOT tracked by LFS (*.zip.part* extension gap). Retry of chat 4 export."
+      "notes": "~90 MiB segment. NOT tracked by LFS (*.zip.part* extension gap). Retry of chat 4 export.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "chat_4_RETRY_full_mnt_data_20260121_185205.zip.part002",
@@ -1618,7 +1793,9 @@
       "part_number": 2,
       "part_total": 2,
       "segment_group": "chat_4_RETRY_full_mnt_data_20260121_185205",
-      "notes": "~45.6 MiB final segment. NOT tracked by LFS (*.zip.part* extension gap)."
+      "notes": "~45.6 MiB final segment. NOT tracked by LFS (*.zip.part* extension gap).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "drive-download-20260104T232014Z-1-001.zip",
@@ -1635,7 +1812,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Google Drive bulk download archive. Earliest timestamp in repo (2026-01-04)."
+      "notes": "LFS pointer (133 bytes). Google Drive bulk download archive. Earliest timestamp in repo (2026-01-04).",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "git_uploader_bundle_reupload_20260127T145213Z (2).zip",
@@ -1652,7 +1831,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (135 bytes). Git uploader bundle re-upload. Duplicate download suffix (2)."
+      "notes": "LFS pointer (135 bytes). Git uploader bundle re-upload. Duplicate download suffix (2). Filename has (2) suffix but original not in repo \u2014 sole surviving copy.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "gpg4win-5.0.0.exe",
@@ -1669,7 +1850,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Gpg4win 5.0.0 cryptography suite for Windows."
+      "notes": "LFS pointer (133 bytes). Gpg4win 5.0.0 cryptography suite for Windows.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "payload_recovery_EXPECTED_FIRST_boot_surface.zip",
@@ -1686,7 +1869,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Payload recovery archive for expected first boot surface."
+      "notes": "LFS pointer (133 bytes). Payload recovery archive for expected first boot surface.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     },
     {
       "filename": "winmfscanutilityv12102.exe",
@@ -1703,7 +1888,9 @@
       "part_number": null,
       "part_total": null,
       "segment_group": null,
-      "notes": "LFS pointer (133 bytes). Windows MF scan utility v1.21.02 for Canon multifunction devices."
+      "notes": "LFS pointer (133 bytes). Windows MF scan utility v1.21.02 for Canon multifunction devices.",
+      "lifecycle_status": "ACTIVE",
+      "superseded_by": null
     }
   ]
 }

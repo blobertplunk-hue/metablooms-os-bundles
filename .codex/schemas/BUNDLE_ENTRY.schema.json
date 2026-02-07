@@ -4,7 +4,7 @@
   "title": "MetaBlooms OS Bundle Entry",
   "description": "Schema for a single entry in the bundle catalog",
   "type": "object",
-  "required": ["filename", "category", "size_bytes", "lfs_tracked"],
+  "required": ["filename", "category", "size_bytes", "lfs_tracked", "lifecycle_status"],
   "properties": {
     "filename": {
       "type": "string",
@@ -80,6 +80,15 @@
     "segment_group": {
       "type": ["string", "null"],
       "description": "Group identifier for multi-part archives"
+    },
+    "lifecycle_status": {
+      "type": "string",
+      "enum": ["ACTIVE", "SUPERSEDED", "DEPRECATED", "FROZEN", "DUPLICATE", "ORPHANED"],
+      "description": "Lifecycle status per BUNDLE_LIFECYCLE_v1.md"
+    },
+    "superseded_by": {
+      "type": ["string", "null"],
+      "description": "Filename of the bundle that supersedes this one (if SUPERSEDED)"
     },
     "notes": {
       "type": ["string", "null"],

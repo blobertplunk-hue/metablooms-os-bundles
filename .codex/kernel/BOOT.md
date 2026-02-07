@@ -195,6 +195,7 @@ Each governance framework has a detailed policy specification:
 | RRP        | `.codex/policies/RRP_v1.md`                |
 | SEE        | `.codex/policies/SEE_ENGINE_v1.md`         |
 | CDR        | `.codex/policies/CDR_v2.md`                |
+| Lifecycle  | `.codex/policies/BUNDLE_LIFECYCLE_v1.md`   |
 
 Frameworks without standalone docs (Kernel Law, ECL, CDR) are defined
 in this file. They may be extracted to standalone docs in future versions.
