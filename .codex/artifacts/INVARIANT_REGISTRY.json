@@ -1,0 +1,31 @@
+{
+  "registry_version": "1.0",
+  "description": "System invariants that must hold across the governance system. Each invariant has an MBQL check that can be executed to verify compliance.",
+  "updated_utc": "2026-02-07T00:00:00Z",
+  "invariants": [
+    {
+      "invariant_id": "MB_INV_NLQ_REQUIRED_V1",
+      "severity": "P0",
+      "title": "Natural language queries must be translatable to MBQL",
+      "description": "Every operator-facing query interface must accept natural language input and translate it through the INTENT_IR pipeline before MBQL execution. Direct MBQL is permitted for programmatic access but NLQ must always be available as an alternative entry point.",
+      "rationale": "Non-technical operators must be able to query the governance system without learning MBQL syntax. If the NLQ translator is bypassed, the system becomes inaccessible to its primary audience.",
+      "mbql_check": "CHECK INVARIANT MB_INV_NLQ_REQUIRED_V1",
+      "verification_method": "Confirm that the NLQ translator pipeline exists (MBQL_v1.md Section 2), INTENT_IR schema exists (INTENT_IR.schema.json), and all 9 intent types have translation rules defined.",
+      "evidence_sources": ["PRIOR_ARTIFACTS", "SCHEMA_VALIDATION"],
+      "status": "ACTIVE",
+      "created_utc": "2026-02-07T00:00:00Z"
+    },
+    {
+      "invariant_id": "MB_INV_BUNDLE_INTERNALS_AS_EVIDENCE_V1",
+      "severity": "P0",
+      "title": "Bundle internal events must be recognized as evidence by SEE",
+      "description": "The SEE Engine must recognize BUNDLE_INTERNAL_EVENTS as a first-class evidence source type ranked at DIRECT_OBSERVATION quality. Learning events (EVT_LEARNING_*) and failure events (EVT_FAIL_*) from inside bundles constitute the highest-quality evidence for claims about bundle behavior, failure history, and structural fixes.",
+      "rationale": "Bundles self-report what failed, what changed, and what was fixed. This evidence is machine-emitted, timestamped, and tied to specific RCA reports. If SEE ignores bundle internal events, it loses access to its highest-quality evidence source and must rely on weaker inference from filenames.",
+      "mbql_check": "FROM bundles WHERE category = 'os_bundle' SELECT filename, lifecycle_status",
+      "verification_method": "Confirm that SEE_ENGINE_v1.md Section 1.10 defines BUNDLE_INTERNAL_EVENTS source type, that it is ranked DIRECT_OBSERVATION in the quality table, and that LEARNING_EVENT.schema.json exists with all 13 event types.",
+      "evidence_sources": ["PRIOR_ARTIFACTS", "SCHEMA_VALIDATION", "BUNDLE_INTERNAL_EVENTS"],
+      "status": "ACTIVE",
+      "created_utc": "2026-02-07T00:00:00Z"
+    }
+  ]
+}

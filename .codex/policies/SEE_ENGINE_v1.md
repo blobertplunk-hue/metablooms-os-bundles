@@ -316,6 +316,40 @@ Every piece of evidence gathered by SEE must be tagged with exactly one source t
 **Schema reference:** `.codex/schemas/LEARNING_EVENT.schema.json`
 **Policy reference:** `.codex/policies/LEARNING_PIPELINE_v1.md`
 
+### 1.11 BUNDLE_AUDIT_RECEIPTS -- Structured Audit Receipts from Inside Bundles
+
+**What it covers:** JSON receipt files produced by bundle-internal audit tools — `FS_ROOT_RECEIPT.json`, `LEARNING_PIPELINE_RECEIPT.json`, and any future `audit/*.json` files that record the outcome of pre-condition checks, pipeline executions, or compliance gates within an OS bundle.
+
+**What this changes:** While BUNDLE_INTERNAL_EVENTS captures the event stream, BUNDLE_AUDIT_RECEIPTS captures the point-in-time attestations. A receipt proves that a specific check was run, what the result was, and when it happened. Receipts are the bundle's equivalent of governance turn receipts.
+
+**How it works:**
+- Extract or read `audit/*.json` from inside the bundle
+- Parse each receipt as a JSON object
+- Verify receipt structure (must contain at minimum: `receipt_type`, `timestamp_utc`, `status`)
+- Cross-reference receipts with learning events for corroboration
+
+**Availability requirement:** Bundle must be extractable and must contain `audit/` directory. Not all bundles will have audit receipts — only those built after the learning pipeline was introduced.
+
+**Produces evidence for:**
+- INTEGRITY claims (receipt proves a check was run and passed/failed)
+- BEHAVIORAL claims (receipt shows what the bundle's audit tools actually verified)
+- TEMPORAL claims (receipt timestamps establish when checks ran)
+- LINEAGE claims (pipeline receipts may reference predecessor bundles)
+
+**Quality rank:** COMPUTED_VERIFICATION — receipts are deterministic outputs from specific audit tools, reproducible given the same inputs.
+
+**Example evidence record:**
+```json
+{
+  "source_type": "BUNDLE_AUDIT_RECEIPTS",
+  "operation": "read audit/FS_ROOT_RECEIPT.json from MetaBlooms_OS_BOOT_HARDENED_*.zip",
+  "result": "FS root guard passed: writable root verified at /target/path, SHA-256 of guard matches expected",
+  "timestamp_utc": "2026-02-07T14:00:00Z"
+}
+```
+
+**Relationship to BUNDLE_INTERNAL_EVENTS:** Events are the stream (what happened over time). Receipts are the snapshots (what was true at a specific moment). Together they provide both history and attestation.
+
 ---
 
 ## 2. METHOD SELECTION LOGIC
@@ -974,7 +1008,7 @@ SEE produces four primary artifacts per run. All are written to `.codex/research
           },
           "source_type": {
             "type": "string",
-            "enum": ["LOCAL_FS", "GIT_HISTORY", "LFS_METADATA", "SCHEMA_VALIDATION", "HASH_VERIFICATION", "WEB_SEARCH", "WEB_FETCH", "PRIOR_ARTIFACTS", "CROSS_REFERENCE", "BUNDLE_INTERNAL_EVENTS"]
+            "enum": ["LOCAL_FS", "GIT_HISTORY", "LFS_METADATA", "SCHEMA_VALIDATION", "HASH_VERIFICATION", "WEB_SEARCH", "WEB_FETCH", "PRIOR_ARTIFACTS", "CROSS_REFERENCE", "BUNDLE_INTERNAL_EVENTS", "BUNDLE_AUDIT_RECEIPTS"]
           },
           "operation": {
             "type": "string",
@@ -1307,14 +1341,17 @@ All evidence IDs follow the pattern: `ev_<source_type_abbreviation>_<three_digit
 | WEB_FETCH | `web_fetch` |
 | PRIOR_ARTIFACTS | `prior_art` |
 | CROSS_REFERENCE | `cross_ref` |
+| BUNDLE_INTERNAL_EVENTS | `bndl_evt` |
+| BUNDLE_AUDIT_RECEIPTS | `bndl_rcpt` |
 
-Examples: `ev_local_fs_001`, `ev_hash_ver_012`, `ev_cross_ref_003`
+Examples: `ev_local_fs_001`, `ev_hash_ver_012`, `ev_cross_ref_003`, `ev_bndl_evt_001`
 
 ## APPENDIX B: Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-02-06 | Initial specification. Replaces informal SEE definition in BOOT.md. |
+| 1.0.1 | 2026-02-07 | Added Section 1.11 BUNDLE_AUDIT_RECEIPTS (11th source type). Fixed Appendix A abbreviations for source types 10-11. |
 
 ---
 

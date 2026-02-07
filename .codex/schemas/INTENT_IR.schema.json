@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "INTENT_IR.schema.json",
+  "title": "INTENT_IR — NLQ-to-MBQL Intermediate Representation",
+  "description": "Schema for the intermediate representation produced by the NLQ translator when converting natural language queries to MBQL. Each INTENT_IR captures the translator's interpretation of the user's question before MBQL generation.",
+  "type": "object",
+  "required": ["nlq", "intent", "source", "confidence"],
+  "properties": {
+    "nlq": {
+      "type": "string",
+      "description": "The original natural language query exactly as submitted"
+    },
+    "intent": {
+      "type": "string",
+      "enum": [
+        "INVENTORY",
+        "LOOKUP",
+        "LINEAGE",
+        "STATUS",
+        "INTEGRITY",
+        "TEMPORAL",
+        "AGGREGATE",
+        "GAP",
+        "INVARIANT"
+      ],
+      "description": "Classified intent type from the NLQ translator"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "bundles",
+        "lineage",
+        "events",
+        "mmd",
+        "invariants",
+        "receipts"
+      ],
+      "description": "Target data source for the query"
+    },
+    "filters": {
+      "type": "array",
+      "description": "Extracted filter predicates",
+      "items": {
+        "type": "object",
+        "required": ["field", "op", "value"],
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "The field name to filter on (dotted path for nested fields)"
+          },
+          "op": {
+            "type": "string",
+            "enum": ["=", "!=", "LIKE", "IN", ">", "<", ">=", "<=", "IS NULL", "IS NOT NULL", "HAS"],
+            "description": "Filter operator"
+          },
+          "value": {
+            "description": "The value to compare against. Type depends on field and operator.",
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" },
+              { "type": "null" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          }
+        }
+      }
+    },
+    "projection": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Fields to return in results. Use '*' for all fields. Use 'COUNT(*)' for count aggregation."
+    },
+    "group_by": {
+      "type": ["string", "null"],
+      "description": "Field to group results by, if aggregating"
+    },
+    "order_by": {
+      "type": ["object", "null"],
+      "properties": {
+        "field": { "type": "string" },
+        "direction": {
+          "type": "string",
+          "enum": ["ASC", "DESC"]
+        }
+      },
+      "description": "Sort specification"
+    },
+    "limit": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Maximum number of results to return"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Translator's confidence in the intent classification (0.0-1.0)"
+    },
+    "disambiguation_notes": {
+      "type": ["string", "null"],
+      "description": "If confidence < 0.85, notes explaining what was ambiguous"
+    },
+    "invariant_id": {
+      "type": ["string", "null"],
+      "description": "For INVARIANT intent: the invariant ID to check"
+    }
+  }
+}

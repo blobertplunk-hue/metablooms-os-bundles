@@ -19,6 +19,7 @@
     "CDR": ".codex/policies/CDR_v2.md",
     "Lifecycle": ".codex/policies/BUNDLE_LIFECYCLE_v1.md",
     "Learning Pipeline": ".codex/policies/LEARNING_PIPELINE_v1.md",
+    "MBQL": ".codex/policies/MBQL_v1.md",
     "Super-Prompt": ".codex/policies/SUPER_PROMPT_v2.3.md"
   },
   "schemas": {
@@ -26,7 +27,8 @@
     "BUNDLE_LINEAGE": ".codex/schemas/BUNDLE_LINEAGE.schema.json",
     "MMD_REPORT": ".codex/schemas/MMD_REPORT.schema.json",
     "TURN_RECEIPT": ".codex/schemas/TURN_RECEIPT.schema.json",
-    "LEARNING_EVENT": ".codex/schemas/LEARNING_EVENT.schema.json"
+    "LEARNING_EVENT": ".codex/schemas/LEARNING_EVENT.schema.json",
+    "INTENT_IR": ".codex/schemas/INTENT_IR.schema.json"
   },
   "canonical_paths": {
     "kernel": ".codex/kernel/",
