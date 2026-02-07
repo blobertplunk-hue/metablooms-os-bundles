@@ -3,7 +3,7 @@
   "boot_version": "v1.1",
   "repository": "metablooms-os-bundles",
   "boot_file": ".codex/kernel/BOOT.md",
-  "boot_file_sha256": "56393f26753213ba857b1ad6b8b9ca79a174048166644b5fba9bd35b5af0278e",
+  "boot_file_sha256": "c8f27e604f91a47d514489e32a9bb1b04a8c4dba5f3a4ba7f521e657513fc4bb",
   "governance_frameworks": [
     "Kernel Law",
     "DeltaGate",
@@ -16,6 +16,7 @@
     "DeltaGate": ".codex/policies/DELTAGATE_v1.md",
     "RRP": ".codex/policies/RRP_v1.md",
     "SEE": ".codex/policies/SEE_ENGINE_v1.md",
+    "CDR": ".codex/policies/CDR_v2.md",
     "Super-Prompt": ".codex/policies/SUPER_PROMPT_v2.3.md"
   },
   "schemas": {

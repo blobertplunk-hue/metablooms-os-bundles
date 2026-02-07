@@ -31,7 +31,14 @@ BUILD (Phase 3) → EVALUATE (Phase 4) → REWRITE (Phase 5)
   - `LOGIC_ERROR` — incorrect classification or computation
   - `STALE_REFERENCE` — references outdated information
   - `SCOPE_VIOLATION` — output exceeds task scope
-  - `CDR_VIOLATION` — decision without justification
+  - `CDR_VIOLATION` — any CDR v2.0 pillar violation (see `.codex/policies/CDR_v2.md`):
+    - `CDR-NORATIONALE` (Pillar 1, HIGH) — no rationale header
+    - `CDR-NOCONSTRAINT` (Pillar 2, MEDIUM) — tradeoff without constraint mapping
+    - `CDR-GENERICDOMAIN` (Pillar 3, MEDIUM) — logic in utils/helpers
+    - `CDR-SILENTFAIL` (Pillar 4, HIGH) — undocumented failure path
+    - `CDR-NOCONTRACT` (Pillar 5, MEDIUM) — no integration declarations
+    - `CDR-GHOSTDELTA` (Pillar 6, HIGH) — change without explaining what it supersedes
+    - `CDR-UNATTESTED` (Pillar 7, CRITICAL) — no reconstructable reasoning
 - NO fixes, NO new ideas, NO scope expansion
 - Emit EVALUATION_REPORT.json
 

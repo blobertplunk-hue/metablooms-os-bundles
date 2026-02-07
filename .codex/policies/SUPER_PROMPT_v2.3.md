@@ -322,20 +322,53 @@ If findings exist at HIGH or below:
 Emit: `.codex/artifacts/MMD_REPORT.json` (per schema)
 
 ==================================================================
-PHASE 3 — BUILD (CDR — CODING DONE RIGHT)
+PHASE 3 — BUILD (CDR v2.0 — CODING DONE RIGHT)
 ==================================================================
 
 Produce the requested deliverables.
 
-### CDR Requirements (MANDATORY for every decision)
+Full CDR specification: `.codex/policies/CDR_v2.md`
 
-| Requirement            | What to Document                              |
-|------------------------|-----------------------------------------------|
-| **WHY**                | Rationale for the decision                    |
-| **CONSTRAINTS**        | What limits or shapes the choice              |
-| **TRADEOFFS**          | What was given up and why that's acceptable   |
-| **FAILURE MODES**      | How this could go wrong                       |
-| **INTEGRATION**        | What this depends on and what depends on it   |
+### CDR Core Axiom
+
+> Code exists first to be understood by future humans, and only
+> second to be executed by machines.
+
+An unexplained line of code is a defect, regardless of whether
+it works. This applies to governance artifacts (schemas, policies,
+configs) as well as code.
+
+### The Seven Pillars (ALL MANDATORY)
+
+| # | Pillar                     | Requirement                                        |
+|---|----------------------------|----------------------------------------------------|
+| 1 | Proactive Rationale        | Every module has a rationale header: problem, solution, rejected alternatives |
+| 2 | Explicit Constraint Mapping| State what you optimize for AND what you sacrifice  |
+| 3 | Semantic Domain Authority  | No generic utils/helpers — named domain constructs only |
+| 4 | Anticipated Failure Intent | Failure paths are design decisions with documented safe states |
+| 5 | Integration Reciprocity    | Declare assumptions, inputs, outputs, side effects, promises |
+| 6 | History-Aware Evolution    | Every delta explains what it supersedes and why     |
+| 7 | Mandatory Attestation      | Reasoning chain must be reconstructable; unattested code is invalid |
+
+### CDR Violation Classes (checked in Phase 4)
+
+| Class              | Pillar | Severity |
+|--------------------|--------|----------|
+| CDR-NORATIONALE    | 1      | HIGH     |
+| CDR-NOCONSTRAINT   | 2      | MEDIUM   |
+| CDR-GENERICDOMAIN  | 3      | MEDIUM   |
+| CDR-SILENTFAIL     | 4      | HIGH     |
+| CDR-NOCONTRACT     | 5      | MEDIUM   |
+| CDR-GHOSTDELTA     | 6      | HIGH     |
+| CDR-UNATTESTED     | 7      | CRITICAL |
+
+### CDR Explicitly Rejects
+
+- Cleverness without justification
+- Implicit trust ("the model knows")
+- Silent success
+- Oral-tradition code (knowledge only in someone's head)
+- Premature optimization without argued tradeoffs
 
 ### Deliverable Paths
 
@@ -510,6 +543,7 @@ GOVERNANCE DOCUMENT REFERENCES
 | DeltaGate policy               | `.codex/policies/DELTAGATE_v1.md`      |
 | RRP policy                     | `.codex/policies/RRP_v1.md`            |
 | SEE Engine spec                | `.codex/policies/SEE_ENGINE_v1.md`     |
+| CDR spec                       | `.codex/policies/CDR_v2.md`            |
 | Bundle entry schema            | `.codex/schemas/BUNDLE_ENTRY.schema.json` |
 | Bundle lineage schema          | `.codex/schemas/BUNDLE_LINEAGE.schema.json` |
 | MMD report schema              | `.codex/schemas/MMD_REPORT.schema.json` |

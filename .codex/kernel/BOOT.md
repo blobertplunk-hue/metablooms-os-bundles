@@ -51,9 +51,21 @@ The agent must declare its capabilities and limitations honestly at the
 start of each session. No enforcement language unless enforcement
 infrastructure actually exists.
 
-### CDR (Coding Done Right)
-Every design decision must include: WHY it was chosen, WHAT constraints
-apply, and HOW it could fail. Unexplained logic is a defect.
+### CDR (Coding Done Right — Justification-First Edition, v2.0)
+CDR is a construction standard where documented, justified intent is
+the primary artifact and code is the secondary artifact. An unexplained
+line of code is a defect, regardless of whether it works.
+
+CDR has Seven Pillars:
+1. **Proactive Rationale** — every module explains WHY, not just WHAT
+2. **Explicit Constraint Mapping** — state what you optimize for and sacrifice
+3. **Semantic Domain Authority** — no generic utils; named domain constructs only
+4. **Anticipated Failure Intent** — failure paths are design decisions
+5. **Integration Reciprocity** — declare assumptions, inputs, outputs, side effects
+6. **History-Aware Evolution** — every change explains what it supersedes
+7. **Mandatory Attestation** — unattested code is invalid
+
+Full specification: `.codex/policies/CDR_v2.md`
 
 ## Bundle Classification Taxonomy
 
@@ -182,6 +194,7 @@ Each governance framework has a detailed policy specification:
 | DeltaGate  | `.codex/policies/DELTAGATE_v1.md`          |
 | RRP        | `.codex/policies/RRP_v1.md`                |
 | SEE        | `.codex/policies/SEE_ENGINE_v1.md`         |
+| CDR        | `.codex/policies/CDR_v2.md`                |
 
 Frameworks without standalone docs (Kernel Law, ECL, CDR) are defined
 in this file. They may be extracted to standalone docs in future versions.
