@@ -36,6 +36,23 @@ DRAFT ──→ VALIDATED ──→ ENFORCED
 
 **What it does NOT mean:** The artifact is correct, complete, or checked by anything.
 
+**DRAFT is temporary for governed artifacts.** If `enforcement_required` is true and
+`governance_class` is not `NON_GOVERNED`, DRAFT blocks commits. The only way forward
+is to write a validator and advance to VALIDATED. This prevents specifications from
+accumulating without enforcement.
+
+### Governance Classification
+
+Every artifact has a `governance_class`:
+
+| Class | Meaning | DRAFT Allowed? |
+|---|---|---|
+| `SYSTEM` | Core infrastructure (schemas, artifacts, receipts, standards) | NO |
+| `PIPELINE` | Defines a process (MPP, SEE, RRP, learning loop) | NO |
+| `INVARIANT` | Defines system invariants | NO |
+| `VALIDATOR` | Is the enforcement mechanism itself | N/A (always ENFORCED) |
+| `NON_GOVERNED` | Superseded, reference-only, explicitly exempt | YES |
+
 ### Stage 2: VALIDATED
 
 **What it means:** The artifact has been checked against a schema or structural

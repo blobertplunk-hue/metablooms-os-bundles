@@ -169,6 +169,15 @@ def main():
 
         if maturity == "DRAFT":
             check_draft(entry)
+            # ENFORCEMENT REQUIRED CHECK: governed artifacts cannot remain at DRAFT
+            governance_class = entry.get("governance_class", "SYSTEM")
+            enforcement_required = entry.get("enforcement_required", True)
+            if enforcement_required and governance_class != "NON_GOVERNED":
+                failures.append(
+                    f"  {entry['artifact_path']}: DRAFT but enforcement_required=true "
+                    f"(governance_class={governance_class}). "
+                    f"Must advance to VALIDATED or ENFORCED. Write a validator or set enforcement_required=false."
+                )
         elif maturity == "VALIDATED":
             check_validated(entry)
         elif maturity == "ENFORCED":

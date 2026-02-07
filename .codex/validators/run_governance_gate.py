@@ -27,6 +27,7 @@ GATES = [
     ("FORBIDDEN_LANGUAGE", "run_forbidden_language_gate.py", 13),
     ("INVARIANT", "run_invariant_gate.py", 14),
     ("MATURITY", "run_maturity_gate.py", 15),
+    ("POLICY_STRUCTURE", "run_policy_structure_gate.py", 16),
 ]
 
 # Gates that can be skipped with --quick
