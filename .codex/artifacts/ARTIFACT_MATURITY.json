@@ -549,12 +549,77 @@
       "notes": "Self-referential: the maturity tracker is tracked by the maturity gate.",
       "governance_class": "SYSTEM",
       "enforcement_required": true
+    },
+    {
+      "artifact_path": ".codex/policies/MB_MASTER_SPEC_v1.md",
+      "artifact_type": "policy",
+      "maturity": "VALIDATED",
+      "schema_path": null,
+      "structural_check": "Policy structure validated + preparation gate checks 6 phases present",
+      "validator_path": ".codex/validators/run_preparation_gate.py",
+      "gate_name": "PREPARATION",
+      "advanced_utc": "2026-02-08T00:00:00Z",
+      "notes": "MetaBlooms Master Specification. The identity document for the entire system.",
+      "governance_class": "PIPELINE",
+      "enforcement_required": true
+    },
+    {
+      "artifact_path": ".codex/schemas/MASTERY_DEFINITION.schema.json",
+      "artifact_type": "schema",
+      "maturity": "VALIDATED",
+      "schema_path": null,
+      "structural_check": "JSON parse check + preparation gate checks existence",
+      "validator_path": ".codex/validators/run_preparation_gate.py",
+      "gate_name": "PREPARATION",
+      "advanced_utc": "2026-02-08T00:00:00Z",
+      "notes": "Defines what world-class looks like for any task. No instances yet.",
+      "governance_class": "SYSTEM",
+      "enforcement_required": true
+    },
+    {
+      "artifact_path": ".codex/schemas/DECISION_RECORD.schema.json",
+      "artifact_type": "schema",
+      "maturity": "VALIDATED",
+      "schema_path": null,
+      "structural_check": "JSON parse check + preparation gate checks existence",
+      "validator_path": ".codex/validators/run_preparation_gate.py",
+      "gate_name": "PREPARATION",
+      "advanced_utc": "2026-02-08T00:00:00Z",
+      "notes": "Records architectural decisions with constraints, candidates, rejections. No instances yet.",
+      "governance_class": "SYSTEM",
+      "enforcement_required": true
+    },
+    {
+      "artifact_path": ".codex/schemas/LESSON_PROMOTION.schema.json",
+      "artifact_type": "schema",
+      "maturity": "VALIDATED",
+      "schema_path": null,
+      "structural_check": "JSON parse check + preparation gate checks existence",
+      "validator_path": ".codex/validators/run_preparation_gate.py",
+      "gate_name": "PREPARATION",
+      "advanced_utc": "2026-02-08T00:00:00Z",
+      "notes": "Tracks lesson lifecycle: OBSERVATION → HYPOTHESIS → CONSTRAINT → INVARIANT. No instances yet.",
+      "governance_class": "SYSTEM",
+      "enforcement_required": true
+    },
+    {
+      "artifact_path": ".codex/validators/run_preparation_gate.py",
+      "artifact_type": "validator",
+      "maturity": "ENFORCED",
+      "schema_path": null,
+      "structural_check": null,
+      "validator_path": null,
+      "gate_name": "PREPARATION",
+      "advanced_utc": "2026-02-08T00:00:00Z",
+      "notes": "Preparation gate. Refuses execution without mastery scaffolding.",
+      "governance_class": "VALIDATOR",
+      "enforcement_required": true
     }
   ],
   "summary": {
-    "total": 42,
-    "ENFORCED": 26,
-    "VALIDATED": 15,
+    "total": 47,
+    "ENFORCED": 27,
+    "VALIDATED": 19,
     "DRAFT": 1
   }
 }

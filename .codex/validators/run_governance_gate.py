@@ -30,6 +30,7 @@ GATES = [
     ("POLICY_STRUCTURE", "run_policy_structure_gate.py", 16),
     ("TOOLBOX_REALITY", "run_toolbox_reality_gate.py", 17),
     ("MMD", "run_mmd_gate.py", 18),
+    ("PREPARATION", "run_preparation_gate.py", 19),
 ]
 
 # Gates that can be skipped with --quick

@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "MASTERY_DEFINITION.schema.json",
+  "title": "MasteryDefinition",
+  "description": "Defines what world-class looks like for a specific task. Produced in Phase 0.5 before any work begins. Failure to produce this = FAIL CLOSED.",
+  "type": "object",
+  "required": [
+    "mastery_id",
+    "task_description",
+    "domain_research",
+    "world_class_standard",
+    "success_criteria",
+    "knowledge_gaps",
+    "constraints"
+  ],
+  "properties": {
+    "mastery_id": {
+      "type": "string",
+      "pattern": "^MDEF-[A-Z0-9_]+$",
+      "description": "Unique identifier for this mastery definition"
+    },
+    "task_description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "What task this mastery definition covers"
+    },
+    "domain_research": {
+      "type": "object",
+      "required": ["domain", "best_practitioners", "standards_identified", "see_queries_used"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "The knowledge domain this task falls in"
+        },
+        "best_practitioners": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "why_relevant"],
+            "properties": {
+              "name": { "type": "string" },
+              "why_relevant": { "type": "string" },
+              "source": { "type": "string" }
+            }
+          },
+          "description": "Who are the best practitioners/systems in this domain?"
+        },
+        "standards_identified": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["standard", "claim_strength"],
+            "properties": {
+              "standard": { "type": "string" },
+              "source": { "type": "string" },
+              "claim_strength": {
+                "type": "string",
+                "enum": ["SUPPORTED", "SUPPORTED-INTENT", "SOURCE-LIMITED", "DESIGN-CHOICE"]
+              }
+            }
+          },
+          "description": "What standards define excellence in this domain?"
+        },
+        "see_queries_used": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "SEE queries used to research this domain"
+        }
+      }
+    },
+    "world_class_standard": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Plain-language description of what world-class looks like for this task. What would a domain expert expect?"
+    },
+    "success_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["criterion_id", "description", "measurable", "required"],
+        "properties": {
+          "criterion_id": {
+            "type": "string",
+            "pattern": "^SC-[0-9]+$"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this criterion measures"
+          },
+          "measurable": {
+            "type": "boolean",
+            "description": "Can this be checked mechanically?"
+          },
+          "measurement_method": {
+            "type": "string",
+            "description": "How to verify this criterion is met (if measurable)"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "If true, NOT_MET on this criterion = execution failure"
+          },
+          "claim_strength": {
+            "type": "string",
+            "enum": ["SUPPORTED", "SUPPORTED-INTENT", "SOURCE-LIMITED", "DESIGN-CHOICE"]
+          }
+        }
+      },
+      "description": "Specific, measurable criteria that define success"
+    },
+    "knowledge_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gap_id", "description", "see_query", "status"],
+        "properties": {
+          "gap_id": {
+            "type": "string",
+            "pattern": "^KG-[0-9]+$"
+          },
+          "description": { "type": "string" },
+          "see_query": {
+            "type": "string",
+            "description": "The SEE query that will fill this gap"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "RESEARCHED", "FILLED", "UNFILLABLE"],
+            "description": "OPEN = not yet researched. FILLED = answer found. UNFILLABLE = cannot be answered."
+          },
+          "answer": {
+            "type": "string",
+            "description": "The answer, if status is FILLED"
+          }
+        }
+      },
+      "description": "What we don't know yet. Each gap becomes a SEE query."
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["environmental", "domain_specific", "governance"],
+      "properties": {
+        "environmental": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "From R2.5 toolbox reality — what the environment can/can't do"
+        },
+        "domain_specific": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "From SEE research — what the domain requires"
+        },
+        "governance": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "From existing policies — what the governance system requires"
+        }
+      }
+    },
+    "generated_utc": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

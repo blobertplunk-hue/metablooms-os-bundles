@@ -156,20 +156,64 @@ NO phase may be skipped.
 NO phase may perform another phase's job.
 
 ```
-Phase -1   → Enforcement Capability Declaration
-Phase -1B  → Environment Declaration
-Phase 0    → Claim Enumeration (ECL)
-Phase 1    → SEE (Evidence Gathering)
-Phase 2    → MMD (Missing Middle Detection)
-Phase 2.5  → TOOLBOX_REALITY_VALIDATION (R2.5)  ← HARD GATE
-Phase 3    → BUILD (Deliverables)
-Phase 4    → EVALUATE (Read-Only Review)   ─┐
-Phase 5    → REWRITE (Fix Enumerated Only)  ─┤ Max 2 iterations
-             └── re-enter Phase 4 if needed ─┘
-Phase 6    → Self-Verification
-Phase 7    → Turn Receipt
-STOP       → Admission Boundary
+Phase -1    → Enforcement Capability Declaration
+Phase -1B   → Environment Declaration
+Phase 0     → Claim Enumeration (ECL)
+Phase 0.5   → MASTERY_DEFINITION                    ← NEW
+Phase 1     → SEE (Evidence Gathering)
+Phase 2     → MMD (Missing Middle Detection)
+Phase 2.5   → TOOLBOX_REALITY_VALIDATION (R2.5)     ← HARD GATE
+Phase 2.75  → PREPARATION_GATE                      ← HARD GATE
+Phase 3     → BUILD (Deliverables)
+Phase 4     → EVALUATE (Read-Only Review)   ─┐
+Phase 5     → REWRITE (Fix Enumerated Only)  ─┤ Max 2 iterations
+              └── re-enter Phase 4 if needed ─┘
+Phase 6     → Self-Verification + Mastery Comparison
+Phase 7     → Turn Receipt
+Phase 7.5   → ASSIMILATION (Lesson Promotion)        ← NEW
+STOP        → Admission Boundary
 ```
+
+### Phase 0.5 — MASTERY_DEFINITION
+
+Before evidence gathering begins, the agent MUST define what world-class
+looks like for the current task.
+
+**Required:** Emit `MASTERY_DEFINITION.json` containing:
+- What domain this task is in and who the best practitioners are
+- What specific, measurable success criteria define "done well"
+- What knowledge gaps exist (each becomes a SEE query in Phase 1)
+- What constraints apply (environmental, domain, governance)
+
+**Schema:** `.codex/schemas/MASTERY_DEFINITION.schema.json`
+
+**Fail-closed:** If mastery definition is empty, has no success criteria,
+or has OPEN knowledge gaps after Phase 1 → FAIL CLOSED.
+
+### Phase 2.75 — PREPARATION_GATE
+
+After MMD and R2.5, before BUILD, verify the system is ready to execute.
+
+**Checks:**
+- MASTERY_DEFINITION exists and has no OPEN knowledge gaps
+- All claims have evidence states
+- All architectural decisions have DecisionRecords
+- No CRITICAL MMD findings are open
+
+**Validator:** `.codex/validators/run_preparation_gate.py`
+**Fail-closed:** If any check fails → FAIL CLOSED.
+
+### Phase 7.5 — ASSIMILATION
+
+After the turn receipt, before STOP, the agent MUST:
+1. Compare outputs to mastery definition success criteria
+2. Record any delta between expectation and result
+3. Promote lessons: OBSERVATION → HYPOTHESIS → CONSTRAINT → INVARIANT
+4. Update pattern catalog if architectural decisions produced new evidence
+
+**Schema:** `.codex/schemas/LESSON_PROMOTION.schema.json`
+
+No session ends without feeding its lessons back into the system.
 
 ### Phase 2.5 — TOOLBOX_REALITY_VALIDATION (R2.5)
 
