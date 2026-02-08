@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+state/MB_STATE.json
+receipts/*.json
+artifacts/*.json
+research/*.json
