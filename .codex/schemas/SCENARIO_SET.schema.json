@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "SCENARIO_SET.schema.json",
+  "title": "ScenarioSet",
+  "description": "Schema for defining uncertainty spaces and plausible futures for DMDU/RDM decision evaluation. Allows explicit enumeration OR explicit generative definition. Prohibits enumeration-only mandates.",
+  "type": "object",
+  "required": [
+    "scenario_set_id",
+    "uncertainty_drivers",
+    "scenario_space_definition",
+    "documentation_of_generation_context"
+  ],
+  "properties": {
+    "scenario_set_id": {
+      "type": "string",
+      "pattern": "^SS-[A-Z0-9_]+$",
+      "description": "Unique identifier for this scenario set"
+    },
+    "uncertainty_drivers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["driver_id", "description", "range_or_distribution"],
+        "properties": {
+          "driver_id": { "type": "string" },
+          "description": { "type": "string" },
+          "range_or_distribution": { "type": "string" }
+        }
+      },
+      "description": "The uncertainty dimensions that define the scenario space"
+    },
+    "scenario_space_definition": {
+      "type": "object",
+      "required": ["definition_type", "specification"],
+      "properties": {
+        "definition_type": {
+          "type": "string",
+          "enum": ["ENUMERATED", "GENERATIVE", "HYBRID"],
+          "description": "How scenarios are specified. ENUMERATED = explicit list, GENERATIVE = rule/algorithm that produces scenarios, HYBRID = some enumerated + some generated"
+        },
+        "specification": {
+          "type": "string",
+          "description": "The actual definition — either a list reference, a generation rule, or a hybrid specification"
+        },
+        "scenario_count": {
+          "type": ["integer", "string"],
+          "description": "Number of scenarios if known, or 'UNBOUNDED' for generative definitions"
+        }
+      },
+      "description": "The definition of the scenario space. Must be explicit but NOT limited to enumeration."
+    },
+    "documentation_of_generation_context": {
+      "type": "string",
+      "minLength": 10,
+      "description": "How and why this scenario set was constructed. Must include methodological justification."
+    },
+    "claim_strength": {
+      "type": "string",
+      "enum": ["SUPPORTED", "SUPPORTED-INTENT", "SOURCE-LIMITED", "DESIGN-CHOICE"],
+      "description": "Evidence level for this scenario set's design choices"
+    }
+  },
+  "additionalProperties": false,
+  "$comment": "PROHIBITION: This schema explicitly does NOT require enumeration-only scenario definitions. Generative definitions are equally valid per DMDU/RDM literature."
+}

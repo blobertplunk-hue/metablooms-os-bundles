@@ -156,19 +156,39 @@ NO phase may be skipped.
 NO phase may perform another phase's job.
 
 ```
-Phase -1  → Enforcement Capability Declaration
-Phase -1B → Environment Declaration
-Phase 0   → Claim Enumeration
-Phase 1   → SEE (Evidence Gathering)
-Phase 2   → MMD (Missing Middle Detection)
-Phase 3   → BUILD (Deliverables)
-Phase 4   → EVALUATE (Read-Only Review)   ─┐
-Phase 5   → REWRITE (Fix Enumerated Only)  ─┤ Max 2 iterations
-            └── re-enter Phase 4 if needed ─┘
-Phase 6   → Self-Verification
-Phase 7   → Turn Receipt
-STOP      → Admission Boundary
+Phase -1   → Enforcement Capability Declaration
+Phase -1B  → Environment Declaration
+Phase 0    → Claim Enumeration (ECL)
+Phase 1    → SEE (Evidence Gathering)
+Phase 2    → MMD (Missing Middle Detection)
+Phase 2.5  → TOOLBOX_REALITY_VALIDATION (R2.5)  ← HARD GATE
+Phase 3    → BUILD (Deliverables)
+Phase 4    → EVALUATE (Read-Only Review)   ─┐
+Phase 5    → REWRITE (Fix Enumerated Only)  ─┤ Max 2 iterations
+             └── re-enter Phase 4 if needed ─┘
+Phase 6    → Self-Verification
+Phase 7    → Turn Receipt
+STOP       → Admission Boundary
 ```
+
+### Phase 2.5 — TOOLBOX_REALITY_VALIDATION (R2.5)
+
+Before any deliverables are built, the agent MUST validate that the
+execution environment can actually support the planned work.
+
+**Required:** Emit or load a `ToolboxReality` declaration containing:
+- `sandbox_capabilities` — what the environment can do
+- `acquisition_channels` — how tools/data can be acquired (sandbox, web.run, user, git_lfs, local_fs)
+- `limitations` — explicit declaration of what CANNOT be done
+
+**Fail-closed:** If ToolboxReality is missing, incomplete, or declares
+channels outside the allowed set → FAIL CLOSED.
+
+**Validator:** `.codex/validators/run_toolbox_reality_gate.py`
+**Schema:** `.codex/schemas/TOOLBOX_REALITY.schema.json`
+
+This gate ensures no DecisionRecord is produced that assumes capabilities
+the environment does not have.
 
 ==================================================================
 PHASE 0 — CLAIM ENUMERATION (ECL)

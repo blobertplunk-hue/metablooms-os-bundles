@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ROBUSTNESS_METRICS.schema.json",
+  "title": "RobustnessMetrics",
+  "description": "Schema for declaring robustness metrics used in DMDU/RDM evaluations. Supports multiple metric families. Prohibits canonical equation mandates.",
+  "type": "object",
+  "required": [
+    "metrics_id",
+    "chosen_metric"
+  ],
+  "properties": {
+    "metrics_id": {
+      "type": "string",
+      "pattern": "^RM-[A-Z0-9_]+$",
+      "description": "Unique identifier for this robustness metrics declaration"
+    },
+    "allowed_families": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "REGRET_FAMILY",
+          "RELIABILITY_FAMILY",
+          "WORST_CASE_FAMILY",
+          "DOMAIN_SPECIFIC_FAMILY"
+        ]
+      },
+      "description": "Which robustness metric families are applicable to this evaluation"
+    },
+    "chosen_metric": {
+      "type": "object",
+      "required": ["family", "declaration", "rationale"],
+      "properties": {
+        "family": {
+          "type": "string",
+          "enum": [
+            "REGRET_FAMILY",
+            "RELIABILITY_FAMILY",
+            "WORST_CASE_FAMILY",
+            "DOMAIN_SPECIFIC_FAMILY"
+          ]
+        },
+        "declaration": {
+          "type": "string",
+          "minLength": 10,
+          "description": "What the metric measures and how it is computed"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Why this metric family was selected over alternatives"
+        },
+        "formula": {
+          "type": "string",
+          "description": "Optional formula. NOT REQUIRED — no canonical equation is mandated."
+        }
+      }
+    },
+    "comparative_across_scenarios": {
+      "type": "boolean",
+      "const": true,
+      "description": "Robustness must always be comparative across scenarios. This is a SEALED requirement."
+    },
+    "claim_strength": {
+      "type": "string",
+      "enum": ["SUPPORTED", "SUPPORTED-INTENT", "SOURCE-LIMITED", "DESIGN-CHOICE"],
+      "description": "Evidence level for this metric selection"
+    }
+  },
+  "additionalProperties": false,
+  "$comment": "PROHIBITION: This schema does NOT require a canonical robustness equation. The chosen_metric.formula field is optional. Per DMDU/RDM literature, multiple valid robustness notions exist."
+}

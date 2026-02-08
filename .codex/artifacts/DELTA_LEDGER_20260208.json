@@ -1,0 +1,167 @@
+{
+  "ledger_version": "1.0",
+  "source_session": "adversarial_governance_review_20260208",
+  "generated_utc": "2026-02-08T00:00:00Z",
+  "description": "Delta and patch ledger from adversarial governance review session. All entries have been reviewed, fixed where needed, and integrated into the .codex/ tree.",
+  "entries": [
+    {
+      "delta_id": "MB_DELTA_PATCH_SEMANTIC_STATE",
+      "type": "POLICY",
+      "purpose": "Formalize SEALED vs SOURCE-LIMITED governance state to prevent drift and overclaiming",
+      "claim_strength": "SUPPORTED",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/policies/SEMANTIC_STATE_v1.md"],
+      "rationale": "Adversarial review showed DMDU/RDM claims were being enforced without evidence categorization. SEALED/SOURCE-LIMITED distinction prevents silent elevation."
+    },
+    {
+      "delta_id": "MB_DELTA_PATCH_SCENARIO_SET",
+      "type": "SCHEMA",
+      "purpose": "Codify ScenarioSet semantics allowing enumeration OR generative definition, prohibiting enumeration-only mandates",
+      "claim_strength": "SUPPORTED",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/schemas/SCENARIO_SET.schema.json"],
+      "rationale": "Primary DMDU/RDM literature supports explicit scenario spaces without mandating enumeration. Schema converted from YAML to JSON Schema to match repo convention."
+    },
+    {
+      "delta_id": "MB_DELTA_PATCH_ROBUSTNESS_METRICS",
+      "type": "SCHEMA",
+      "purpose": "Codify multi-family robustness metrics with no canonical equation mandate",
+      "claim_strength": "SUPPORTED",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/schemas/ROBUSTNESS_METRICS.schema.json"],
+      "rationale": "RDM/DMDU literature allows multiple robustness notions. Schema requires metric declaration + rationale, prohibits canonical equation lock-in."
+    },
+    {
+      "delta_id": "MB_DELTA_PATCH_CLAIM_STRENGTH",
+      "type": "POLICY",
+      "purpose": "Mandatory claim-strength labeling for all normative statements, including Wikipedia prohibition",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/policies/CLAIM_STRENGTH_v1.md"],
+      "rationale": "Prevents future silent upgrades from SOURCE-LIMITED to enforced. Wikipedia prohibition codified as load-bearing source ban."
+    },
+    {
+      "delta_id": "MB_DELTA_P0_TOOLBOX_R25_BINDING",
+      "type": "SCHEMA",
+      "purpose": "Sandbox + acquisition channels bind decisions to reality (MPP R2.5)",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [
+        ".codex/schemas/TOOLBOX_REALITY.schema.json",
+        ".codex/validators/run_toolbox_reality_gate.py"
+      ],
+      "rationale": "Decision Engine was making choices without checking what the environment can actually do. R2.5 gate fails closed if toolbox reality is missing."
+    },
+    {
+      "delta_id": "MB_DELTA_P0_ACTIVE_CREATION_MODE",
+      "type": "DELTA",
+      "purpose": "Prevent OS freezing during exploratory phases",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/policies/SEMANTIC_STATE_v1.md"],
+      "rationale": "Sealing requires explicit user command; no auto-freeze during active work."
+    },
+    {
+      "delta_id": "MB_DELTA_P0_AUTONOMOUS_DECISION_SELECTION",
+      "type": "DELTA",
+      "purpose": "Decision engine selects options autonomously unless USER_REQUIRED",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/policies/CLAIM_STRENGTH_v1.md"],
+      "rationale": "Agent should select from valid options rather than always deferring. USER_REQUIRED flag gates when human input is needed."
+    },
+    {
+      "delta_id": "MB_DELTA_P0_LLM_META_IMPACT_TRACKING_v1",
+      "type": "DELTA",
+      "purpose": "Track how MetaBlooms affects the LLM itself (calibration, hallucination, abstention)",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "DEFERRED",
+      "artifacts_produced": [],
+      "rationale": "Requires measurement infrastructure that doesn't exist yet in the governance system.",
+      "not_done_reason": "No mechanical way to measure LLM calibration/hallucination rate from within the governance system. Needs external tooling."
+    },
+    {
+      "delta_id": "MB_DELTA_P0_ARCHITECTURAL_PATTERN_SELECTION",
+      "type": "DELTA",
+      "purpose": "Enable Claude-style built-right architectural decisions (Feistel-class choices)",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "DEFERRED",
+      "artifacts_produced": [],
+      "rationale": "Pattern selection requires a pattern library that doesn't exist yet.",
+      "not_done_reason": "No pattern library or DecisionRecord schema exists to implement this against. Needs DecisionRecord.schema.json first."
+    },
+    {
+      "delta_id": "MB_DELTA_SANDBOX_MAP_REGISTRATION",
+      "type": "DELTA",
+      "purpose": "Make sandbox map a governed artifact, not just a note",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/schemas/TOOLBOX_REALITY.schema.json"],
+      "rationale": "sandbox_map_source field in TOOLBOX_REALITY schema enables binding to an authoritative map."
+    },
+    {
+      "delta_id": "MB_DELTA_TOOLBOX_BULK_ALIGNMENT",
+      "type": "DELTA",
+      "purpose": "Align sandbox_tools_bulk_bundle with Decision Engine inputs",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/schemas/TOOLBOX_REALITY.schema.json"],
+      "rationale": "tool_corpus_binding field in TOOLBOX_REALITY schema enables binding to tool corpus."
+    },
+    {
+      "delta_id": "MB_DELTA_KNOWLEDGE_INDEX_REBIND",
+      "type": "DELTA",
+      "purpose": "Fix dangling references between toolbox, sandbox, and SEE",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/schemas/TOOLBOX_REALITY.schema.json"],
+      "rationale": "TOOLBOX_REALITY schema now explicitly binds sandbox map + tool corpus, eliminating dangling references."
+    },
+    {
+      "delta_id": "MB_DELTA_P0_R25_ENFORCEMENT",
+      "type": "VALIDATOR",
+      "purpose": "Enforce Row R2.5 in MPP with fail-closed gate",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [
+        ".codex/validators/run_toolbox_reality_gate.py"
+      ],
+      "rationale": "R2.5 must be mechanically enforced, not just documented. Gate registered in master governance runner."
+    },
+    {
+      "delta_id": "MB_DELTA_WRITE_AUDIT",
+      "type": "PATCH",
+      "purpose": "Record durable write receipt for all governance artifacts from this integration",
+      "claim_strength": "DESIGN-CHOICE",
+      "status": "INTEGRATED",
+      "artifacts_produced": [".codex/artifacts/DELTA_LEDGER_20260208.json"],
+      "rationale": "Auditability — proves state was materialized, not just discussed."
+    }
+  ],
+  "deferred_items": [
+    {
+      "item": "Canonical robustness equations",
+      "reason": "Awaits formal robustness math SEE investigation"
+    },
+    {
+      "item": "Scenario enumeration requirement",
+      "reason": "Explicitly prohibited — not a gap"
+    },
+    {
+      "item": "Fixed scenario cardinality",
+      "reason": "Explicitly prohibited — not a gap"
+    },
+    {
+      "item": "Representation comparison (JSON vs YAML vs Protobuf)",
+      "reason": "Repo convention is JSON Schema — no comparison needed"
+    },
+    {
+      "item": "LLM meta-impact tracking",
+      "reason": "Needs external measurement tooling"
+    },
+    {
+      "item": "Pattern-Invariant Validators (bijection, invertibility)",
+      "reason": "Needs pattern library + DecisionRecord schema first"
+    }
+  ]
+}

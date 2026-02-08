@@ -130,11 +130,111 @@ def check_mb_inv_maturity_pipeline_v1():
         failures.append("  MB_INV_MATURITY_PIPELINE_V1: MATURITY gate not registered in master runner")
 
 
+def check_mb_inv_claim_strength_v1():
+    """
+    MB_INV_CLAIM_STRENGTH_REQUIRED_V1: Claim strength policy must exist
+    and schemas must include claim_strength fields.
+    Checks:
+    1. CLAIM_STRENGTH_v1.md exists
+    2. Schemas with normative claims include claim_strength field
+    3. Wikipedia prohibition is documented
+    """
+    global checked
+    checked += 1
+
+    policy = ROOT / ".codex" / "policies" / "CLAIM_STRENGTH_v1.md"
+    if not policy.exists():
+        failures.append("  MB_INV_CLAIM_STRENGTH_REQUIRED_V1: CLAIM_STRENGTH_v1.md not found")
+        return
+
+    content = policy.read_text()
+    if "Wikipedia" not in content:
+        failures.append(
+            "  MB_INV_CLAIM_STRENGTH_REQUIRED_V1: Wikipedia prohibition not documented in policy"
+        )
+
+    # Check that at least one schema has claim_strength field
+    schemas_dir = ROOT / ".codex" / "schemas"
+    found_claim_strength = False
+    for schema_file in schemas_dir.glob("*.schema.json"):
+        try:
+            schema = json.loads(schema_file.read_text())
+            props = schema.get("properties", {})
+            if "claim_strength" in props:
+                found_claim_strength = True
+                break
+        except json.JSONDecodeError:
+            continue
+
+    if not found_claim_strength:
+        failures.append(
+            "  MB_INV_CLAIM_STRENGTH_REQUIRED_V1: No schema contains claim_strength field"
+        )
+
+
+def check_mb_inv_toolbox_reality_v1():
+    """
+    MB_INV_TOOLBOX_REALITY_R25_V1: R2.5 must be wired.
+    Checks:
+    1. TOOLBOX_REALITY.schema.json exists
+    2. run_toolbox_reality_gate.py exists
+    3. TOOLBOX_REALITY gate is registered in master runner
+    4. SUPER_PROMPT mentions Phase 2.5
+    """
+    global checked
+    checked += 1
+
+    schema = ROOT / ".codex" / "schemas" / "TOOLBOX_REALITY.schema.json"
+    gate = ROOT / ".codex" / "validators" / "run_toolbox_reality_gate.py"
+    master = ROOT / ".codex" / "validators" / "run_governance_gate.py"
+    prompt = ROOT / ".codex" / "policies" / "SUPER_PROMPT_v2.3.md"
+
+    if not schema.exists():
+        failures.append("  MB_INV_TOOLBOX_REALITY_R25_V1: TOOLBOX_REALITY.schema.json not found")
+        return
+    if not gate.exists():
+        failures.append("  MB_INV_TOOLBOX_REALITY_R25_V1: run_toolbox_reality_gate.py not found")
+        return
+
+    master_content = master.read_text()
+    if '"TOOLBOX_REALITY"' not in master_content:
+        failures.append("  MB_INV_TOOLBOX_REALITY_R25_V1: TOOLBOX_REALITY gate not registered in master runner")
+
+    if prompt.exists():
+        prompt_content = prompt.read_text()
+        if "Phase 2.5" not in prompt_content and "R2.5" not in prompt_content:
+            failures.append("  MB_INV_TOOLBOX_REALITY_R25_V1: SUPER_PROMPT does not document Phase 2.5")
+
+
+def check_mb_inv_wikipedia_prohibition_v1():
+    """
+    MB_INV_WIKIPEDIA_PROHIBITION_V1: Wikipedia prohibition documented.
+    Checks:
+    1. CLAIM_STRENGTH_v1.md exists and mentions Wikipedia prohibition
+    """
+    global checked
+    checked += 1
+
+    policy = ROOT / ".codex" / "policies" / "CLAIM_STRENGTH_v1.md"
+    if not policy.exists():
+        failures.append("  MB_INV_WIKIPEDIA_PROHIBITION_V1: CLAIM_STRENGTH_v1.md not found")
+        return
+
+    content = policy.read_text()
+    if "Wikipedia" not in content or "load-bearing" not in content.lower():
+        failures.append(
+            "  MB_INV_WIKIPEDIA_PROHIBITION_V1: Wikipedia load-bearing prohibition not found in policy"
+        )
+
+
 # Registry of invariant checkers
 INVARIANT_CHECKERS = {
     "MB_INV_NLQ_REQUIRED_V1": check_mb_inv_nlq_required_v1,
     "MB_INV_BUNDLE_INTERNALS_AS_EVIDENCE_V1": check_mb_inv_bundle_internals_v1,
     "MB_INV_MATURITY_PIPELINE_V1": check_mb_inv_maturity_pipeline_v1,
+    "MB_INV_CLAIM_STRENGTH_REQUIRED_V1": check_mb_inv_claim_strength_v1,
+    "MB_INV_TOOLBOX_REALITY_R25_V1": check_mb_inv_toolbox_reality_v1,
+    "MB_INV_WIKIPEDIA_PROHIBITION_V1": check_mb_inv_wikipedia_prohibition_v1,
 }
 
 

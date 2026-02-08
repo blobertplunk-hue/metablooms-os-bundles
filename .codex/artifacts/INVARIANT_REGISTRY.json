@@ -1,7 +1,7 @@
 {
-  "registry_version": "1.0",
+  "registry_version": "1.1",
   "description": "System invariants that must hold across the governance system. Each invariant has an MBQL check that can be executed to verify compliance.",
-  "updated_utc": "2026-02-07T00:00:00Z",
+  "updated_utc": "2026-02-08T00:00:00Z",
   "invariants": [
     {
       "invariant_id": "MB_INV_NLQ_REQUIRED_V1",
@@ -38,6 +38,42 @@
       "evidence_sources": ["LOCAL_FS", "SCHEMA_VALIDATION", "PRIOR_ARTIFACTS"],
       "status": "ACTIVE",
       "created_utc": "2026-02-07T00:00:00Z"
+    },
+    {
+      "invariant_id": "MB_INV_CLAIM_STRENGTH_REQUIRED_V1",
+      "severity": "P0",
+      "title": "Normative claims must have claim-strength labels",
+      "description": "Every normative claim in the governance system must be tagged with a claim strength level (SUPPORTED, SUPPORTED-INTENT, SOURCE-LIMITED, or DESIGN-CHOICE). Claims without labels default to SOURCE-LIMITED. SOURCE-LIMITED claims may NOT be used as enforcement predicates (gate conditions, invariant checks, or admission criteria).",
+      "rationale": "Without claim-strength labeling, SOURCE-LIMITED claims silently get elevated to enforced requirements. This was the primary failure mode in DMDU/RDM governance where unsupported requirements were being enforced.",
+      "mbql_check": "CHECK INVARIANT MB_INV_CLAIM_STRENGTH_REQUIRED_V1",
+      "verification_method": "Confirm that CLAIM_STRENGTH_v1.md policy exists, that schemas containing normative claims include a claim_strength field, and that no SOURCE-LIMITED claim is used as a gate condition.",
+      "evidence_sources": ["PRIOR_ARTIFACTS", "SCHEMA_VALIDATION"],
+      "status": "ACTIVE",
+      "created_utc": "2026-02-08T00:00:00Z"
+    },
+    {
+      "invariant_id": "MB_INV_TOOLBOX_REALITY_R25_V1",
+      "severity": "P0",
+      "title": "No decision may be produced without validated toolbox reality",
+      "description": "The MPP must validate toolbox reality (sandbox capabilities, acquisition channels, limitations) before the Decision Engine (Phase 3) executes. This is a hard gate at position R2.5. If ToolboxReality is missing or declares invalid channels, execution halts.",
+      "rationale": "Previous sessions produced decisions that assumed capabilities the environment did not have (e.g., writing to /mnt/data when no such path exists, or using web APIs without web access). R2.5 eliminates this by binding decisions to proven reality.",
+      "mbql_check": "CHECK INVARIANT MB_INV_TOOLBOX_REALITY_R25_V1",
+      "verification_method": "Confirm that TOOLBOX_REALITY.schema.json exists, run_toolbox_reality_gate.py exists and is registered in the master governance runner, and the SUPER_PROMPT documents Phase 2.5.",
+      "evidence_sources": ["LOCAL_FS", "SCHEMA_VALIDATION", "PRIOR_ARTIFACTS"],
+      "status": "ACTIVE",
+      "created_utc": "2026-02-08T00:00:00Z"
+    },
+    {
+      "invariant_id": "MB_INV_WIKIPEDIA_PROHIBITION_V1",
+      "severity": "P1",
+      "title": "Wikipedia may not serve as load-bearing evidence",
+      "description": "Wikipedia may never be the sole evidence basis for SUPPORTED claims on requirements, invariants, or formal definitions. It may be used for discovery and orientation but not as load-bearing evidence in the SEE Engine.",
+      "rationale": "Repeated failure mode where Wikipedia was cited as evidence for formal requirements. Wikipedia is editable, non-authoritative, and summarizes rather than defines.",
+      "mbql_check": "CHECK INVARIANT MB_INV_WIKIPEDIA_PROHIBITION_V1",
+      "verification_method": "Confirm that CLAIM_STRENGTH_v1.md lists Wikipedia in its prohibited load-bearing sources section.",
+      "evidence_sources": ["PRIOR_ARTIFACTS"],
+      "status": "ACTIVE",
+      "created_utc": "2026-02-08T00:00:00Z"
     }
   ]
 }

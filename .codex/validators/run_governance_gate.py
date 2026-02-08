@@ -28,6 +28,7 @@ GATES = [
     ("INVARIANT", "run_invariant_gate.py", 14),
     ("MATURITY", "run_maturity_gate.py", 15),
     ("POLICY_STRUCTURE", "run_policy_structure_gate.py", 16),
+    ("TOOLBOX_REALITY", "run_toolbox_reality_gate.py", 17),
 ]
 
 # Gates that can be skipped with --quick

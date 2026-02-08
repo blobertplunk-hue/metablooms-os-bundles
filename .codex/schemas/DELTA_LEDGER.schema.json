@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "DELTA_LEDGER.schema.json",
+  "title": "DeltaLedger",
+  "description": "Schema for recording deltas and patches from chat sessions. Each entry represents a governance change with its code, rationale, and evidence.",
+  "type": "object",
+  "required": ["ledger_version", "source_session", "entries"],
+  "properties": {
+    "ledger_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "source_session": {
+      "type": "string",
+      "description": "Identifier for the chat session that produced these deltas"
+    },
+    "generated_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["delta_id", "type", "purpose", "claim_strength", "status", "artifacts_produced"],
+        "properties": {
+          "delta_id": {
+            "type": "string",
+            "pattern": "^MB_DELTA_"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["PATCH", "DELTA", "INVARIANT", "SCHEMA", "POLICY", "VALIDATOR"]
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "claim_strength": {
+            "type": "string",
+            "enum": ["SUPPORTED", "SUPPORTED-INTENT", "SOURCE-LIMITED", "DESIGN-CHOICE"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["INTEGRATED", "PROPOSED", "DEFERRED", "REJECTED"]
+          },
+          "artifacts_produced": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "not_done_reason": {
+            "type": "string",
+            "description": "If status is DEFERRED or REJECTED, why"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
