@@ -1,10 +1,10 @@
 {
   "catalog_version": "1.0",
   "generated_utc": "2026-02-06T00:00:00Z",
-  "total_files": 90,
+  "total_files": 91,
   "summary": {
     "by_category": {
-      "os_bundle": 52,
+      "os_bundle": 53,
       "os_bundle_part": 2,
       "chat_export": 7,
       "chat_export_part": 10,
@@ -1891,6 +1891,17 @@
       "notes": "LFS pointer (133 bytes). Windows MF scan utility v1.21.02 for Canon multifunction devices.",
       "lifecycle_status": "ACTIVE",
       "superseded_by": null
+    },
+    {
+      "filename": "MetaBlooms_OS_SANDBOX_PACKAGE_20260208T000000Z.zip",
+      "category": "os_bundle",
+      "size_bytes": 114010,
+      "date_prefix": null,
+      "timestamp_suffix": "20260208T000000Z",
+      "naming_convention_compliant": true,
+      "lfs_tracked": true,
+      "lifecycle_status": "ACTIVE",
+      "description": "MetaBlooms OS sandbox package \u2014 bootable meta-competence engine for ChatGPT Code Interpreter"
     }
   ]
 }

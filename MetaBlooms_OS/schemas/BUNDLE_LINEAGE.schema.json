@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "BUNDLE_LINEAGE.schema.json",
+  "title": "Bundle Lineage Graph",
+  "description": "Schema for tracking evolutionary relationships between bundles",
+  "type": "object",
+  "required": ["lineage_version", "generated_utc", "chains"],
+  "properties": {
+    "lineage_version": { "type": "string" },
+    "generated_utc": { "type": "string", "format": "date-time" },
+    "chains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["chain_id", "description", "bundles"],
+        "properties": {
+          "chain_id": {
+            "type": "string",
+            "description": "Identifier for this evolution chain"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this chain represents"
+          },
+          "bundles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["filename", "order", "relationship"],
+              "properties": {
+                "filename": { "type": "string" },
+                "order": {
+                  "type": "integer",
+                  "description": "Position in the evolution chain (1 = earliest)"
+                },
+                "relationship": {
+                  "type": "string",
+                  "enum": ["ORIGIN", "PATCHED", "REBUILT", "EXTENDED", "REMEDIATED", "REISSUED", "FROZEN", "INTEGRATED", "WIRED"],
+                  "description": "How this bundle relates to the previous one in the chain"
+                },
+                "parent_filename": {
+                  "type": ["string", "null"],
+                  "description": "The bundle this was derived from (null for ORIGIN)"
+                },
+                "delta_description": {
+                  "type": ["string", "null"],
+                  "description": "What changed from the parent"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "orphans": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Bundles not assigned to any lineage chain"
+    }
+  }
+}

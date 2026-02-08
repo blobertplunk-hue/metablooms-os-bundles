@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "DECISION_RECORD.schema.json",
+  "title": "DecisionRecord",
+  "description": "Records an architectural or design decision with constraints, candidates, rejections, and selection reasoning. No architectural choice without one.",
+  "type": "object",
+  "required": [
+    "decision_id",
+    "decision_type",
+    "context",
+    "constraints",
+    "candidates",
+    "selected",
+    "rejections",
+    "rationale"
+  ],
+  "properties": {
+    "decision_id": {
+      "type": "string",
+      "pattern": "^DR-[A-Z0-9_]+$"
+    },
+    "decision_type": {
+      "type": "string",
+      "enum": [
+        "ARCHITECTURAL_PATTERN",
+        "TOOL_SELECTION",
+        "SCHEMA_DESIGN",
+        "POLICY_DESIGN",
+        "REPRESENTATION_CHOICE",
+        "ALGORITHM_SELECTION",
+        "TRADEOFF_RESOLUTION"
+      ]
+    },
+    "context": {
+      "type": "string",
+      "minLength": 10,
+      "description": "What problem this decision addresses"
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["constraint", "source"],
+        "properties": {
+          "constraint": { "type": "string" },
+          "source": {
+            "type": "string",
+            "description": "Where this constraint comes from (mastery_definition, R2.5, domain research, etc.)"
+          },
+          "hard": {
+            "type": "boolean",
+            "description": "If true, violating this constraint eliminates a candidate"
+          }
+        }
+      },
+      "description": "All constraints that bound this decision"
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "source": { "type": "string" }
+        }
+      },
+      "description": "All candidates considered. Must be at least 2 — a single option is not a decision."
+    },
+    "selected": {
+      "type": "object",
+      "required": ["name", "evidence"],
+      "properties": {
+        "name": { "type": "string" },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Evidence citations supporting this selection"
+        }
+      }
+    },
+    "rejections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "reason"],
+        "properties": {
+          "name": { "type": "string" },
+          "reason": { "type": "string" },
+          "constraint_violated": { "type": "string" }
+        }
+      },
+      "description": "Every rejected candidate with explicit reason"
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 20,
+      "description": "CDR Pillar 1: WHY this selection, not just WHAT"
+    },
+    "failure_modes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "CDR Pillar 4: How could this decision fail?"
+    },
+    "supersedes": {
+      "type": "string",
+      "description": "CDR Pillar 6: What prior decision does this replace?"
+    },
+    "claim_strength": {
+      "type": "string",
+      "enum": ["SUPPORTED", "SUPPORTED-INTENT", "SOURCE-LIMITED", "DESIGN-CHOICE"]
+    },
+    "mastery_definition_ref": {
+      "type": "string",
+      "description": "Reference to the mastery definition that produced the constraints for this decision"
+    },
+    "generated_utc": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

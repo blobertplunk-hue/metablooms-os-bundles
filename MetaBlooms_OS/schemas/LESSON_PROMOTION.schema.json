@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "LESSON_PROMOTION.schema.json",
+  "title": "LessonPromotion",
+  "description": "Tracks the lifecycle of a learned lesson from observation through invariant. Implements the assimilation loop: OBSERVATION → HYPOTHESIS → CONSTRAINT → INVARIANT.",
+  "type": "object",
+  "required": [
+    "lesson_id",
+    "current_level",
+    "observation",
+    "source_session"
+  ],
+  "properties": {
+    "lesson_id": {
+      "type": "string",
+      "pattern": "^LESSON-[0-9]+$"
+    },
+    "current_level": {
+      "type": "string",
+      "enum": ["OBSERVATION", "HYPOTHESIS", "CONSTRAINT", "INVARIANT"],
+      "description": "Current promotion level"
+    },
+    "observation": {
+      "type": "object",
+      "required": ["what_happened", "when", "evidence"],
+      "properties": {
+        "what_happened": { "type": "string" },
+        "when": { "type": "string" },
+        "evidence": {
+          "type": "string",
+          "description": "How we know this happened (receipt, delta ledger, etc.)"
+        }
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "properties": {
+        "proposed_cause": { "type": "string" },
+        "testable_prediction": { "type": "string" },
+        "claim_strength": {
+          "type": "string",
+          "enum": ["SUPPORTED", "SUPPORTED-INTENT", "SOURCE-LIMITED", "DESIGN-CHOICE"]
+        },
+        "promoted_utc": { "type": "string", "format": "date-time" }
+      },
+      "description": "Filled when promoted to HYPOTHESIS"
+    },
+    "constraint": {
+      "type": "object",
+      "properties": {
+        "policy_created": {
+          "type": "string",
+          "description": "Path to the policy doc that codifies this constraint"
+        },
+        "enforcement_method": { "type": "string" },
+        "promoted_utc": { "type": "string", "format": "date-time" }
+      },
+      "description": "Filled when promoted to CONSTRAINT"
+    },
+    "invariant": {
+      "type": "object",
+      "properties": {
+        "invariant_id": {
+          "type": "string",
+          "description": "ID in INVARIANT_REGISTRY.json"
+        },
+        "checker_function": {
+          "type": "string",
+          "description": "Name of mechanical checker in run_invariant_gate.py"
+        },
+        "promoted_utc": { "type": "string", "format": "date-time" }
+      },
+      "description": "Filled when promoted to INVARIANT"
+    },
+    "source_session": {
+      "type": "string",
+      "description": "Which session produced this observation"
+    },
+    "related_delta_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Delta ledger entries related to this lesson"
+    }
+  },
+  "additionalProperties": false
+}

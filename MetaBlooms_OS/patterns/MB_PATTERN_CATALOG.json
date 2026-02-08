@@ -1,0 +1,104 @@
+{
+  "catalog_id": "MB_PATTERN_CATALOG",
+  "version": "2.0",
+  "description": "Architectural patterns available for constraint-driven decision making",
+  "generated_utc": "2026-02-08T00:00:00Z",
+  "patterns": [
+    {
+      "pattern_id": "BIJECTION",
+      "name": "Bijection / Invertible Mapping",
+      "description": "One-to-one mapping where every input maps to a unique output AND every output maps back to a unique input. No information is lost.",
+      "when_to_use": "When you need exact reversibility — encode then decode, encrypt then decrypt, serialize then deserialize with zero loss.",
+      "strengths": ["reversibility", "information preservation", "deterministic", "composable"],
+      "weaknesses": ["Cannot compress", "domain and codomain must have same cardinality"],
+      "required_capabilities": ["mathematical_precision"],
+      "forbidden_when": ["lossy compression needed", "many-to-one mapping required"],
+      "exemplar": "Feistel cipher in Library of Babel — chose bijection because every page index must map to exactly one page and back",
+      "claim_strength": "SUPPORTED"
+    },
+    {
+      "pattern_id": "IDEMPOTENT",
+      "name": "Idempotent Operation",
+      "description": "Operation that produces the same result regardless of how many times it is applied. f(f(x)) = f(x).",
+      "when_to_use": "Retry logic, message processing, state synchronization, API endpoints that may be called multiple times.",
+      "strengths": ["safe retries", "crash recovery", "distributed systems"],
+      "weaknesses": ["Cannot accumulate state", "harder to implement for complex mutations"],
+      "required_capabilities": [],
+      "forbidden_when": ["accumulation required", "each invocation must produce different results"],
+      "exemplar": "HTTP PUT is idempotent — uploading the same file twice yields the same result",
+      "claim_strength": "SUPPORTED"
+    },
+    {
+      "pattern_id": "MONOTONIC",
+      "name": "Monotonic Accumulation",
+      "description": "Values only grow (or only shrink), never reverse direction. Append-only logs, version counters, intelligence levels.",
+      "when_to_use": "When history must be preserved, when rollback is dangerous, when you need to prove 'this only gets better'.",
+      "strengths": ["auditability", "conflict-free in distributed systems", "provable progress"],
+      "weaknesses": ["Cannot correct errors by deletion", "storage grows unboundedly"],
+      "required_capabilities": [],
+      "forbidden_when": ["correction by deletion needed", "bounded storage required without archival"],
+      "exemplar": "MetaBlooms intelligence_level — only increases as mastery definitions, decisions, and lessons accumulate",
+      "claim_strength": "DESIGN-CHOICE"
+    },
+    {
+      "pattern_id": "FAIL_CLOSED",
+      "name": "Fail-Closed Gate",
+      "description": "On any unexpected condition, deny/halt rather than permit/continue. Default to 'no' rather than 'yes'.",
+      "when_to_use": "Security gates, quality gates, admission decisions, anything where false-positive (allowing bad input) is worse than false-negative (rejecting good input).",
+      "strengths": ["safety", "predictability", "prevents cascading failures"],
+      "weaknesses": ["Can block legitimate operations", "requires explicit allowlisting"],
+      "required_capabilities": [],
+      "forbidden_when": ["availability is more important than correctness", "best-effort is acceptable"],
+      "exemplar": "MPP phases — any CRITICAL finding triggers FAIL CLOSED, halting the pipeline",
+      "claim_strength": "SUPPORTED"
+    },
+    {
+      "pattern_id": "CONSTRAINT_ELIMINATION",
+      "name": "Constraint-Driven Elimination",
+      "description": "Instead of picking the 'best' option, define constraints and eliminate everything that violates them. Selection emerges from what survives.",
+      "when_to_use": "Architectural decisions, tool selection, any choice where you need justified, traceable reasoning rather than gut feel.",
+      "strengths": ["justified decisions", "traceable reasoning", "reproducible"],
+      "weaknesses": ["Requires well-defined constraints", "can eliminate all candidates if constraints are too tight"],
+      "required_capabilities": [],
+      "forbidden_when": ["no constraints are known", "creative exploration is the goal"],
+      "exemplar": "Feistel cipher selection — hash eliminated (no reverse), LCG eliminated (fragile), lookup eliminated (impossible), Feistel survived",
+      "claim_strength": "SUPPORTED"
+    },
+    {
+      "pattern_id": "RECURSIVE_REFINEMENT",
+      "name": "Recursive Refinement with Convergence Bounds",
+      "description": "Iteratively improve output by detecting defects and fixing them, with hard limits on iterations and convergence testing to prevent infinite loops.",
+      "when_to_use": "Quality improvement, document editing, code review cycles — any iterative process that could loop forever without bounds.",
+      "strengths": ["quality improvement", "bounded resource usage", "defect tracking"],
+      "weaknesses": ["May terminate with remaining defects", "overhead of evaluation phases"],
+      "required_capabilities": [],
+      "forbidden_when": ["single-shot correctness is guaranteed", "iteration cost exceeds benefit"],
+      "exemplar": "RRP: BUILD -> EVALUATE -> REWRITE, max 2 iterations, convergence test: defects_after >= defects_before -> STOP",
+      "claim_strength": "DESIGN-CHOICE"
+    },
+    {
+      "pattern_id": "EVIDENCE_BEFORE_EXECUTION",
+      "name": "Evidence-Before-Execution Gate",
+      "description": "Refuse to execute until sufficient evidence has been gathered for all claims. Prevents action based on assumptions.",
+      "when_to_use": "When the cost of acting on false premises is high — any decision with significant consequences.",
+      "strengths": ["prevents premature execution", "forces research", "makes assumptions explicit"],
+      "weaknesses": ["Slows down execution", "can block action when evidence is genuinely unavailable"],
+      "required_capabilities": [],
+      "forbidden_when": ["speed is critical and stakes are low", "evidence is fundamentally unavailable"],
+      "exemplar": "MPP Phase 2.75 PREPARATION_GATE — blocks BUILD if mastery definition has OPEN knowledge gaps",
+      "claim_strength": "DESIGN-CHOICE"
+    },
+    {
+      "pattern_id": "LESSON_PROMOTION",
+      "name": "Lesson Promotion Lifecycle",
+      "description": "Observations get promoted through levels (OBSERVATION -> HYPOTHESIS -> CONSTRAINT -> INVARIANT) only with evidence at each step. Prevents premature generalization.",
+      "when_to_use": "Learning systems, knowledge management, any system that needs to distinguish between 'I noticed this once' and 'this is a law'.",
+      "strengths": ["prevents premature generalization", "evidence-gated knowledge", "monotonic intelligence growth"],
+      "weaknesses": ["Slow to promote", "requires multiple sessions of evidence"],
+      "required_capabilities": [],
+      "forbidden_when": ["single-use knowledge", "no persistence between sessions"],
+      "exemplar": "MetaBlooms assimilation: MMD findings become observations, recurring observations become hypotheses, confirmed hypotheses become constraints, mechanically-checked constraints become invariants",
+      "claim_strength": "DESIGN-CHOICE"
+    }
+  ]
+}

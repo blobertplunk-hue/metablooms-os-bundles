@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "TOOLBOX_REALITY.schema.json",
+  "title": "ToolboxReality",
+  "description": "Schema for MPP Row R2.5 — Toolbox Reality Validation. Binds decisions to actual sandbox capabilities and acquisition channels. Fail-closed if missing or invalid.",
+  "type": "object",
+  "required": [
+    "sandbox_capabilities",
+    "acquisition_channels",
+    "limitations"
+  ],
+  "properties": {
+    "sandbox_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["capability", "available"],
+        "properties": {
+          "capability": {
+            "type": "string",
+            "description": "Name of the sandbox capability (e.g., filesystem_write, web_access, shell_access)"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "What the execution environment can actually do"
+    },
+    "acquisition_channels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["sandbox", "web.run", "user", "git_lfs", "local_fs"]
+      },
+      "minItems": 1,
+      "description": "How tools/data can be acquired. Must be explicit — no implicit channels."
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "Explicit declaration of what CANNOT be done. Must not be empty — every environment has limits."
+    },
+    "sandbox_map_source": {
+      "type": "string",
+      "description": "Path to the authoritative sandbox capability map (e.g., SANDBOX_MAP.json)"
+    },
+    "tool_corpus_binding": {
+      "type": "string",
+      "description": "Identifier of the tool corpus bound to this reality (e.g., sandbox_tools_bulk_bundle_1)"
+    }
+  },
+  "additionalProperties": false
+}
