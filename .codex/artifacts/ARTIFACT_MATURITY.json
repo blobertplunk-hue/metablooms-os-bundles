@@ -510,11 +510,50 @@
       "notes": "R2.5 enforcement gate. Self-proving by execution.",
       "governance_class": "VALIDATOR",
       "enforcement_required": true
+    },
+    {
+      "artifact_path": ".codex/validators/run_mmd_gate.py",
+      "artifact_type": "validator",
+      "maturity": "ENFORCED",
+      "schema_path": null,
+      "structural_check": null,
+      "validator_path": null,
+      "gate_name": "MMD",
+      "advanced_utc": "2026-02-08T00:00:00Z",
+      "notes": "MMD v2 mechanical gap detection engine. 6 detection methods. Self-proving by execution.",
+      "governance_class": "VALIDATOR",
+      "enforcement_required": true
+    },
+    {
+      "artifact_path": ".codex/policies/MMD_ENGINE_v2.md",
+      "artifact_type": "policy",
+      "maturity": "ENFORCED",
+      "schema_path": null,
+      "structural_check": "Policy structure validated + MMD gate implements this spec",
+      "validator_path": ".codex/validators/run_mmd_gate.py",
+      "gate_name": "MMD",
+      "advanced_utc": "2026-02-08T00:00:00Z",
+      "notes": "MMD v2 specification. Enforced by the MMD gate itself.",
+      "governance_class": "PIPELINE",
+      "enforcement_required": true
+    },
+    {
+      "artifact_path": ".codex/artifacts/ARTIFACT_MATURITY.json",
+      "artifact_type": "artifact",
+      "maturity": "ENFORCED",
+      "schema_path": null,
+      "structural_check": "Summary counts verified by run_maturity_gate.py + MMD self-check",
+      "validator_path": ".codex/validators/run_maturity_gate.py",
+      "gate_name": "MATURITY",
+      "advanced_utc": "2026-02-08T00:00:00Z",
+      "notes": "Self-referential: the maturity tracker is tracked by the maturity gate.",
+      "governance_class": "SYSTEM",
+      "enforcement_required": true
     }
   ],
   "summary": {
-    "total": 39,
-    "ENFORCED": 23,
+    "total": 42,
+    "ENFORCED": 26,
     "VALIDATED": 15,
     "DRAFT": 1
   }

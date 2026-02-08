@@ -63,7 +63,20 @@
               "ORPHANED_PART",
               "LFS_GAP",
               "TEMPLATE_GAP",
-              "INTEGRATION_GAP"
+              "INTEGRATION_GAP",
+              "BROKEN_REFERENCE",
+              "COUNT_MISMATCH",
+              "UNREGISTERED_VALIDATOR",
+              "UNTRACEABLE_INVARIANT",
+              "UNREFERENCED_SCHEMA",
+              "UNEXPLAINED_DEFERRAL",
+              "MISSING_REPORT",
+              "INVALID_JSON",
+              "MISSING_FIELD",
+              "DUPLICATE_ID",
+              "CLOSED_ENUM",
+              "CIRCULAR_DEPENDENCY",
+              "DEAD_VALIDATOR"
             ]
           },
           "title": {
