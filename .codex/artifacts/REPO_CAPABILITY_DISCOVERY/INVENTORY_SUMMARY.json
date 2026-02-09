@@ -1,0 +1,321 @@
+{
+  "total_files": 198,
+  "total_bytes": 1132518429,
+  "real_files": 121,
+  "lfs_pointer_files": 77,
+  "real_bytes": 1132508152,
+  "lfs_pointer_bytes": 10277,
+  "top_50_largest_real_files": [
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part001",
+      "size_bytes": 104857600
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part002",
+      "size_bytes": 104857600
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part003",
+      "size_bytes": 104857600
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part004",
+      "size_bytes": 104857600
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part005",
+      "size_bytes": 104857600
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part006",
+      "size_bytes": 104857600
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part007",
+      "size_bytes": 104857600
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_VALIDATED_EXPORT.zip.part1",
+      "size_bytes": 95898025
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_VALIDATED_EXPORT.zip.part2",
+      "size_bytes": 95898024
+    },
+    {
+      "file_path": "os_bundles/chat_4_RETRY_full_mnt_data_20260121_185205.zip.part001",
+      "size_bytes": 94371840
+    },
+    {
+      "file_path": "os_bundles/chat_4_RETRY_full_mnt_data_20260121_185205.zip.part002",
+      "size_bytes": 47816350
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part008",
+      "size_bytes": 35531819
+    },
+    {
+      "file_path": "os_bundles/Lesson plans 1_19-1_23.rtf",
+      "size_bytes": 28014058
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_SANDBOX_PACKAGE_20260208T000000Z.zip",
+      "size_bytes": 114010
+    },
+    {
+      "file_path": ".codex/policies/SEE_ENGINE_v1.md",
+      "size_bytes": 60574
+    },
+    {
+      "file_path": "MetaBlooms_OS/policies/SEE_ENGINE_v1.md",
+      "size_bytes": 60574
+    },
+    {
+      "file_path": ".codex/artifacts/BUNDLE_CATALOG.json",
+      "size_bytes": 59891
+    },
+    {
+      "file_path": ".codex/artifacts/MMD_REPORT.json",
+      "size_bytes": 41384
+    },
+    {
+      "file_path": ".codex/artifacts/ARTIFACT_MATURITY.json",
+      "size_bytes": 25691
+    },
+    {
+      "file_path": ".codex/artifacts/BUNDLE_LINEAGE.json",
+      "size_bytes": 24157
+    },
+    {
+      "file_path": ".codex/policies/SUPER_PROMPT_v2.3.md",
+      "size_bytes": 22857
+    },
+    {
+      "file_path": "MetaBlooms_OS/policies/SUPER_PROMPT_v2.3.md",
+      "size_bytes": 22857
+    },
+    {
+      "file_path": "MetaBlooms_OS/mpp.py",
+      "size_bytes": 21525
+    },
+    {
+      "file_path": "MetaBlooms_OS/state/MB_STATE.json",
+      "size_bytes": 20115
+    },
+    {
+      "file_path": ".codex/validators/run_mmd_gate.py",
+      "size_bytes": 18961
+    },
+    {
+      "file_path": "scripts/mb-upload.sh",
+      "size_bytes": 17342
+    },
+    {
+      "file_path": "MetaBlooms_OS/engines/see_engine.py",
+      "size_bytes": 14990
+    },
+    {
+      "file_path": "MetaBlooms_OS/engines/decision_engine.py",
+      "size_bytes": 14647
+    },
+    {
+      "file_path": ".codex/policies/MB_MASTER_SPEC_v1.md",
+      "size_bytes": 12936
+    },
+    {
+      "file_path": "MetaBlooms_OS/policies/MB_MASTER_SPEC_v1.md",
+      "size_bytes": 12936
+    },
+    {
+      "file_path": ".codex/kernel/BOOT.md",
+      "size_bytes": 12347
+    },
+    {
+      "file_path": "MetaBlooms_OS/engines/mmd_engine.py",
+      "size_bytes": 12193
+    },
+    {
+      "file_path": "MetaBlooms_OS/engines/assimilation_engine.py",
+      "size_bytes": 12104
+    },
+    {
+      "file_path": ".codex/policies/MBQL_v1.md",
+      "size_bytes": 11251
+    },
+    {
+      "file_path": "MetaBlooms_OS/policies/MBQL_v1.md",
+      "size_bytes": 11251
+    },
+    {
+      "file_path": "MetaBlooms_OS/state/state_manager.py",
+      "size_bytes": 10667
+    },
+    {
+      "file_path": ".codex/policies/SUPER_PROMPT_v2.2.md",
+      "size_bytes": 10130
+    },
+    {
+      "file_path": ".codex/policies/BUNDLE_LIFECYCLE_v1.md",
+      "size_bytes": 9686
+    },
+    {
+      "file_path": "MetaBlooms_OS/policies/BUNDLE_LIFECYCLE_v1.md",
+      "size_bytes": 9686
+    },
+    {
+      "file_path": ".codex/validators/run_invariant_gate.py",
+      "size_bytes": 9541
+    },
+    {
+      "file_path": "MetaBlooms_OS/engines/mastery_engine.py",
+      "size_bytes": 8987
+    },
+    {
+      "file_path": "CLAUDE.md",
+      "size_bytes": 8430
+    },
+    {
+      "file_path": ".codex/validators/run_policy_structure_gate.py",
+      "size_bytes": 8306
+    },
+    {
+      "file_path": "MetaBlooms_OS/boot.py",
+      "size_bytes": 8303
+    },
+    {
+      "file_path": "MetaBlooms_OS/BOOT_PROMPT.md",
+      "size_bytes": 7966
+    },
+    {
+      "file_path": "MetaBlooms_OS/engines/rrp_engine.py",
+      "size_bytes": 7963
+    },
+    {
+      "file_path": ".codex/validators/run_maturity_gate.py",
+      "size_bytes": 7837
+    },
+    {
+      "file_path": ".codex/artifacts/DELTA_LEDGER_20260208.json",
+      "size_bytes": 7835
+    },
+    {
+      "file_path": ".codex/policies/LEARNING_PIPELINE_v1.md",
+      "size_bytes": 7447
+    },
+    {
+      "file_path": "MetaBlooms_OS/policies/LEARNING_PIPELINE_v1.md",
+      "size_bytes": 7447
+    }
+  ],
+  "extensions_breakdown": {
+    "(none)": {
+      "count": 2,
+      "bytes": 693,
+      "lfs": 0,
+      "real": 2
+    },
+    ".md": {
+      "count": 30,
+      "bytes": 349275,
+      "lfs": 0,
+      "real": 30
+    },
+    ".zip": {
+      "count": 72,
+      "bytes": 123485,
+      "lfs": 71,
+      "real": 1
+    },
+    ".exe": {
+      "count": 6,
+      "bytes": 802,
+      "lfs": 6,
+      "real": 0
+    },
+    ".part001": {
+      "count": 2,
+      "bytes": 199229440,
+      "lfs": 0,
+      "real": 2
+    },
+    ".part002": {
+      "count": 2,
+      "bytes": 152673950,
+      "lfs": 0,
+      "real": 2
+    },
+    ".part003": {
+      "count": 1,
+      "bytes": 104857600,
+      "lfs": 0,
+      "real": 1
+    },
+    ".part004": {
+      "count": 1,
+      "bytes": 104857600,
+      "lfs": 0,
+      "real": 1
+    },
+    ".part005": {
+      "count": 1,
+      "bytes": 104857600,
+      "lfs": 0,
+      "real": 1
+    },
+    ".part006": {
+      "count": 1,
+      "bytes": 104857600,
+      "lfs": 0,
+      "real": 1
+    },
+    ".part007": {
+      "count": 1,
+      "bytes": 104857600,
+      "lfs": 0,
+      "real": 1
+    },
+    ".part008": {
+      "count": 1,
+      "bytes": 35531819,
+      "lfs": 0,
+      "real": 1
+    },
+    ".rtf": {
+      "count": 1,
+      "bytes": 28014058,
+      "lfs": 0,
+      "real": 1
+    },
+    ".part1": {
+      "count": 1,
+      "bytes": 95898025,
+      "lfs": 0,
+      "real": 1
+    },
+    ".part2": {
+      "count": 1,
+      "bytes": 95898024,
+      "lfs": 0,
+      "real": 1
+    },
+    ".sh": {
+      "count": 2,
+      "bytes": 18411,
+      "lfs": 0,
+      "real": 2
+    },
+    ".json": {
+      "count": 49,
+      "bytes": 303771,
+      "lfs": 0,
+      "real": 49
+    },
+    ".py": {
+      "count": 24,
+      "bytes": 188676,
+      "lfs": 0,
+      "real": 24
+    }
+  },
+  "scannable_extensions": {}
+}

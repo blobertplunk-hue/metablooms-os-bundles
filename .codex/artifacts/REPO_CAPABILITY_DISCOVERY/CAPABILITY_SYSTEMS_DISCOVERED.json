@@ -1,0 +1,731 @@
+{
+  "discovery_version": "1.0",
+  "generated_utc": "2026-02-09T00:00:00Z",
+  "total_systems": 25,
+  "capability_types_found": [
+    "CREATE",
+    "VALIDATE",
+    "TRANSFORM",
+    "ORCHESTRATE",
+    "PERSIST",
+    "SEARCH",
+    "LEARN",
+    "DECIDE"
+  ],
+  "systems": [
+    {
+      "system_id": "SYS-001",
+      "name": "MPP Orchestrator",
+      "type": "ORCHESTRATE",
+      "source_files": [
+        "MetaBlooms_OS/mpp.py"
+      ],
+      "entry_points": [
+        "MPPOrchestrator.__init__",
+        "MPPOrchestrator.run_preparation_phases",
+        "MPPOrchestrator.run_execution_phases"
+      ],
+      "inputs": [
+        "task_type (str: STRUCTURAL_ANALYSIS|RESEARCH|CODE_GENERATION|POLICY)",
+        "task_description (str)",
+        "domain (str)",
+        "claims (list of claim objects)",
+        "mastery_definition (dict)",
+        "build_artifacts (list of {path, content})",
+        "execution_results (dict mapping criterion_id to {verdict, evidence})"
+      ],
+      "outputs": [
+        "TURN_RECEIPT.json",
+        "FAIL_RECEIPT.json",
+        "all phase-specific artifacts"
+      ],
+      "dependencies": [
+        "SYS-002",
+        "SYS-003",
+        "SYS-004",
+        "SYS-005",
+        "SYS-006",
+        "SYS-007",
+        "SYS-008"
+      ],
+      "evidence": "MetaBlooms_OS/mpp.py defines class MPPOrchestrator with 14 pipeline phases (-1 through 7.5). Imports and instantiates all 6 engines plus StateManager. Methods: phase_neg1_enforcement, phase_neg1b_environment, phase_0_claims, phase_05_mastery, phase_1_see, phase_2_mmd, phase_25_toolbox, phase_275_preparation, phase_6_verify, phase_7_receipt, phase_75_assimilation, fail_closed."
+    },
+    {
+      "system_id": "SYS-002",
+      "name": "Mastery Engine",
+      "type": "CREATE",
+      "source_files": [
+        "MetaBlooms_OS/engines/mastery_engine.py"
+      ],
+      "entry_points": [
+        "MasteryEngine.__init__",
+        "MasteryEngine.check_prior_mastery",
+        "MasteryEngine.create_mastery_definition",
+        "MasteryEngine.validate",
+        "MasteryEngine.check_readiness",
+        "MasteryEngine.compare_outputs"
+      ],
+      "inputs": [
+        "task_description (str, min 20 chars)",
+        "domain (str)",
+        "best_practitioners (list of {name, why_relevant, source?})",
+        "standards (list of {standard, claim_strength, source?})",
+        "world_class_standard (str, min 20 chars)",
+        "success_criteria (list of {criterion_id, description, measurable, required})",
+        "knowledge_gaps (list of {gap_id, description, see_query, status, answer?})",
+        "constraints ({environmental, domain_specific, governance})",
+        "see_queries_used (list of str)"
+      ],
+      "outputs": [
+        "MASTERY_DEFINITION artifact (MDEF-{DOMAIN}_{DATE}.json)",
+        "validation errors (list of str)",
+        "readiness assessment (bool, blockers list)",
+        "mastery comparison result"
+      ],
+      "dependencies": [
+        "SYS-008",
+        "SYS-015"
+      ],
+      "evidence": "MetaBlooms_OS/engines/mastery_engine.py defines class MasteryEngine. Creates MASTERY_DEFINITION artifacts conforming to MASTERY_DEFINITION.schema.json. Validates required fields, length constraints, and structural requirements. Stores definitions in StateManager for cross-session reuse. Phase 0.5 of MPP."
+    },
+    {
+      "system_id": "SYS-003",
+      "name": "SEE Engine (Search for Evidence)",
+      "type": "SEARCH",
+      "source_files": [
+        "MetaBlooms_OS/engines/see_engine.py"
+      ],
+      "entry_points": [
+        "SEEEngine.__init__",
+        "SEEEngine.run",
+        "SEEEngine.gather_evidence_for_claim",
+        "SEEEngine.emit_artifacts"
+      ],
+      "inputs": [
+        "claims (list of {claim_id, text, type, evidence_required})",
+        "environment ({web_access: YES|NO})"
+      ],
+      "outputs": [
+        "claim_evidence_map ({claim_id: {evidence_strength, evidence_ids, source_limited, methods_attempted}})",
+        "evidence_records (list)",
+        "query_log (list)",
+        "SEE_QUERY_LOG.json",
+        "SOURCE_LEDGER.json"
+      ],
+      "dependencies": [
+        "SYS-008"
+      ],
+      "evidence": "MetaBlooms_OS/engines/see_engine.py defines class SEEEngine. Implements 6 evidence-gathering methods: LOCAL_FS, SCHEMA_VALIDATION, PRIOR_ARTIFACTS, HASH_VERIFICATION, CROSS_REFERENCE, and WEB_SEARCH. Uses QUALITY_RANKS (Q1-Q6) and METHOD_PRIORITY tables for 9 claim types. Assigns evidence strength: CONFIRMED, SUPPORTED, PARTIAL, CONTESTED, UNSUPPORTED, UNFALSIFIABLE. Phase 1 of MPP."
+    },
+    {
+      "system_id": "SYS-004",
+      "name": "MMD Engine (Missing Middle Detector)",
+      "type": "VALIDATE",
+      "source_files": [
+        "MetaBlooms_OS/engines/mmd_engine.py"
+      ],
+      "entry_points": [
+        "MMDEngine.__init__",
+        "MMDEngine.run",
+        "MMDEngine.emit_report",
+        "MMDEngine.method_schema_coverage",
+        "MMDEngine.method_policy_coverage",
+        "MMDEngine.method_mastery_readiness",
+        "MMDEngine.method_decision_completeness",
+        "MMDEngine.method_evidence_gaps",
+        "MMDEngine.method_state_integrity"
+      ],
+      "inputs": [
+        "mastery_definition (dict, optional)",
+        "see_results (dict, optional)"
+      ],
+      "outputs": [
+        "MMD_REPORT.json with status (PASS|PASS_WITH_WARNINGS|FAIL), findings, summary"
+      ],
+      "dependencies": [
+        "SYS-008"
+      ],
+      "evidence": "MetaBlooms_OS/engines/mmd_engine.py defines class MMDEngine. Runs 6 detection methods: SCHEMA_COVERAGE, POLICY_COVERAGE, MASTERY_READINESS, DECISION_COMPLETENESS, EVIDENCE_GAPS, STATE_INTEGRITY. Produces findings with severity levels CRITICAL/HIGH/MEDIUM/LOW/INFO. FAIL CLOSED on CRITICAL findings. Phase 2 of MPP."
+    },
+    {
+      "system_id": "SYS-005",
+      "name": "Decision Engine (Constraint-Driven)",
+      "type": "DECIDE",
+      "source_files": [
+        "MetaBlooms_OS/engines/decision_engine.py"
+      ],
+      "entry_points": [
+        "DecisionEngine.__init__",
+        "DecisionEngine.make_decision",
+        "DecisionEngine.extract_constraints",
+        "DecisionEngine.enumerate_candidates",
+        "DecisionEngine.eliminate",
+        "DecisionEngine.score_candidates"
+      ],
+      "inputs": [
+        "decision_type (str: ARCHITECTURAL_PATTERN|TOOL_SELECTION|...)",
+        "context (str)",
+        "mastery_definition (dict, optional)",
+        "toolbox_reality (dict, optional)",
+        "additional_constraints (list of {constraint, source, hard})",
+        "additional_candidates (list of {name, description, source})",
+        "evidence (list of str)"
+      ],
+      "outputs": [
+        "DECISION_RECORD artifact (DR-{TYPE}_{TIMESTAMP}.json)",
+        "decision_record with selected candidate, rejections, rationale, failure_modes"
+      ],
+      "dependencies": [
+        "SYS-008",
+        "SYS-009"
+      ],
+      "evidence": "MetaBlooms_OS/engines/decision_engine.py defines class DecisionEngine. Replaces keyword-based pattern matching with constraint-driven elimination. 5-step pipeline: extract_constraints -> enumerate_candidates -> eliminate (hard constraints) -> score_candidates (soft constraints) -> select best. Requires minimum 2 candidates. Stores records in state for cross-session learning."
+    },
+    {
+      "system_id": "SYS-006",
+      "name": "RRP Engine (Recursive Refinement Protocol)",
+      "type": "TRANSFORM",
+      "source_files": [
+        "MetaBlooms_OS/engines/rrp_engine.py"
+      ],
+      "entry_points": [
+        "RRPEngine.__init__",
+        "RRPEngine.evaluate",
+        "RRPEngine.should_rewrite",
+        "RRPEngine.plan_rewrite",
+        "RRPEngine.record_rewrite",
+        "RRPEngine.get_known_defects",
+        "RRPEngine.emit_reports"
+      ],
+      "inputs": [
+        "artifacts (list of {path, content_or_object})",
+        "mastery_definition (dict, optional)"
+      ],
+      "outputs": [
+        "EVALUATION_REPORT_{N}.json",
+        "REWRITE_REPORT_{N}.json",
+        "defect list with severity and category"
+      ],
+      "dependencies": [],
+      "evidence": "MetaBlooms_OS/engines/rrp_engine.py defines class RRPEngine. Implements BUILD -> EVALUATE -> REWRITE cycle. MAX_ITERATIONS = 2 with convergence test (defects must decrease). Detects defects: SCHEMA_VIOLATION, CDR_VIOLATION, MISSING_FIELD. Plans rewrites by severity order. Phases 4-5 of MPP."
+    },
+    {
+      "system_id": "SYS-007",
+      "name": "Assimilation Engine",
+      "type": "LEARN",
+      "source_files": [
+        "MetaBlooms_OS/engines/assimilation_engine.py"
+      ],
+      "entry_points": [
+        "AssimilationEngine.__init__",
+        "AssimilationEngine.run",
+        "AssimilationEngine.compare_to_mastery",
+        "AssimilationEngine.extract_lessons",
+        "AssimilationEngine.promote_lesson",
+        "AssimilationEngine.auto_promote_recurring"
+      ],
+      "inputs": [
+        "mastery_definition (dict)",
+        "execution_results (dict)",
+        "mmd_report (dict)",
+        "rrp_reports (list of evaluation reports)"
+      ],
+      "outputs": [
+        "ASSIMILATION_REPORT.json",
+        "lessons extracted from MMD findings, RRP defects, mastery deltas",
+        "auto-promoted lesson IDs"
+      ],
+      "dependencies": [
+        "SYS-008"
+      ],
+      "evidence": "MetaBlooms_OS/engines/assimilation_engine.py defines class AssimilationEngine. Promotion lifecycle: OBSERVATION -> HYPOTHESIS -> CONSTRAINT -> INVARIANT, each requiring evidence. Auto-promotes observations seen in 3+ sessions to HYPOTHESIS. Extracts lessons from MMD findings, RRP defects, and mastery comparison deltas. Phase 7.5 of MPP."
+    },
+    {
+      "system_id": "SYS-008",
+      "name": "State Manager (Cross-Session Persistence)",
+      "type": "PERSIST",
+      "source_files": [
+        "MetaBlooms_OS/state/state_manager.py"
+      ],
+      "entry_points": [
+        "StateManager.__init__",
+        "StateManager.save",
+        "StateManager.store_mastery_definition",
+        "StateManager.get_mastery_definition",
+        "StateManager.find_similar_mastery",
+        "StateManager.store_decision_record",
+        "StateManager.find_decisions_by_type",
+        "StateManager.store_lesson",
+        "StateManager.get_lessons_at_level",
+        "StateManager.promote_lesson",
+        "StateManager.update_source_reputation",
+        "StateManager.update_query_pattern",
+        "StateManager.get_intelligence_summary"
+      ],
+      "inputs": [
+        "os_root (str, filesystem path)",
+        "state (dict, optional prior state)"
+      ],
+      "outputs": [
+        "MB_STATE.json (serialized cross-session state)",
+        "intelligence_summary dict"
+      ],
+      "dependencies": [],
+      "evidence": "MetaBlooms_OS/state/state_manager.py defines class StateManager. Manages state keys: version, sessions_count, mastery_definitions, decision_records, lesson_promotions, source_ledger_accumulated, pattern_catalog_version, query_patterns, source_reputation, known_defects, intelligence_level. Intelligence computed as: mastery_defs*3 + decision_records*2 + lessons*1 + constraints*5 + invariants*10."
+    },
+    {
+      "system_id": "SYS-009",
+      "name": "Pattern Catalog",
+      "type": "PERSIST",
+      "source_files": [
+        "MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json"
+      ],
+      "entry_points": [
+        "JSON data loaded by DecisionEngine._load_pattern_catalog"
+      ],
+      "inputs": [],
+      "outputs": [
+        "8 architectural patterns: BIJECTION, IDEMPOTENT, MONOTONIC, FAIL_CLOSED, CONSTRAINT_ELIMINATION, RECURSIVE_REFINEMENT, EVIDENCE_BEFORE_EXECUTION, LESSON_PROMOTION"
+      ],
+      "dependencies": [],
+      "evidence": "MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json v2.0 defines 8 patterns. Each has: pattern_id, name, description, when_to_use, strengths, weaknesses, required_capabilities, forbidden_when, exemplar, claim_strength. Used by DecisionEngine for constraint-driven elimination."
+    },
+    {
+      "system_id": "SYS-010",
+      "name": "Boot System",
+      "type": "ORCHESTRATE",
+      "source_files": [
+        "MetaBlooms_OS/boot.py"
+      ],
+      "entry_points": [
+        "boot",
+        "find_os_root",
+        "load_state",
+        "validate_os_tree",
+        "emit_boot_receipt"
+      ],
+      "inputs": [
+        "Filesystem presence of MetaBlooms_OS directory"
+      ],
+      "outputs": [
+        "BOOT_RECEIPT.json",
+        "Initialized MPPOrchestrator instance",
+        "Loaded StateManager",
+        "os_root path"
+      ],
+      "dependencies": [
+        "SYS-001",
+        "SYS-008",
+        "SYS-011"
+      ],
+      "evidence": "MetaBlooms_OS/boot.py defines boot sequence: find_os_root (3 candidate paths), load_state (cross-session persistence), validate_os_tree (9 required dirs, 12 required files), run validation gates, emit_boot_receipt, print intelligence summary, initialize MPPOrchestrator."
+    },
+    {
+      "system_id": "SYS-011",
+      "name": "Validation Gates (MetaBlooms_OS)",
+      "type": "VALIDATE",
+      "source_files": [
+        "MetaBlooms_OS/validators/gates.py"
+      ],
+      "entry_points": [
+        "ValidationGates.__init__",
+        "ValidationGates.run_all",
+        "ValidationGates.gate_schema_existence",
+        "ValidationGates.gate_policy_existence",
+        "ValidationGates.gate_json_validity",
+        "ValidationGates.gate_state_integrity",
+        "ValidationGates.gate_pattern_catalog"
+      ],
+      "inputs": [
+        "os_root (str)"
+      ],
+      "outputs": [
+        "Combined gate result: {overall: PASS|FAIL, gates: {name: {pass, ...}}, validated_utc}"
+      ],
+      "dependencies": [],
+      "evidence": "MetaBlooms_OS/validators/gates.py defines class ValidationGates with 5 gates: schema_existence (5 required schemas), policy_existence (5 required policy prefixes), json_validity (all JSON in artifacts/schemas/receipts), state_integrity (MB_STATE.json structure), pattern_catalog (exists and has patterns). Used by boot.py."
+    },
+    {
+      "system_id": "SYS-012",
+      "name": "Master Governance Gate",
+      "type": "ORCHESTRATE",
+      "source_files": [
+        ".codex/validators/run_governance_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "run_gate"
+      ],
+      "inputs": [
+        "--quick flag (optional, skip slow gates)"
+      ],
+      "outputs": [
+        "EXIT 0 (all pass) or EXIT 1 (one or more failed)",
+        "Per-gate PASS/FAIL with timing"
+      ],
+      "dependencies": [
+        "SYS-013",
+        "SYS-014",
+        "SYS-015",
+        "SYS-016",
+        "SYS-017",
+        "SYS-018",
+        "SYS-019",
+        "SYS-020",
+        "SYS-021",
+        "SYS-022"
+      ],
+      "evidence": ".codex/validators/run_governance_gate.py orchestrates 10 gates in sequence: SCHEMA_VALIDATION, STALENESS, LFS_GAP, FORBIDDEN_LANGUAGE, INVARIANT, MATURITY, POLICY_STRUCTURE, TOOLBOX_REALITY, MMD, PREPARATION. Each gate runs as subprocess with 60s timeout. Used as pre-commit hook via install_hooks.sh."
+    },
+    {
+      "system_id": "SYS-013",
+      "name": "Schema Validation Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_schema_validation_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "validate_catalog",
+        "validate_lineage",
+        "validate_mmd",
+        "validate_boot_receipt",
+        "validate_invariant_registry"
+      ],
+      "inputs": [
+        ".codex/artifacts/*.json",
+        ".codex/schemas/*.schema.json",
+        ".codex/receipts/BOOT_RECEIPT.json"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 10 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_schema_validation_gate.py validates BUNDLE_CATALOG entries against BUNDLE_ENTRY.schema.json, BUNDLE_LINEAGE against its schema, MMD_REPORT against its schema, BOOT_RECEIPT structural checks, INVARIANT_REGISTRY structural checks, and all JSON files parse cleanly. Requires jsonschema package."
+    },
+    {
+      "system_id": "SYS-014",
+      "name": "Staleness Detection Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_staleness_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "check_boot_sha",
+        "check_catalog_coverage",
+        "check_policy_doc_refs"
+      ],
+      "inputs": [
+        ".codex/receipts/BOOT_RECEIPT.json",
+        ".codex/kernel/BOOT.md",
+        ".codex/artifacts/BUNDLE_CATALOG.json",
+        "os_bundles/ directory listing"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 11 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_staleness_gate.py checks: BOOT_RECEIPT SHA-256 matches actual BOOT.md hash, BUNDLE_CATALOG covers every file in os_bundles/ (no uncataloged files, no phantom entries), policy_documents and schemas references in BOOT_RECEIPT point to existing files."
+    },
+    {
+      "system_id": "SYS-015",
+      "name": "LFS Gap Detection Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_lfs_gap_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "parse_lfs_patterns",
+        "extension_matches_any_pattern"
+      ],
+      "inputs": [
+        ".gitattributes",
+        "os_bundles/ directory listing"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 12 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_lfs_gap_gate.py parses .gitattributes for filter=lfs patterns, then checks every file in os_bundles/ is covered by at least one LFS glob pattern. Groups untracked files by extension for clear reporting."
+    },
+    {
+      "system_id": "SYS-016",
+      "name": "Forbidden Language Detection Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_forbidden_language_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "scan_file",
+        "get_bundle_filenames"
+      ],
+      "inputs": [
+        ".codex/receipts/*.json",
+        ".codex/research/*.json",
+        "os_bundles/ filenames (for exemption)"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 13 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_forbidden_language_gate.py scans agent-emitted artifacts for 8 forbidden words: enforced, verified, running, active, wired, booted, compliant, guaranteed. Exempts: human-authored governance docs, bundle filenames, JSON filename field values. Uses word-boundary regex matching."
+    },
+    {
+      "system_id": "SYS-017",
+      "name": "Invariant Evaluation Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_invariant_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "check_mb_inv_nlq_required_v1",
+        "check_mb_inv_bundle_internals_v1",
+        "check_mb_inv_maturity_pipeline_v1",
+        "check_mb_inv_claim_strength_v1",
+        "check_mb_inv_toolbox_reality_v1",
+        "check_mb_inv_wikipedia_prohibition_v1"
+      ],
+      "inputs": [
+        ".codex/artifacts/INVARIANT_REGISTRY.json",
+        "Various policy docs, schemas, and validators"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 14 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_invariant_gate.py evaluates 6 ACTIVE invariants with mechanical checkers: MB_INV_NLQ_REQUIRED_V1 (MBQL+INTENT_IR), MB_INV_BUNDLE_INTERNALS_AS_EVIDENCE_V1 (SEE+LEARNING_EVENT), MB_INV_MATURITY_PIPELINE_V1 (maturity tracker+gate+policy), MB_INV_CLAIM_STRENGTH_REQUIRED_V1 (claim strength policy+Wikipedia), MB_INV_TOOLBOX_REALITY_R25_V1 (schema+gate+super-prompt), MB_INV_WIKIPEDIA_PROHIBITION_V1 (policy doc check)."
+    },
+    {
+      "system_id": "SYS-018",
+      "name": "Artifact Maturity Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_maturity_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "check_draft",
+        "check_validated",
+        "check_enforced",
+        "check_untracked_artifacts",
+        "get_registered_gates"
+      ],
+      "inputs": [
+        ".codex/artifacts/ARTIFACT_MATURITY.json",
+        ".codex/validators/run_governance_gate.py (for registered gates)"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 15 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_maturity_gate.py verifies artifact maturity claims are mechanically provable. DRAFT: file exists. VALIDATED: file exists + schema or structural check. ENFORCED: VALIDATED + validator exists + gate registered. Also detects untracked artifacts and validates summary counts."
+    },
+    {
+      "system_id": "SYS-019",
+      "name": "Policy Structure Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_policy_structure_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "validate_super_prompt",
+        "validate_cdr",
+        "validate_see",
+        "validate_rrp",
+        "validate_deltagate",
+        "validate_lifecycle",
+        "validate_learning_pipeline",
+        "validate_mbql",
+        "validate_maturity"
+      ],
+      "inputs": [
+        ".codex/policies/*.md (9 policy documents)"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 16 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_policy_structure_gate.py validates structural integrity of 9 policy documents: SUPER_PROMPT (MPP phases, forbidden language, BOOT ref), CDR (7 pillars, violation classes), SEE (evidence sources, quality ranks, strength levels, BUNDLE_INTERNAL_EVENTS), RRP (BUILD/EVALUATE/REWRITE, convergence bounds), DELTAGATE (PROPOSE/ADMIT/REJECT), LIFECYCLE (6 statuses), LEARNING_PIPELINE (RCA/EVT_FAIL/EVT_LEARNING/corrective), MBQL (NLQ/FROM/WHERE/SELECT/INTENT_IR/INVARIANT), MATURITY (DRAFT/VALIDATED/ENFORCED, demotion rules)."
+    },
+    {
+      "system_id": "SYS-020",
+      "name": "Toolbox Reality Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_toolbox_reality_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "check_schema_exists",
+        "check_environment_declaration",
+        "check_policy_references"
+      ],
+      "inputs": [
+        ".codex/schemas/TOOLBOX_REALITY.schema.json",
+        ".codex/receipts/ENVIRONMENT_DECLARATION.json",
+        ".codex/policies/*.md"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 17 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_toolbox_reality_gate.py enforces R2.5: schema exists with title ToolboxReality, environment declaration has filesystem_write, and at least one policy doc references TOOLBOX_REALITY or R2.5. FAIL-CLOSED on missing schema."
+    },
+    {
+      "system_id": "SYS-021",
+      "name": "MMD Gate (Mechanical Gap Detector)",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_mmd_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "method_reference_graph",
+        "method_schema_coverage",
+        "method_traceability",
+        "method_deferral_audit",
+        "method_self_check",
+        "method_category_completeness"
+      ],
+      "inputs": [
+        "All .codex/ JSON artifacts and markdown policies"
+      ],
+      "outputs": [
+        "EXIT 0 (pass or pass_with_warnings) or EXIT 18 (CRITICAL fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_mmd_gate.py runs 6 detection methods: REFERENCE_GRAPH (broken file references), SCHEMA_COVERAGE (unschema'd artifacts), TRACEABILITY (validators registered, invariants have checkers, schemas referenced), DEFERRAL_AUDIT (unexplained deferrals in delta ledgers), SELF_CHECK (MMD report validates against own schema), CATEGORY_COMPLETENESS (closed enum detection). Inspired by DO-178C traceability."
+    },
+    {
+      "system_id": "SYS-022",
+      "name": "Preparation Gate",
+      "type": "VALIDATE",
+      "source_files": [
+        ".codex/validators/run_preparation_gate.py"
+      ],
+      "entry_points": [
+        "main",
+        "check_file",
+        "check_valid_json"
+      ],
+      "inputs": [
+        ".codex/policies/MB_MASTER_SPEC_v1.md",
+        ".codex/schemas/MASTERY_DEFINITION.schema.json",
+        ".codex/schemas/DECISION_RECORD.schema.json",
+        ".codex/schemas/LESSON_PROMOTION.schema.json"
+      ],
+      "outputs": [
+        "EXIT 0 (pass) or EXIT 19 (fail)"
+      ],
+      "dependencies": [],
+      "evidence": ".codex/validators/run_preparation_gate.py enforces Phase 2.75 readiness: master spec exists and contains all 6 phases (SURFACE, DETECT, PREPARE, REFUSE, EXECUTE, ASSIMILATE), 3 core schemas exist and are valid JSON with title or $schema. Blocks BUILD without preparation."
+    },
+    {
+      "system_id": "SYS-023",
+      "name": "Upload Pipeline (mb-upload.sh)",
+      "type": "CREATE",
+      "source_files": [
+        "scripts/mb-upload.sh"
+      ],
+      "entry_points": [
+        "upload",
+        "preflight",
+        "list_downloads",
+        "ensure_lfs_tracking",
+        "push_with_retry",
+        "run_setup",
+        "parse_gitattributes",
+        "is_lfs_tracked"
+      ],
+      "inputs": [
+        "Files from /storage/emulated/0/Download (Android)",
+        "Optional glob pattern filter",
+        "--dry-run, --list, --setup, --help flags"
+      ],
+      "outputs": [
+        "Files copied to os_bundles/",
+        "Git commit with descriptive message",
+        "Git push with retry (max 4 attempts, exponential backoff)"
+      ],
+      "dependencies": [
+        "git",
+        "git-lfs",
+        ".gitattributes"
+      ],
+      "evidence": "scripts/mb-upload.sh v2.0-governed. Termux-based Android uploader. Patterns: IDEMPOTENT (skips existing files), FAIL_CLOSED (unknown extensions rejected), MONOTONIC (append-only). Parses .gitattributes dynamically for LFS patterns. Preflight checks: storage access, repo clone, git, git-lfs. Exponential backoff push retry (2s/4s/8s/16s)."
+    },
+    {
+      "system_id": "SYS-024",
+      "name": "Git Hook Installer",
+      "type": "CREATE",
+      "source_files": [
+        ".codex/validators/install_hooks.sh"
+      ],
+      "entry_points": [
+        "main (shell script)"
+      ],
+      "inputs": [
+        "Git repository root"
+      ],
+      "outputs": [
+        ".git/hooks/pre-commit (executable hook that runs run_governance_gate.py)"
+      ],
+      "dependencies": [
+        "SYS-012"
+      ],
+      "evidence": ".codex/validators/install_hooks.sh installs a pre-commit hook that runs python3 .codex/validators/run_governance_gate.py. Prompts before overwriting existing hook. Blocks commits when governance gates fail."
+    },
+    {
+      "system_id": "SYS-025",
+      "name": "JSON Schema System",
+      "type": "VALIDATE",
+      "source_files": [
+        "MetaBlooms_OS/schemas/MASTERY_DEFINITION.schema.json",
+        "MetaBlooms_OS/schemas/DECISION_RECORD.schema.json",
+        "MetaBlooms_OS/schemas/LESSON_PROMOTION.schema.json",
+        "MetaBlooms_OS/schemas/TURN_RECEIPT.schema.json",
+        "MetaBlooms_OS/schemas/MMD_REPORT.schema.json",
+        "MetaBlooms_OS/schemas/BUNDLE_ENTRY.schema.json",
+        "MetaBlooms_OS/schemas/BUNDLE_LINEAGE.schema.json",
+        "MetaBlooms_OS/schemas/INTENT_IR.schema.json",
+        "MetaBlooms_OS/schemas/LEARNING_EVENT.schema.json",
+        "MetaBlooms_OS/schemas/TOOLBOX_REALITY.schema.json",
+        "MetaBlooms_OS/schemas/ROBUSTNESS_METRICS.schema.json",
+        "MetaBlooms_OS/schemas/SCENARIO_SET.schema.json",
+        "MetaBlooms_OS/schemas/DELTA_LEDGER.schema.json",
+        ".codex/schemas/MASTERY_DEFINITION.schema.json",
+        ".codex/schemas/DECISION_RECORD.schema.json",
+        ".codex/schemas/LESSON_PROMOTION.schema.json",
+        ".codex/schemas/TURN_RECEIPT.schema.json",
+        ".codex/schemas/MMD_REPORT.schema.json",
+        ".codex/schemas/BUNDLE_ENTRY.schema.json",
+        ".codex/schemas/BUNDLE_LINEAGE.schema.json",
+        ".codex/schemas/INTENT_IR.schema.json",
+        ".codex/schemas/LEARNING_EVENT.schema.json",
+        ".codex/schemas/TOOLBOX_REALITY.schema.json",
+        ".codex/schemas/ROBUSTNESS_METRICS.schema.json",
+        ".codex/schemas/SCENARIO_SET.schema.json",
+        ".codex/schemas/DELTA_LEDGER.schema.json"
+      ],
+      "entry_points": [
+        "Used by MasteryEngine._load_schema",
+        "Used by DecisionEngine._load_schema",
+        "Used by run_schema_validation_gate.py",
+        "Used by run_invariant_gate.py"
+      ],
+      "inputs": [
+        "JSON data to validate"
+      ],
+      "outputs": [
+        "Validation pass/fail per entry against schema"
+      ],
+      "dependencies": [],
+      "evidence": "13 JSON schemas across MetaBlooms_OS/schemas/ and .codex/schemas/ define the structural contracts for all artifact types: MASTERY_DEFINITION, DECISION_RECORD, LESSON_PROMOTION, TURN_RECEIPT, MMD_REPORT, BUNDLE_ENTRY, BUNDLE_LINEAGE, INTENT_IR, LEARNING_EVENT, TOOLBOX_REALITY, ROBUSTNESS_METRICS, SCENARIO_SET, DELTA_LEDGER."
+    }
+  ]
+}

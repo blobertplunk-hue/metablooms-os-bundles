@@ -1,0 +1,285 @@
+file_path,line_number,pattern_category,matched_text,confidence
+MetaBlooms_OS/mpp.py,57,class_def,"class MPPOrchestrator:",high
+MetaBlooms_OS/mpp.py,62,function_def,"def __init__(self, os_root, state, environment):",high
+MetaBlooms_OS/mpp.py,78,function_def,"def fail_closed(self, phase, reason):",high
+MetaBlooms_OS/mpp.py,100,function_def,"def phase_neg1_enforcement(self):",high
+MetaBlooms_OS/mpp.py,119,function_def,"def phase_neg1b_environment(self):",high
+MetaBlooms_OS/mpp.py,144,function_def,"def phase_0_claims(self, task_type, task_description):",high
+MetaBlooms_OS/mpp.py,170,function_def,"def phase_05_mastery(self, task_description, domain):",high
+MetaBlooms_OS/mpp.py,192,function_def,"def phase_1_see(self, claims):",high
+MetaBlooms_OS/mpp.py,214,function_def,"def phase_2_mmd(self, mastery_definition, see_results):",high
+MetaBlooms_OS/mpp.py,234,function_def,"def phase_25_toolbox(self):",high
+MetaBlooms_OS/mpp.py,268,function_def,"def phase_275_preparation(self, mastery_definition):",high
+MetaBlooms_OS/mpp.py,293,function_def,"def phase_6_verify(self):",high
+MetaBlooms_OS/mpp.py,363,function_def,"def phase_7_receipt(self, see_summary, mmd_summary, rrp_summary):",high
+MetaBlooms_OS/mpp.py,409,function_def,"def phase_75_assimilation(self, mastery_definition, ...):",high
+MetaBlooms_OS/mpp.py,432,function_def,"def run_preparation_phases(self, task_type, task_description, domain):",high
+MetaBlooms_OS/mpp.py,468,function_def,"def run_execution_phases(self, claims, mastery_definition, ...):",high
+MetaBlooms_OS/mpp.py,10,pipeline_phase,"Phase -1 -> Enforcement Capability Declaration",high
+MetaBlooms_OS/mpp.py,11,pipeline_phase,"Phase -1B -> Environment Declaration",high
+MetaBlooms_OS/mpp.py,12,pipeline_phase,"Phase 0 -> Claim Enumeration (ECL)",high
+MetaBlooms_OS/mpp.py,13,pipeline_phase,"Phase 0.5 -> MASTERY_DEFINITION",high
+MetaBlooms_OS/mpp.py,14,pipeline_phase,"Phase 1 -> SEE (Evidence Gathering)",high
+MetaBlooms_OS/mpp.py,15,pipeline_phase,"Phase 2 -> MMD (Missing Middle Detection)",high
+MetaBlooms_OS/mpp.py,16,pipeline_phase,"Phase 2.5 -> TOOLBOX_REALITY_VALIDATION (R2.5) <- HARD GATE",high
+MetaBlooms_OS/mpp.py,17,pipeline_phase,"Phase 2.75 -> PREPARATION_GATE <- HARD GATE",high
+MetaBlooms_OS/mpp.py,18,pipeline_phase,"Phase 3 -> BUILD (Deliverables)",high
+MetaBlooms_OS/mpp.py,19,pipeline_phase,"Phase 4 -> EVALUATE (Read-Only Review)",high
+MetaBlooms_OS/mpp.py,20,pipeline_phase,"Phase 5 -> REWRITE (Fix Enumerated Only)",high
+MetaBlooms_OS/mpp.py,21,pipeline_phase,"Phase 6 -> Self-Verification + Mastery Comparison",high
+MetaBlooms_OS/mpp.py,22,pipeline_phase,"Phase 7 -> Turn Receipt",high
+MetaBlooms_OS/mpp.py,23,pipeline_phase,"Phase 7.5 -> ASSIMILATION (Lesson Promotion)",high
+MetaBlooms_OS/mpp.py,79,gate_validate,"FAIL CLOSED: halt pipeline and emit failure receipt",high
+MetaBlooms_OS/mpp.py,67,build_create,"self.artifacts_emitted = []",medium
+MetaBlooms_OS/mpp.py,157,build_create,"generated_utc: datetime.now(timezone.utc).isoformat()",medium
+MetaBlooms_OS/mpp.py,195,build_create,"see_paths = self.see_engine.emit_artifacts()",high
+MetaBlooms_OS/mpp.py,217,build_create,"report_path = self.mmd_engine.emit_report()",high
+MetaBlooms_OS/mpp.py,517,build_create,"self.rrp_engine.emit_reports()",high
+MetaBlooms_OS/engines/mastery_engine.py,32,class_def,"class MasteryEngine:",high
+MetaBlooms_OS/engines/mastery_engine.py,35,function_def,"def __init__(self, os_root, state_manager):",high
+MetaBlooms_OS/engines/mastery_engine.py,40,function_def,"def _load_schema(self):",high
+MetaBlooms_OS/engines/mastery_engine.py,47,function_def,"def check_prior_mastery(self, domain):",high
+MetaBlooms_OS/engines/mastery_engine.py,62,function_def,"def create_mastery_definition(self, task_description, domain, ...):",high
+MetaBlooms_OS/engines/mastery_engine.py,115,function_def,"def validate(self, definition):",high
+MetaBlooms_OS/engines/mastery_engine.py,167,function_def,"def check_readiness(self, definition):",high
+MetaBlooms_OS/engines/mastery_engine.py,186,function_def,"def compare_outputs(self, definition, outputs):",high
+MetaBlooms_OS/engines/mastery_engine.py,38,schema_keyword,"self.schema = self._load_schema()",high
+MetaBlooms_OS/engines/mastery_engine.py,41,schema_keyword,"schema_path = os.path.join(self.os_root, schemas, MASTERY_DEFINITION.schema.json)",high
+MetaBlooms_OS/engines/mastery_engine.py,62,build_create,"def create_mastery_definition",high
+MetaBlooms_OS/engines/mastery_engine.py,105,state_persist,"self.state.store_mastery_definition(definition)",high
+MetaBlooms_OS/engines/mastery_engine.py,108,build_create,"artifact_path = os.path.join(self.os_root, artifacts, ...)",high
+MetaBlooms_OS/engines/mastery_engine.py,115,gate_validate,"def validate(self, definition):",high
+MetaBlooms_OS/engines/see_engine.py,64,class_def,"class SEEEngine:",high
+MetaBlooms_OS/engines/see_engine.py,67,function_def,"def __init__(self, os_root, state_manager, environment):",high
+MetaBlooms_OS/engines/see_engine.py,79,function_def,"def _next_evidence_id(self, source_type):",medium
+MetaBlooms_OS/engines/see_engine.py,91,function_def,"def _next_query_id(self):",medium
+MetaBlooms_OS/engines/see_engine.py,95,function_def,"def gather_evidence_for_claim(self, claim):",high
+MetaBlooms_OS/engines/see_engine.py,145,function_def,"def _gather_by_method(self, method, claim):",high
+MetaBlooms_OS/engines/see_engine.py,200,function_def,"def _local_fs_check(self, claim):",high
+MetaBlooms_OS/engines/see_engine.py,216,function_def,"def _schema_check(self, claim):",high
+MetaBlooms_OS/engines/see_engine.py,230,function_def,"def _prior_artifact_check(self, claim):",high
+MetaBlooms_OS/engines/see_engine.py,244,function_def,"def _hash_check(self, claim):",high
+MetaBlooms_OS/engines/see_engine.py,260,function_def,"def _cross_reference(self, claim):",high
+MetaBlooms_OS/engines/see_engine.py,270,function_def,"def _sufficient_evidence(self, evidence_ids):",high
+MetaBlooms_OS/engines/see_engine.py,282,function_def,"def _assign_strength(self, claim, evidence_ids, methods_unavailable):",high
+MetaBlooms_OS/engines/see_engine.py,319,function_def,"def run(self, claims):",high
+MetaBlooms_OS/engines/see_engine.py,371,function_def,"def emit_artifacts(self):",high
+MetaBlooms_OS/engines/see_engine.py,28,evidence_keyword,"QUALITY_RANKS = {DIRECT_OBSERVATION: Q1 ... INFERENCE: Q6}",high
+MetaBlooms_OS/engines/see_engine.py,38,evidence_keyword,"SOURCE_QUALITY = {LOCAL_FS: Q1 ... CROSS_REFERENCE: Q6}",high
+MetaBlooms_OS/engines/see_engine.py,51,evidence_keyword,"METHOD_PRIORITY = {STRUCTURAL: [...] ... FACTUAL: [...]}",high
+MetaBlooms_OS/engines/see_engine.py,73,evidence_keyword,"self.evidence_records = []",high
+MetaBlooms_OS/engines/see_engine.py,129,evidence_keyword,"strength = self._assign_strength(claim, evidence_ids, methods_unavailable)",high
+MetaBlooms_OS/engines/see_engine.py,297,decision_keyword,"return CONTESTED",high
+MetaBlooms_OS/engines/see_engine.py,300,evidence_keyword,"return CONFIRMED",high
+MetaBlooms_OS/engines/see_engine.py,315,evidence_keyword,"return SUPPORTED",high
+MetaBlooms_OS/engines/see_engine.py,371,build_create,"def emit_artifacts(self):",high
+MetaBlooms_OS/engines/mmd_engine.py,25,class_def,"class MMDEngine:",high
+MetaBlooms_OS/engines/mmd_engine.py,28,function_def,"def __init__(self, os_root, state_manager):",high
+MetaBlooms_OS/engines/mmd_engine.py,34,function_def,"def _add_finding(self, category, severity, description, method, ...):",high
+MetaBlooms_OS/engines/mmd_engine.py,52,function_def,"def method_schema_coverage(self):",high
+MetaBlooms_OS/engines/mmd_engine.py,93,function_def,"def method_policy_coverage(self):",high
+MetaBlooms_OS/engines/mmd_engine.py,128,function_def,"def method_mastery_readiness(self, mastery_definition):",high
+MetaBlooms_OS/engines/mmd_engine.py,168,function_def,"def method_decision_completeness(self):",high
+MetaBlooms_OS/engines/mmd_engine.py,200,function_def,"def method_evidence_gaps(self, see_results):",high
+MetaBlooms_OS/engines/mmd_engine.py,229,function_def,"def method_state_integrity(self):",high
+MetaBlooms_OS/engines/mmd_engine.py,250,function_def,"def run(self, mastery_definition, see_results):",high
+MetaBlooms_OS/engines/mmd_engine.py,294,function_def,"def emit_report(self):",high
+MetaBlooms_OS/engines/mmd_engine.py,52,gate_validate,"method_schema_coverage: Check that all artifact types have schemas",high
+MetaBlooms_OS/engines/mmd_engine.py,93,gate_validate,"method_policy_coverage: Check governance frameworks have policy docs",high
+MetaBlooms_OS/engines/mmd_engine.py,128,gate_validate,"method_mastery_readiness: Check mastery definition complete and ready",high
+MetaBlooms_OS/engines/mmd_engine.py,200,gate_validate,"method_evidence_gaps: Check for claims with weak evidence",high
+MetaBlooms_OS/engines/mmd_engine.py,229,state_persist,"method_state_integrity: Check cross-session state consistency",high
+MetaBlooms_OS/engines/decision_engine.py,41,class_def,"class DecisionEngine:",high
+MetaBlooms_OS/engines/decision_engine.py,44,function_def,"def __init__(self, os_root, state_manager):",high
+MetaBlooms_OS/engines/decision_engine.py,50,function_def,"def _load_pattern_catalog(self):",high
+MetaBlooms_OS/engines/decision_engine.py,58,function_def,"def _load_schema(self):",high
+MetaBlooms_OS/engines/decision_engine.py,65,function_def,"def extract_constraints(self, mastery_definition, toolbox_reality, ...):",high
+MetaBlooms_OS/engines/decision_engine.py,123,function_def,"def enumerate_candidates(self, decision_context):",high
+MetaBlooms_OS/engines/decision_engine.py,155,function_def,"def eliminate(self, candidates, constraints):",high
+MetaBlooms_OS/engines/decision_engine.py,186,function_def,"def _violates(self, candidate, constraint):",high
+MetaBlooms_OS/engines/decision_engine.py,219,function_def,"def score_candidates(self, surviving, constraints):",high
+MetaBlooms_OS/engines/decision_engine.py,239,function_def,"def _aligns_with(self, candidate, constraint):",high
+MetaBlooms_OS/engines/decision_engine.py,252,function_def,"def make_decision(self, decision_type, context, ...):",high
+MetaBlooms_OS/engines/decision_engine.py,65,decision_keyword,"extract_constraints: constraints from MASTERY_DEFINITION and R2.5",high
+MetaBlooms_OS/engines/decision_engine.py,123,decision_keyword,"enumerate_candidates: from pattern catalog plus custom",high
+MetaBlooms_OS/engines/decision_engine.py,155,decision_keyword,"eliminate: candidates violating hard constraints",high
+MetaBlooms_OS/engines/decision_engine.py,219,decision_keyword,"score_candidates: against soft constraints",high
+MetaBlooms_OS/engines/decision_engine.py,252,decision_keyword,"make_decision: full constraint-driven pipeline",high
+MetaBlooms_OS/engines/decision_engine.py,346,state_persist,"self.state.store_decision_record(record)",high
+MetaBlooms_OS/engines/rrp_engine.py,20,class_def,"class RRPEngine:",high
+MetaBlooms_OS/engines/rrp_engine.py,25,function_def,"def __init__(self, os_root):",high
+MetaBlooms_OS/engines/rrp_engine.py,31,function_def,"def evaluate(self, artifacts, mastery_definition):",high
+MetaBlooms_OS/engines/rrp_engine.py,94,function_def,"def _check_required_fields(self, obj, path, defects, counter):",high
+MetaBlooms_OS/engines/rrp_engine.py,124,function_def,"def should_rewrite(self, evaluation_report):",high
+MetaBlooms_OS/engines/rrp_engine.py,146,function_def,"def plan_rewrite(self, evaluation_report):",high
+MetaBlooms_OS/engines/rrp_engine.py,156,function_def,"def record_rewrite(self, fixes_applied, defects_deferred, oscillating):",high
+MetaBlooms_OS/engines/rrp_engine.py,176,function_def,"def get_known_defects(self):",high
+MetaBlooms_OS/engines/rrp_engine.py,190,function_def,"def emit_reports(self):",high
+MetaBlooms_OS/engines/rrp_engine.py,22,pipeline_phase,"MAX_ITERATIONS = 2",high
+MetaBlooms_OS/engines/rrp_engine.py,31,gate_validate,"evaluate: Read-only evaluation of BUILD outputs",high
+MetaBlooms_OS/engines/rrp_engine.py,124,gate_validate,"should_rewrite: convergence test — defects must decrease",high
+MetaBlooms_OS/engines/assimilation_engine.py,25,class_def,"class AssimilationEngine:",high
+MetaBlooms_OS/engines/assimilation_engine.py,30,function_def,"def __init__(self, os_root, state_manager):",high
+MetaBlooms_OS/engines/assimilation_engine.py,35,function_def,"def compare_to_mastery(self, mastery_definition, execution_results):",high
+MetaBlooms_OS/engines/assimilation_engine.py,91,function_def,"def extract_lessons(self, mmd_report, rrp_reports, mastery_comparison):",high
+MetaBlooms_OS/engines/assimilation_engine.py,151,function_def,"def promote_lesson(self, lesson_id, new_level, evidence, ...):",high
+MetaBlooms_OS/engines/assimilation_engine.py,219,function_def,"def auto_promote_recurring(self):",high
+MetaBlooms_OS/engines/assimilation_engine.py,254,function_def,"def run(self, mastery_definition, execution_results, ...):",high
+MetaBlooms_OS/engines/assimilation_engine.py,28,learning_keyword,"PROMOTION_LEVELS = [OBSERVATION, HYPOTHESIS, CONSTRAINT, INVARIANT]",high
+MetaBlooms_OS/engines/assimilation_engine.py,91,learning_keyword,"extract_lessons: from MMD findings, RRP defects, mastery deltas",high
+MetaBlooms_OS/engines/assimilation_engine.py,151,learning_keyword,"promote_lesson: OBSERVATION -> HYPOTHESIS -> CONSTRAINT -> INVARIANT",high
+MetaBlooms_OS/engines/assimilation_engine.py,219,learning_keyword,"auto_promote_recurring: observations in 3+ sessions -> HYPOTHESIS",high
+MetaBlooms_OS/engines/assimilation_engine.py,267,state_persist,"self.state.store_lesson(lesson)",high
+MetaBlooms_OS/engines/assimilation_engine.py,274,state_persist,"self.state.save()",high
+MetaBlooms_OS/state/state_manager.py,27,class_def,"class StateManager:",high
+MetaBlooms_OS/state/state_manager.py,48,function_def,"def __init__(self, os_root, state):",high
+MetaBlooms_OS/state/state_manager.py,54,function_def,"def _default_state(self):",high
+MetaBlooms_OS/state/state_manager.py,72,function_def,"def save(self):",high
+MetaBlooms_OS/state/state_manager.py,81,function_def,"def store_mastery_definition(self, mastery_def):",high
+MetaBlooms_OS/state/state_manager.py,89,function_def,"def get_mastery_definition(self, mastery_id):",high
+MetaBlooms_OS/state/state_manager.py,93,function_def,"def list_mastery_definitions(self):",high
+MetaBlooms_OS/state/state_manager.py,100,function_def,"def find_similar_mastery(self, domain):",high
+MetaBlooms_OS/state/state_manager.py,112,function_def,"def store_decision_record(self, record):",high
+MetaBlooms_OS/state/state_manager.py,120,function_def,"def get_decision_record(self, decision_id):",high
+MetaBlooms_OS/state/state_manager.py,124,function_def,"def find_decisions_by_type(self, decision_type):",high
+MetaBlooms_OS/state/state_manager.py,133,function_def,"def store_lesson(self, lesson):",high
+MetaBlooms_OS/state/state_manager.py,140,function_def,"def get_lessons_at_level(self, level):",high
+MetaBlooms_OS/state/state_manager.py,147,function_def,"def promote_lesson(self, lesson_id, new_level, evidence):",high
+MetaBlooms_OS/state/state_manager.py,161,function_def,"def update_source_reputation(self, source_id, corroborated, contradicted):",high
+MetaBlooms_OS/state/state_manager.py,189,function_def,"def update_query_pattern(self, pattern_tag, useful_results, noise_results):",high
+MetaBlooms_OS/state/state_manager.py,220,function_def,"def _update_intelligence(self):",high
+MetaBlooms_OS/state/state_manager.py,240,function_def,"def get_intelligence_summary(self):",high
+MetaBlooms_OS/state/state_manager.py,72,state_persist,"def save(self): Persist state to disk",high
+MetaBlooms_OS/state/state_manager.py,81,state_persist,"store_mastery_definition: keyed by mastery_id",high
+MetaBlooms_OS/state/state_manager.py,112,state_persist,"store_decision_record: keyed by decision_id",high
+MetaBlooms_OS/state/state_manager.py,133,state_persist,"store_lesson: append to lesson_promotions",high
+MetaBlooms_OS/state/state_manager.py,161,state_persist,"update_source_reputation: reliability tracking",high
+MetaBlooms_OS/state/state_manager.py,189,state_persist,"update_query_pattern: accumulated effectiveness",high
+MetaBlooms_OS/state/state_manager.py,220,learning_keyword,"_update_intelligence: mastery_defs*3 + decisions*2 + lessons*1 + constraints*5 + invariants*10",high
+MetaBlooms_OS/boot.py,32,function_def,"def find_os_root():",high
+MetaBlooms_OS/boot.py,51,function_def,"def load_state(os_root):",high
+MetaBlooms_OS/boot.py,87,function_def,"def validate_os_tree(os_root):",high
+MetaBlooms_OS/boot.py,121,function_def,"def emit_boot_receipt(os_root, state_mgr, validation_result):",high
+MetaBlooms_OS/boot.py,147,function_def,"def boot():",high
+MetaBlooms_OS/boot.py,51,state_persist,"load_state: Load cross-session state from MB_STATE.json",high
+MetaBlooms_OS/boot.py,87,gate_validate,"validate_os_tree: 9 required dirs and 12 required files",high
+MetaBlooms_OS/boot.py,121,build_create,"emit_boot_receipt: BOOT_RECEIPT.json with SHA-256",high
+MetaBlooms_OS/validators/gates.py,20,class_def,"class ValidationGates:",high
+MetaBlooms_OS/validators/gates.py,26,function_def,"def run_all(self):",high
+MetaBlooms_OS/validators/gates.py,42,function_def,"def gate_schema_existence(self):",high
+MetaBlooms_OS/validators/gates.py,62,function_def,"def gate_policy_existence(self):",high
+MetaBlooms_OS/validators/gates.py,80,function_def,"def gate_json_validity(self):",high
+MetaBlooms_OS/validators/gates.py,100,function_def,"def gate_state_integrity(self):",high
+MetaBlooms_OS/validators/gates.py,119,function_def,"def gate_pattern_catalog(self):",high
+MetaBlooms_OS/validators/gates.py,42,gate_validate,"gate_schema_existence: 5 required schemas",high
+MetaBlooms_OS/validators/gates.py,62,gate_validate,"gate_policy_existence: 5 required policy prefixes",high
+MetaBlooms_OS/validators/gates.py,80,gate_validate,"gate_json_validity: all JSON in artifacts/schemas/receipts",high
+MetaBlooms_OS/validators/gates.py,100,gate_validate,"gate_state_integrity: MB_STATE.json structure",high
+MetaBlooms_OS/validators/gates.py,119,gate_validate,"gate_pattern_catalog: exists and has patterns",high
+.codex/validators/run_governance_gate.py,40,function_def,"def run_gate(name, script):",high
+.codex/validators/run_governance_gate.py,64,function_def,"def main():",high
+.codex/validators/run_governance_gate.py,23,pipeline_phase,"GATES = [(SCHEMA_VALIDATION, ...) through (PREPARATION, ...)]",high
+.codex/validators/run_governance_gate.py,40,gate_validate,"run_gate: subprocess execution with 60s timeout",high
+.codex/validators/run_schema_validation_gate.py,33,function_def,"def validate_catalog(catalog_path, entry_schema_path):",high
+.codex/validators/run_schema_validation_gate.py,54,function_def,"def validate_lineage(lineage_path, schema_path):",high
+.codex/validators/run_schema_validation_gate.py,66,function_def,"def validate_mmd(mmd_path, schema_path):",high
+.codex/validators/run_schema_validation_gate.py,78,function_def,"def validate_boot_receipt(receipt_path):",high
+.codex/validators/run_schema_validation_gate.py,89,function_def,"def validate_invariant_registry(registry_path):",high
+.codex/validators/run_schema_validation_gate.py,108,function_def,"def main():",high
+.codex/validators/run_schema_validation_gate.py,23,schema_keyword,"ARTIFACT_SCHEMA_MAP: catalog->BUNDLE_ENTRY, lineage->BUNDLE_LINEAGE, mmd->MMD_REPORT",high
+.codex/validators/run_schema_validation_gate.py,33,gate_validate,"validate_catalog: each entry against BUNDLE_ENTRY schema",high
+.codex/validators/run_staleness_gate.py,20,function_def,"def check_boot_sha():",high
+.codex/validators/run_staleness_gate.py,46,function_def,"def check_catalog_coverage():",high
+.codex/validators/run_staleness_gate.py,81,function_def,"def check_policy_doc_refs():",high
+.codex/validators/run_staleness_gate.py,99,function_def,"def main():",high
+.codex/validators/run_staleness_gate.py,20,gate_validate,"check_boot_sha: BOOT_RECEIPT SHA-256 matches BOOT.md",high
+.codex/validators/run_staleness_gate.py,46,gate_validate,"check_catalog_coverage: BUNDLE_CATALOG covers all os_bundles files",high
+.codex/validators/run_lfs_gap_gate.py,18,function_def,"def parse_lfs_patterns(gitattributes_path):",high
+.codex/validators/run_lfs_gap_gate.py,35,function_def,"def extension_matches_any_pattern(filename, patterns):",high
+.codex/validators/run_lfs_gap_gate.py,47,function_def,"def main():",high
+.codex/validators/run_lfs_gap_gate.py,18,gate_validate,"parse_lfs_patterns: extract filter=lfs patterns from .gitattributes",high
+.codex/validators/run_lfs_gap_gate.py,35,gate_validate,"extension_matches_any_pattern: fnmatch + regex for glob patterns",high
+.codex/validators/run_forbidden_language_gate.py,49,function_def,"def get_bundle_filenames():",high
+.codex/validators/run_forbidden_language_gate.py,57,function_def,"def scan_file(filepath, bundle_names):",high
+.codex/validators/run_forbidden_language_gate.py,96,function_def,"def main():",high
+.codex/validators/run_forbidden_language_gate.py,20,gate_validate,"FORBIDDEN_WORDS = [enforced, verified, running, active, wired, booted, compliant, guaranteed]",high
+.codex/validators/run_forbidden_language_gate.py,57,gate_validate,"scan_file: word-boundary regex with filename exemptions",high
+.codex/validators/run_invariant_gate.py,19,function_def,"def check_mb_inv_nlq_required_v1():",high
+.codex/validators/run_invariant_gate.py,56,function_def,"def check_mb_inv_bundle_internals_v1():",high
+.codex/validators/run_invariant_gate.py,100,function_def,"def check_mb_inv_maturity_pipeline_v1():",high
+.codex/validators/run_invariant_gate.py,133,function_def,"def check_mb_inv_claim_strength_v1():",high
+.codex/validators/run_invariant_gate.py,175,function_def,"def check_mb_inv_toolbox_reality_v1():",high
+.codex/validators/run_invariant_gate.py,209,function_def,"def check_mb_inv_wikipedia_prohibition_v1():",high
+.codex/validators/run_invariant_gate.py,241,function_def,"def main():",high
+.codex/validators/run_invariant_gate.py,231,gate_validate,"INVARIANT_CHECKERS: 6 mechanical checker functions",high
+.codex/validators/run_maturity_gate.py,27,function_def,"def get_registered_gates():",high
+.codex/validators/run_maturity_gate.py,41,function_def,"def check_draft(entry):",high
+.codex/validators/run_maturity_gate.py,52,function_def,"def check_validated(entry):",high
+.codex/validators/run_maturity_gate.py,73,function_def,"def check_enforced(entry):",high
+.codex/validators/run_maturity_gate.py,106,function_def,"def check_untracked_artifacts():",high
+.codex/validators/run_maturity_gate.py,152,function_def,"def main():",high
+.codex/validators/run_maturity_gate.py,41,gate_validate,"check_draft: file must exist",high
+.codex/validators/run_maturity_gate.py,52,gate_validate,"check_validated: file exists + schema or structural check",high
+.codex/validators/run_maturity_gate.py,73,gate_validate,"check_enforced: VALIDATED + validator exists + gate registered",high
+.codex/validators/run_policy_structure_gate.py,25,function_def,"def check_section_exists(content, section_name, filepath_short):",high
+.codex/validators/run_policy_structure_gate.py,35,function_def,"def check_file_ref(content, ref_path, filepath_short):",high
+.codex/validators/run_policy_structure_gate.py,44,function_def,"def validate_super_prompt(filepath):",high
+.codex/validators/run_policy_structure_gate.py,65,function_def,"def validate_cdr(filepath):",high
+.codex/validators/run_policy_structure_gate.py,90,function_def,"def validate_see(filepath):",high
+.codex/validators/run_policy_structure_gate.py,115,function_def,"def validate_rrp(filepath):",high
+.codex/validators/run_policy_structure_gate.py,133,function_def,"def validate_deltagate(filepath):",high
+.codex/validators/run_policy_structure_gate.py,145,function_def,"def validate_lifecycle(filepath):",high
+.codex/validators/run_policy_structure_gate.py,157,function_def,"def validate_learning_pipeline(filepath):",high
+.codex/validators/run_policy_structure_gate.py,169,function_def,"def validate_mbql(filepath):",high
+.codex/validators/run_policy_structure_gate.py,186,function_def,"def validate_maturity(filepath):",high
+.codex/validators/run_policy_structure_gate.py,215,function_def,"def main():",high
+.codex/validators/run_policy_structure_gate.py,44,gate_validate,"validate_super_prompt: MPP phases, forbidden language, BOOT ref",high
+.codex/validators/run_policy_structure_gate.py,65,gate_validate,"validate_cdr: 7 pillars, violation classes",high
+.codex/validators/run_policy_structure_gate.py,90,gate_validate,"validate_see: evidence sources, quality ranks, strength levels",high
+.codex/validators/run_policy_structure_gate.py,115,gate_validate,"validate_rrp: BUILD/EVALUATE/REWRITE, convergence bounds",high
+.codex/validators/run_toolbox_reality_gate.py,31,function_def,"def check_schema_exists():",high
+.codex/validators/run_toolbox_reality_gate.py,47,function_def,"def check_environment_declaration():",high
+.codex/validators/run_toolbox_reality_gate.py,70,function_def,"def check_policy_references():",high
+.codex/validators/run_toolbox_reality_gate.py,93,function_def,"def main():",high
+.codex/validators/run_toolbox_reality_gate.py,31,gate_validate,"check_schema_exists: TOOLBOX_REALITY.schema.json with title ToolboxReality",high
+.codex/validators/run_mmd_gate.py,44,function_def,"def add_finding(method, severity, category, title, affected, recommendation):",high
+.codex/validators/run_mmd_gate.py,62,function_def,"def method_reference_graph():",high
+.codex/validators/run_mmd_gate.py,142,function_def,"def method_schema_coverage():",high
+.codex/validators/run_mmd_gate.py,190,function_def,"def method_traceability():",high
+.codex/validators/run_mmd_gate.py,282,function_def,"def method_deferral_audit():",high
+.codex/validators/run_mmd_gate.py,330,function_def,"def method_self_check():",high
+.codex/validators/run_mmd_gate.py,425,function_def,"def method_category_completeness():",high
+.codex/validators/run_mmd_gate.py,472,function_def,"def main():",high
+.codex/validators/run_mmd_gate.py,62,gate_validate,"method_reference_graph: broken file path references in JSON",high
+.codex/validators/run_mmd_gate.py,142,gate_validate,"method_schema_coverage: artifacts without schemas",high
+.codex/validators/run_mmd_gate.py,190,gate_validate,"method_traceability: validators->master gate, invariants->checkers, schemas->artifacts",high
+.codex/validators/run_mmd_gate.py,282,gate_validate,"method_deferral_audit: unexplained DEFERRED deltas",high
+.codex/validators/run_mmd_gate.py,330,gate_validate,"method_self_check: MMD report validates against own schema",high
+.codex/validators/run_preparation_gate.py,34,function_def,"def check_file(path, description):",high
+.codex/validators/run_preparation_gate.py,43,function_def,"def check_valid_json(path, description):",high
+.codex/validators/run_preparation_gate.py,60,function_def,"def main():",high
+.codex/validators/run_preparation_gate.py,34,gate_validate,"check_file: path existence check",high
+.codex/validators/run_preparation_gate.py,43,gate_validate,"check_valid_json: JSON object with title or $schema",high
+scripts/mb-upload.sh,62,function_def,"human_size() { ... }",high
+scripts/mb-upload.sh,84,function_def,"parse_gitattributes() { ... }",high
+scripts/mb-upload.sh,120,function_def,"is_lfs_tracked() { ... }",high
+scripts/mb-upload.sh,144,function_def,"preflight() { ... }",high
+scripts/mb-upload.sh,198,function_def,"list_downloads() { ... }",high
+scripts/mb-upload.sh,248,function_def,"ensure_lfs_tracking() { ... }",high
+scripts/mb-upload.sh,279,function_def,"push_with_retry() { ... }",high
+scripts/mb-upload.sh,322,function_def,"upload() { ... }",high
+scripts/mb-upload.sh,460,function_def,"run_setup() { ... }",high
+scripts/mb-upload.sh,84,gate_validate,"parse_gitattributes: dynamic LFS pattern extraction, FAIL CLOSED if missing",high
+scripts/mb-upload.sh,144,gate_validate,"preflight: storage access, repo, git, git-lfs checks, FAIL CLOSED",high
+scripts/mb-upload.sh,248,gate_validate,"ensure_lfs_tracking: FAIL CLOSED for unknown extensions",high
+scripts/mb-upload.sh,279,build_create,"push_with_retry: exponential backoff 2s/4s/8s/16s, max 4 attempts",high
+scripts/mb-upload.sh,322,build_create,"upload: main pipeline — collect, preview, confirm, pull, copy, commit, push",high
+.codex/validators/install_hooks.sh,27,build_create,"cat > pre-commit hook: runs run_governance_gate.py",high
+MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json,8,decision_keyword,"pattern_id: BIJECTION — one-to-one mapping",high
+MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json,20,decision_keyword,"pattern_id: IDEMPOTENT — f(f(x)) = f(x)",high
+MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json,32,decision_keyword,"pattern_id: MONOTONIC — values only grow",high
+MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json,44,decision_keyword,"pattern_id: FAIL_CLOSED — deny on unexpected",high
+MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json,56,decision_keyword,"pattern_id: CONSTRAINT_ELIMINATION — selection by elimination",high
+MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json,68,decision_keyword,"pattern_id: RECURSIVE_REFINEMENT — bounded iteration",high
+MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json,80,decision_keyword,"pattern_id: EVIDENCE_BEFORE_EXECUTION — refuse without evidence",high
+MetaBlooms_OS/patterns/MB_PATTERN_CATALOG.json,92,decision_keyword,"pattern_id: LESSON_PROMOTION — evidence-gated knowledge levels",high

@@ -1,0 +1,557 @@
+{
+  "scan_date": "2026-02-09",
+  "total_excluded": 91,
+  "exclusion_reasons": {
+    "LFS_POINTER": 77,
+    "BINARY_SPLIT_ARCHIVE": 12,
+    "BINARY_FORMAT": 2
+  },
+  "excluded_files": [
+    {
+      "file_path": "os_bundles/2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_DELTA_SEE_UBIQUITY_V1_FULL.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1_PLUS_PORTABILITY_CONFIG_DEPENDENCY_V1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/2026-01-17_MetaBlooms_OS_PASS3_BYTE_TRUTH_V2_PLUS_PHASE1_OS_BASELINE_V1_PLUS_SEE_LOOP_P0_PLUS_SECURITY_AXIS_P0_PLUS_RESOURCE_CONCURRENCY_SCHEMA_V1_PLUS_PORTABILITY_CONFIG_DEPENDENCY_V1_PLUS_FILE_HANDLING_P0_V1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/3 ELAR Resource_ Annotated Example of the Teacher Model Prompt - Poetry_.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/591.44-desktop-win10-win11-64bit-international-nsd-dch-whql.exe",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Archive 2.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part001",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 104857600,
+      "detail": "Split archive part (104857600 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part002",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 104857600,
+      "detail": "Split archive part (104857600 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part003",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 104857600,
+      "detail": "Split archive part (104857600 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part004",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 104857600,
+      "detail": "Split archive part (104857600 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part005",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 104857600,
+      "detail": "Split archive part (104857600 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part006",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 104857600,
+      "detail": "Split archive part (104857600 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part007",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 104857600,
+      "detail": "Split archive part (104857600 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/CHAT7_FULL_MNT_DATA_EXPORT.part008",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 35531819,
+      "detail": "Split archive part (35531819 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/CHAT_DELTA_EVIDENCE_PART2.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/GitHubDesktopSetup-x64.exe",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Lesson plans 1_19-1_23.rtf",
+      "reason": "BINARY_FORMAT",
+      "size_bytes": 28014058,
+      "detail": "Binary file format (.rtf), not text-scannable"
+    },
+    {
+      "file_path": "os_bundles/MB_CHAT3_MNT_DATA_PART1_20260121T185046Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MB_CHAT3_MNT_DATA_PART2_20260121T185046Z (1).zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MB_CHAT3_MNT_DATA_PART2_20260121T185046Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MB_CHAT6_MNTDATA_CHUNK002_20260121.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MB_CHAT6_MNTDATA_CHUNK004_20260121.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MB_CHAT6_MNTDATA_PART02_20260121.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MB_SHIP_BUNDLE_20260122.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MF642CMFDriverV6405W64.exe",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_COMPLETE_OS_BUNDLE_20260124T234508Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_GitHubUploader_RunPack_20260124T224700Z_PATCHED (2).zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 135,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_Jan19-23_NON_OS_CONTENT.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_NON_PROJECT_FILES_PART1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_NON_PROJECT_FILES_PART2.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_NON_PROJECT_FILES_PART3.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_NON_PROJECT_FILES_PART4.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_CANONICAL_P0_P1_FULLY_WIRED.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_ENFORCED_V1_CONTENT__PATCHED_20260122.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_CANONICAL_P0_P1_MASTERY_INTEGRATED.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_EXECUTED_20260127T142924Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_FIXED_20260127T142423Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_FULL_CANONICAL_REBUILT_20260128T164100Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_FULL_P0_EXECUTION_ENFORCED_20260127T134057Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_FULL_P0_EXECUTION_ENFORCED_RESHIPPED_20260127T134913Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_FULL_UIUX_ENFORCED_20260127T150901Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_PASS3_PLUS_FILE_HANDLING_GATE_P0_V1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_PASS3_PLUS_PHASEC3_MATERIALIZED_V1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_PASS3_PLUS_SHIPPING_PROCEDURE_V1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_PATCHED_UX_P0_20260127T143734Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_RCA_ENABLED_20260127T144654Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_SHIP_GATED_20260127T143236Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_TRACE_DRIFT_ENABLED_20260127T144920Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_V1_WHOLEOS_REPAIRED.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_VALIDATED_EXPORT.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_VALIDATED_EXPORT.zip.part1",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 95898025,
+      "detail": "Split archive part (95898025 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_VALIDATED_EXPORT.zip.part2",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 95898024,
+      "detail": "Split archive part (95898024 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2 (1).zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_BASELINE_v1_2_P0_SEE_MMD_ECL_REBUILT_BOOT_OK_REPAIRED_SHAFIX_v2.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_P0FIX_REMEDIATED__WIRED_2026-01-21.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_PAYLOAD_APPLIED_ACCEPT_OK.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_CANONICAL_20260121_RUNTIMEENTRYPOINT_FIX.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_CBPPP_BOOT_HARDENED_20260121.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_PLUS_AUTO_MMD_CONTRACT_AUDIT_V1_2026-01-17_PLUS_DELTA_SEE_MMD_ECL_2026-01-18_P1.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_PLUS_SEE_MMD_ECL_INVARIANTS_V1_2026-01-18.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_RUNTIME_FULL_GOVERNANCE_V2_CANONICAL_20260121.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_WHOLEOS_RUNTIME_FULL_GOVERNANCE_V3_CANONICAL_20260121.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_CANONICAL_P0_REHYDRATED_CLEAN_MB-BOOT-20260124T191416Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_EXPORT_20260128T220638Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_EXPORT_20260129T060025Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_EXPORT_WITH_CHAT_INDEX_20260129T060156Z (1).zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_EXPORT_WITH_CHAT_INDEX_20260129T060156Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_FROZEN_FULL_EXPORT.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_FROZEN_FULL_EXPORT_V2_WITH_PROJECTS.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_FROZEN_FULL_EXPORT_V3.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_FULL_P0_ENFORCED_CHASSISGATE_BTSFIX_20260127T123419Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_FULL_P0_ENFORCED_CHASSISGATE_REISSUE_20260127T120832Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_WITH_CHAT_DELTAS_20260128T140143Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_canonical_snapshot_20260127T190025Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_v1.3_LTS_FULLFIX_20260129T064552Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/Metablooms_OS_working_os_20260127T190025Z.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/NVIDIA_app_v11.0.5.420.exe",
+      "reason": "LFS_POINTER",
+      "size_bytes": 134,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/chat_4_RETRY_full_mnt_data_20260121_185205.zip.part001",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 94371840,
+      "detail": "Split archive part (94371840 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/chat_4_RETRY_full_mnt_data_20260121_185205.zip.part002",
+      "reason": "BINARY_SPLIT_ARCHIVE",
+      "size_bytes": 47816350,
+      "detail": "Split archive part (47816350 bytes), cannot extract individually"
+    },
+    {
+      "file_path": "os_bundles/drive-download-20260104T232014Z-1-001.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/git_uploader_bundle_reupload_20260127T145213Z (2).zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 135,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/gpg4win-5.0.0.exe",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/payload_recovery_EXPECTED_FIRST_boot_surface.zip",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/winmfscanutilityv12102.exe",
+      "reason": "LFS_POINTER",
+      "size_bytes": 133,
+      "detail": "Git LFS pointer (133-134 bytes), actual content not available locally"
+    },
+    {
+      "file_path": "os_bundles/MetaBlooms_OS_SANDBOX_PACKAGE_20260208T000000Z.zip",
+      "reason": "BINARY_FORMAT",
+      "size_bytes": 114010,
+      "detail": "Binary file format (.zip), not text-scannable"
+    }
+  ]
+}
