@@ -1,0 +1,17 @@
+{
+  "_comment": "MPP CDR Aesthetic Contract template — lock this before writing a single line of code.",
+  "naming_style": "snake_case",
+  "max_function_lines": 40,
+  "max_nesting_depth": 3,
+  "line_length_limit": 100,
+  "required_blank_lines_between_sections": 2,
+  "output_format": "Describe what produced output should look and feel like. Example: 'JSON objects with snake_case keys, timestamps in ISO 8601, error messages prefixed with the failing operation name.'",
+  "expressiveness_rule": "Names must say what a thing IS, not how it works. 'user_receipt' not 'dict_from_loop'. 'parse_dossier' not 'do_parse'.",
+  "banned_patterns": [
+    "bare except clauses (always catch a specific exception type)",
+    "boolean flags as function arguments (use separate functions)",
+    "deeply nested ternary expressions",
+    "magic numbers without named constants",
+    "print() in library code (use return values or raise)"
+  ]
+}

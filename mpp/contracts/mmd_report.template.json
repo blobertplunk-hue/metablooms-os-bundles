@@ -1,0 +1,60 @@
+{
+  "_comment": "MPP MMD_REPORT template — fill in all sections before Stage 3 runs.",
+  "gaps": [
+    {
+      "id": "G1",
+      "severity": "HIGH",
+      "description": "What assumption is being made but not stated?",
+      "resolution": "How is this gap closed? (Required for HIGH severity)"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "dependency-name",
+      "type": "stdlib | third-party | internal | runtime",
+      "version": ">=x.y.z or 'any'",
+      "declared": true
+    }
+  ],
+  "edge_cases": [
+    {
+      "id": "EC1",
+      "input": "What specific input triggers this edge case?",
+      "expected_behavior": "What should the system do with this input?",
+      "test_exists": false
+    },
+    {
+      "id": "EC2",
+      "input": "Empty input / null / None",
+      "expected_behavior": "Should raise ValueError with message explaining what was expected.",
+      "test_exists": false
+    },
+    {
+      "id": "EC3",
+      "input": "Input at exact boundary of accepted range",
+      "expected_behavior": "Should be accepted and produce the documented boundary behavior.",
+      "test_exists": false
+    }
+  ],
+  "failure_modes": [
+    {
+      "name": "MISSING_REQUIRED_INPUT",
+      "trigger": "A required argument or file is absent",
+      "response": "BLOCK",
+      "message_template": "Required {name} is missing. Provide {description}."
+    },
+    {
+      "name": "SCHEMA_VIOLATION",
+      "trigger": "Input does not match declared schema",
+      "response": "BLOCK",
+      "message_template": "Schema violation in {location}: {detail}."
+    }
+  ],
+  "integration_points": [
+    {
+      "target": "module.function_name",
+      "contract": "What we expect from this touch point (inputs accepted, outputs returned, side effects)",
+      "tested": false
+    }
+  ]
+}

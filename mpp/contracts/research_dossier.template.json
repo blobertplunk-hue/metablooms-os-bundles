@@ -1,0 +1,20 @@
+{
+  "_comment": "MPP PRVE research_dossier template — the problem must be understood before it can be solved.",
+  "problem_statement": "One precise paragraph: what is broken or missing, why it matters, what 'done' looks like.",
+  "files_touched": ["path/to/file1.py", "path/to/file2.md"],
+  "prior_solutions_considered": [
+    {
+      "approach": "Description of approach considered",
+      "rejected_because": "Why it was ruled out"
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "Assertion that must be true for the solution to work (will be checked against SEE_CITATION_MAP)"
+    }
+  ],
+  "known_constraints": ["constraint 1", "constraint 2"],
+  "complexity": "STANDARD",
+  "trivial_justification": "(only required if complexity is TRIVIAL)"
+}

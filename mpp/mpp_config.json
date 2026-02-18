@@ -1,0 +1,10 @@
+{
+  "_comment": "MPP pipeline configuration. Override defaults here.",
+  "pipeline_version": "1.0.0",
+  "coverage_threshold": 90,
+  "max_iterations_default": 3,
+  "edge_case_minimum": 3,
+  "critical_path_roles": ["entrypoint", "orchestrator", "gate"],
+  "beauty_audit_enabled": true,
+  "fast_path_allowed": true
+}
