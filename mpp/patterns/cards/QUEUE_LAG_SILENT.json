@@ -1,0 +1,58 @@
+{
+  "id": "QUEUE_LAG_SILENT",
+  "name": "Sustained queue lag without a traffic spike",
+  "class": "architectural",
+  "status": "ACTIVE",
+  "tags": ["queue", "consumer", "backlog", "lag", "throughput", "async", "kafka", "sqs", "rabbitmq"],
+  "trigger_shapes": [
+    "message queue consumer that calls an external dependency per message",
+    "queue-based worker pool where processing time is assumed constant",
+    "kafka or SQS consumer with per-partition or per-queue monitoring only at the aggregate level",
+    "async pipeline where downstream derives state from queue-processed events"
+  ],
+  "activation": "Consumer processing time per message increases (due to a dependency slowdown, a schema change requiring more computation, or a code regression) while the message inflow rate remains constant. The queue begins accumulating backlog.",
+  "mechanism": "Messages arrive at a constant rate; consumers slow down (e.g., an upstream dependency adds 100ms per call); the processing rate drops below the inflow rate; lag accumulates as a growing backlog; there is no backpressure mechanism to slow inflow; downstream systems derive state from processed messages and begin operating on increasingly stale data; no explicit errors are emitted — all messages eventually process, just late.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Queue accept rate is normal. Broker health metrics are green. Consumer instances are running with no crashes or errors."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Rising lag metric (consumer group lag or backlog time exceeds threshold). Per-partition skew may hide this in aggregate metrics."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Retry rates increase if retry-on-lag is configured. Downstream systems surface stale data anomalies. On-call receives reports of delayed actions."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "User-facing features that depend on queue-processed state show stale or delayed data. Time-sensitive operations (notifications, order status) arrive late or out of order."
+    }
+  ],
+  "lag": "hours",
+  "threshold_estimated": "Lag exceeding 5 minutes sustained over 15 minutes. Based on typical SLOs for near-real-time workflow processing. Earlier detection requires per-partition monitoring rather than aggregate broker health.",
+  "invisible_because": "No explicit errors are emitted — messages are processed, just late. Aggregate queue depth metrics may look normal if lag is distributed across many partitions. Monitoring is configured on broker health and consumer liveness, not on the ratio of processing rate to inflow rate. The assumption of constant processing time is never validated.",
+  "diagnostic": "Does queue monitoring track per-partition consumer lag AND consumer throughput (messages/second) vs. inflow rate? If processing rate < inflow rate at any partition, lag will accumulate regardless of broker health.",
+  "countermeasures": [
+    "Alert on consumer group lag per partition, not just aggregate queue depth or broker health.",
+    "Track and alert on the ratio of consumer throughput to inflow rate — if it drops below 1.0, lag will grow.",
+    "Implement backpressure: slow inflow when consumer lag exceeds threshold, rather than letting backlog grow unbounded.",
+    "Benchmark processing time per message under dependency latency conditions; set capacity headroom accordingly.",
+    "Add a canary consumer that processes a subset of messages with fine-grained latency tracking to detect processing slowdowns early."
+  ],
+  "sources": [
+    {
+      "title": "Queue growth and asynchronous failures — dev.to",
+      "url": "https://dev.to/",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "AWS Health Dashboard — increased queue processing time",
+      "url": "https://health.aws.amazon.com/",
+      "type": "postmortem"
+    }
+  ],
+  "discovered": "2026-02-18",
+  "last_reviewed": "2026-02-18"
+}

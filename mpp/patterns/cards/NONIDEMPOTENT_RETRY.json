@@ -1,0 +1,63 @@
+{
+  "id": "NONIDEMPOTENT_RETRY",
+  "name": "Non-idempotent retry on stateful operations",
+  "class": "operational",
+  "status": "ACTIVE",
+  "tags": ["retry", "idempotency", "payment", "double-write", "state", "side-effects"],
+  "trigger_shapes": [
+    "retry around a database write, payment, or email send",
+    "retry policy that does not distinguish retryable from non-retryable errors",
+    "operation that creates a record or charges a customer wrapped in generic retry logic",
+    "message consumer that reprocesses messages without an idempotency key check"
+  ],
+  "activation": "A retry is triggered on an operation that has already partially or fully committed state (e.g., a payment was charged, a record was created, an email was sent) due to a transient error in the response path — the operation succeeded but the caller never received confirmation.",
+  "mechanism": "Operation executes and commits state; a network failure prevents the success response from reaching the caller; caller's retry policy triggers a second execution; the second execution duplicates the side effect (double charge, duplicate record, second email); neither execution has an idempotency key check to detect the duplicate; reconciliation detects the inconsistency hours or days later.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Retry metrics record a 'success' on the second attempt. Error rate returns to zero. No alert fires."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Duplicate entries appear in audit logs or database. Counts in reconciliation reports don't match expected totals."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Inconsistent state detected across systems. Finance or operations team flags discrepancies in reports."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Customers report overcharges, duplicate orders, or receiving the same notification multiple times."
+    }
+  ],
+  "lag": "minutes to hours",
+  "threshold_estimated": "More than 3 retries per operation without idempotency keys. Based on the default max_attempts in common retry policies (boto3, requests, urllib3). Even a single retry without idempotency on a payment operation is unacceptable.",
+  "invisible_because": "The retrying operation looks retry-safe in isolation — the call signature is the same, the retry policy is standard. Non-retryable error types (e.g., ValueError) are not explicitly listed in the policy, so all failures look retryable. The happy path (no failure) is tested extensively; failure-during-response is not.",
+  "diagnostic": "Are non-retryable error types (e.g., any error from a successful write that fails on response) explicitly excluded from the retry policy? Does every state-mutating operation require an idempotency key that is checked before execution, not just passed through?",
+  "countermeasures": [
+    "Require idempotency keys for all state-mutating operations; check the key at the start of execution and return the prior result if found.",
+    "Explicitly enumerate non-retryable error types in retry policies — do not use a generic catch-all.",
+    "Use the outbox pattern: write intent to a durable store before executing; deduplicate on the consumer side.",
+    "Test the failure-during-response path explicitly: simulate a successful write followed by a dropped response and verify the retry produces no duplicate.",
+    "For payments specifically: use payment provider idempotency keys (Stripe, Braintree all support this natively)."
+  ],
+  "sources": [
+    {
+      "title": "Temporal.io — The Golden Rule of Retries",
+      "url": "https://temporal.io/blog/idempotency-and-durable-execution",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Yandex incident story on retry budgets and duplicate side effects",
+      "url": "https://habr.com/en/companies/yandex/articles/",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Idempotent consumers — iamraghuveer.com",
+      "url": "https://iamraghuveer.com/idempotent-consumers",
+      "type": "engineering-blog"
+    }
+  ],
+  "discovered": "2026-02-18",
+  "last_reviewed": "2026-02-18"
+}

@@ -1,0 +1,63 @@
+{
+  "id": "DLQ_ACCUMULATION",
+  "name": "Dead letter queue accumulation from persistent errors",
+  "class": "operational",
+  "status": "ACTIVE",
+  "tags": ["dlq", "dead-letter", "queue", "schema-drift", "contract", "message", "kafka", "sqs"],
+  "trigger_shapes": [
+    "message queue consumer with a dead letter queue configured",
+    "consumer that processes messages from a schema controlled by an upstream producer",
+    "any async pipeline where producers and consumers evolve independently",
+    "retry-on-failure consumer where some errors are never retryable"
+  ],
+  "activation": "A persistent error prevents a class of messages from being processed — typically a schema change in the producer that the consumer does not handle, a missing field, a new enum value, or a codec mismatch. Messages retry to the max_attempts limit and move to the DLQ. Additional messages of the same type continue arriving and follow the same path.",
+  "mechanism": "Producer adds a new required field or changes a field type; consumer does not handle the new schema; deserialization or validation fails; retry policy retries N times; after max retries, message moves to DLQ; main queue depth returns to normal (messages are being 'processed' — just moved); DLQ depth grows linearly with incoming message rate; affected events are never processed; downstream systems derive incorrect or missing state silently.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Main queue depth and throughput appear normal. Consumer error rate is masked because messages are moved to DLQ rather than erroring repeatedly."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "DLQ depth increases. If DLQ alerting is not configured, this phase may not trigger any notification."
+    },
+    {
+      "phase": "escalation",
+      "signal": "DLQ growth rate alarms fire (if configured). Ops team investigates. Root cause identification requires sampling DLQ messages."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Events that should have triggered downstream actions did not. Data inconsistencies surface. Features depending on the affected event type degrade silently."
+    }
+  ],
+  "lag": "hours to days",
+  "threshold_estimated": "DLQ growth exceeding 10 messages per hour warrants investigation. This threshold distinguishes isolated message failures (noise) from a systemic schema or contract problem. At lower rates, isolated failures are expected; above this rate, a class of messages is broken.",
+  "invisible_because": "The DLQ is treated as a safety net rather than a signal — 'it's there for bad messages'. Monitoring is configured on the main queue, not the DLQ. After messages move to the DLQ, the main queue looks healthy. Without DLQ sampling, the error type is unknown and the scope of impact is invisible.",
+  "diagnostic": "Is DLQ depth alerted on growth rates above 10 messages/hour? When the alert fires, is there an automated sampler that classifies DLQ messages by error type? Without error type classification, DLQ alerts are actionable only after a manual investigation that may take hours.",
+  "countermeasures": [
+    "Configure DLQ depth alerts with a rate threshold (not just an absolute depth), e.g., alert when growth rate exceeds 10 messages/hour.",
+    "Run an automated DLQ sampler that classifies messages by error type on every alert — this converts a 'DLQ is growing' alert into 'schema field X is missing in 100% of DLQ messages'.",
+    "Use schema registries (Confluent Schema Registry, AWS Glue) with compatibility enforcement to prevent producers from deploying breaking schema changes.",
+    "Implement consumer-side schema versioning: consumers should handle at least one prior schema version gracefully.",
+    "Add a DLQ replay pipeline: after fixing the consumer, replay DLQ messages rather than discarding them, to recover missed events."
+  ],
+  "sources": [
+    {
+      "title": "Dead Letter Queues for Failed Log Processing — Substack engineering",
+      "url": "https://substack.com/",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Temporal.io — Error rates and dead letter patterns",
+      "url": "https://temporal.io/blog/",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Dead-letter queues in practice — dev.to",
+      "url": "https://dev.to/",
+      "type": "engineering-blog"
+    }
+  ],
+  "discovered": "2026-02-18",
+  "last_reviewed": "2026-02-18"
+}

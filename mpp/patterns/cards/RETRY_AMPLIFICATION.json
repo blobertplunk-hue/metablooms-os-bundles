@@ -1,0 +1,58 @@
+{
+  "id": "RETRY_AMPLIFICATION",
+  "name": "Retry amplification in call chains",
+  "class": "architectural",
+  "status": "ACTIVE",
+  "tags": ["retry", "cascading-failure", "distributed-systems", "timeout", "load"],
+  "trigger_shapes": [
+    "retry loop around an external API call",
+    "retry decorator or policy applied at multiple layers of the call stack",
+    "microservice calling microservice with retries at each hop",
+    "SDK or client with built-in retry on top of application-level retry"
+  ],
+  "activation": "A transient failure in a downstream service (e.g., timeout or 503) triggers retry logic at the immediate caller. If callers upstream of that caller also have retry logic, and the operation is not idempotent end-to-end, each retry fans out into further retries.",
+  "mechanism": "Downstream service fails with a timeout; immediate caller retries 3x (standard policy); each retry arrives at the downstream service as a new request; if a layer above the immediate caller also has retries, it retries the already-retrying caller; total load on the downstream service becomes (original_requests x retries_layer_1 x retries_layer_2 x ...). With 3 retries at 3 layers, a single request becomes 27 requests. Resource exhaustion cascades laterally to healthy services sharing infrastructure.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Overall request rate appears normal or only slightly elevated. Success metrics mask underlying failures because some retries succeed."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Retry count metrics rise in logs. Latency p99 creeps up. Error rates in downstream service increase but stay below alert thresholds."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Latency spikes spread across services. Thread pools and connection pools in upstream services begin exhausting. CPU/memory anomalies in services that are not the root cause."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Widespread timeouts and errors. All services degraded even though the original failure was isolated to one downstream dependency."
+    }
+  ],
+  "lag": "minutes",
+  "threshold_estimated": "50% error rate sustained for 10 seconds in the downstream service. At that rate, without circuit breakers, retry amplification reaches runaway load within 1-2 retry cycles. Based on common circuit breaker defaults in AWS boto3 and Hystrix.",
+  "invisible_because": "Each individual service's retry policy looks reasonable in isolation (3 retries is standard). No end-to-end load simulation tests the multiplicative effect. Per-service dashboards show retry counts rising but not the cross-service fan-out multiplier. Success metrics from retries mask that the system is working much harder than traffic levels suggest.",
+  "diagnostic": "Does distributed tracing show a retry fan-out multiplier greater than 1 across more than 2 layers in simulated failure scenarios? Specifically: trigger a single downstream failure and count how many total requests arrive at the downstream service.",
+  "countermeasures": [
+    "Implement circuit breakers at each service boundary — open the circuit after threshold failures to stop retry fan-out at the source.",
+    "Add jitter to all retry delays to prevent synchronized retry storms across service instances.",
+    "Enforce a retry budget at the edge (e.g., one retry total per user-facing request) and make all internal hops fail-fast without retrying.",
+    "Use idempotency keys so retries do not duplicate side effects, enabling safe pass-through without fan-out.",
+    "Add end-to-end load simulation tests that inject downstream failures and measure total request amplification at the leaf service."
+  ],
+  "sources": [
+    {
+      "title": "AWS US-EAST-1 Outage Postmortem — retry storms at 3 retries without jitter",
+      "url": "https://aws.amazon.com/message/5467D2/",
+      "type": "postmortem"
+    },
+    {
+      "title": "Temporal.io — Error Handling and Compensation in Distributed Systems",
+      "url": "https://temporal.io/blog/error-handling",
+      "type": "engineering-blog"
+    }
+  ],
+  "discovered": "2026-02-18",
+  "last_reviewed": "2026-02-18"
+}

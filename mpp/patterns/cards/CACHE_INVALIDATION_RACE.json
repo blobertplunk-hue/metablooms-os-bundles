@@ -1,0 +1,63 @@
+{
+  "id": "CACHE_INVALIDATION_RACE",
+  "name": "Cache invalidation race without versioning",
+  "class": "data",
+  "status": "ACTIVE",
+  "tags": ["cache", "race-condition", "concurrency", "invalidation", "stale-data", "redis", "memcached"],
+  "trigger_shapes": [
+    "cache populated from a database read, then invalidated on write",
+    "read-through or write-invalidate cache pattern without version fences",
+    "multiple writers that can update the same cache key concurrently",
+    "cache invalidation triggered by an event bus or message queue (not inline with the write)"
+  ],
+  "activation": "Concurrent reads and writes to the same cache key occur at a rate where the write path (DB write + cache invalidation) and the read path (DB read + cache populate) interleave in a way that a stale value is written to the cache after a fresh value was invalidated.",
+  "mechanism": "Thread A reads from DB and gets value V1 (before a write). Thread B writes value V2 to DB and sends a cache invalidation. Thread A (delayed) writes V1 to the cache. Cache now serves V1 while DB has V2. No further invalidation is triggered because Thread B's invalidation already ran. Cache serves stale data until the next write to that key or until TTL expiry.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Cache hit rate is stable. No errors. All operations return data. Read latency is within normal bounds."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Inconsistent reads reported: different clients see different values for the same key. May appear in logs as unexpected state or in user reports as 'I see old data'."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Data anomalies surface in downstream systems that derived state from the stale cache value. Reconciliation detects discrepancies between cache and DB."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Users see incorrect data. Business decisions are made on stale state. If the pattern affects pricing, inventory, or permissions, the impact is direct and financial."
+    }
+  ],
+  "lag": "minutes",
+  "threshold_estimated": "Write rate exceeding 10 per second on a single cache key without version fencing. Below this rate, the race window is narrow enough that the probability of interleaving is low but non-zero. Under high concurrency (multi-instance deployments), this threshold can be much lower.",
+  "invisible_because": "Cache invalidation appears atomic in the happy path — the invalidation completes and a fresh read populates the cache. The race condition only occurs in a specific timing window between a read's DB fetch and its cache write. Standard tests do not inject this delay. Cache hit rate and error metrics remain green because the stale value is served successfully.",
+  "diagnostic": "Do cache invalidation events include a version fence — i.e., does the cache write check that the value being written is newer than what is currently in the cache? Without version fencing, any delayed cache writer can overwrite a newer value.",
+  "countermeasures": [
+    "Version all cache writes: include a monotonic version number or timestamp; the cache layer should reject writes older than the current cached version.",
+    "Use the cache-aside pattern with a compare-and-swap (CAS) write: only write to cache if the key is still absent or matches the expected version.",
+    "Prefer cache invalidation over cache updating: after a DB write, delete the cache key rather than writing a new value; the next read will always populate from the fresh DB state.",
+    "For high write-rate keys, use a distributed lock or a write-serialization queue to prevent concurrent cache population from multiple readers.",
+    "Test the race condition explicitly: add a test that delays the cache write after a DB read and verifies the correct value is served after a concurrent write completes."
+  ],
+  "sources": [
+    {
+      "title": "Cache invalidation queue and race conditions — gitconnected.com",
+      "url": "https://gitconnected.com/",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Meta engineering on cache consistency races",
+      "url": "https://engineering.fb.com/",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Race conditions in event-based cache invalidation — DEV Community",
+      "url": "https://dev.to/",
+      "type": "engineering-blog"
+    }
+  ],
+  "discovered": "2026-02-18",
+  "last_reviewed": "2026-02-18"
+}

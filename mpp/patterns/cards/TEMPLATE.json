@@ -1,0 +1,50 @@
+{
+  "_instructions": "Copy this file to <YOUR_PATTERN_ID>.json. Delete this _instructions field. Fill every field. Status must be DRAFT until G2 passes.",
+  "id": "YOUR_PATTERN_ID",
+  "name": "Short human-readable name for the failure pattern",
+  "class": "architectural | operational | data | security | concurrency",
+  "status": "DRAFT",
+  "tags": ["tag1", "tag2", "technology-name", "failure-mode"],
+  "trigger_shapes": [
+    "Code shape 1 that should trigger checking this pattern",
+    "Code shape 2 — plain English, specific enough for a code reviewer to recognize"
+  ],
+  "activation": "The specific precipitating condition — what state change crosses from safe to failing? Minimum 50 chars.",
+  "mechanism": "Step-by-step causal chain. Step 1 causes step 2 causes step 3. Each step must be causally connected to the next. Minimum 100 chars.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "What monitoring sees (or doesn't see) at this phase. Specific enough to reference a real metric or log line."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "The first observable deviation from normal. Which metric, which log, which threshold?"
+    },
+    {
+      "phase": "escalation",
+      "signal": "How the anomaly spreads or intensifies. What else starts failing?"
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "What users or downstream systems experience. Be specific about the error or degradation."
+    }
+  ],
+  "lag": "seconds | minutes | hours | days",
+  "threshold_estimated": "Quantified estimate of the load, rate, or concurrency at which this pattern activates. Include the reasoning, not just the number.",
+  "invisible_because": "The specific assumption or monitoring gap that causes this to look healthy when it isn't. Minimum 50 chars.",
+  "diagnostic": "The specific question or query an on-call engineer runs to confirm or rule out this pattern. Specific enough to execute.",
+  "countermeasures": [
+    "Countermeasure 1 — specific, named, actionable. Include technology or policy name.",
+    "Countermeasure 2 — cheaper or complementary to countermeasure 1.",
+    "Countermeasure 3 — at least one must be a test that would catch the failure."
+  ],
+  "sources": [
+    {
+      "title": "Source title",
+      "url": "https://...",
+      "type": "postmortem | engineering-blog | documentation | research | book"
+    }
+  ],
+  "discovered": "YYYY-MM-DD",
+  "last_reviewed": "YYYY-MM-DD"
+}
