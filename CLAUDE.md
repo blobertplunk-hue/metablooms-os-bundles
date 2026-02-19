@@ -67,6 +67,12 @@ Patterns live in `mpp/patterns/`. Every pattern is a structured JSON card.
 | Retry around an external call | `RETRY_AMPLIFICATION`, `NONIDEMPOTENT_RETRY` |
 | Message queue consumer | `QUEUE_LAG_SILENT`, `DLQ_ACCUMULATION` |
 | Cache read/write/invalidate | `CACHE_INVALIDATION_RACE` |
+| Database connection pool | `CONNECTION_POOL_EXHAUSTION` |
+| Multi-service write / saga / rollback | `DISTRIBUTED_TRANSACTION_ROLLBACK_GAP` |
+| Rate limiter with fixed window | `RATE_LIMITER_THUNDERING_HERD` |
+| Leader election / distributed lock | `LEADER_ELECTION_SPLIT_BRAIN` |
+| Batch job querying a database table | `BATCH_JOB_MEMORY_PRESSURE` |
+| Fan-out to followers / subscribers | `FAN_OUT_AMPLIFICATION` |
 | Any shape with no card | Run `mpp/patterns/STUDY_PROTOCOL.md` |
 
 **Look up a pattern:**
@@ -88,14 +94,16 @@ print(registry.render_index())
 **Adding a new pattern:** Follow `mpp/patterns/STUDY_PROTOCOL.md`.
 New cards start as `DRAFT` and only become `ACTIVE` after G2 passes.
 
-**Active patterns as of 2026-02-18:**
+**Active patterns as of 2026-02-19 (11 cards):**
 
 - `RETRY_AMPLIFICATION` — Retry amplification in call chains `[architectural]`
 - `NONIDEMPOTENT_RETRY` — Non-idempotent retry on stateful operations `[operational]`
 - `QUEUE_LAG_SILENT` — Sustained queue lag without a traffic spike `[architectural]`
 - `DLQ_ACCUMULATION` — Dead letter queue accumulation from persistent errors `[operational]`
 - `CACHE_INVALIDATION_RACE` — Cache invalidation race without versioning `[data]`
-
-**Patterns with no card yet (study triggers):**
-Connection pool exhaustion, distributed transaction rollback gaps, rate limiter thundering herd,
-leader election split-brain, batch job memory pressure, fan-out amplification.
+- `CONNECTION_POOL_EXHAUSTION` — Connection pool exhaustion from slow consumers `[operational]`
+- `DISTRIBUTED_TRANSACTION_ROLLBACK_GAP` — Distributed transaction rollback gap leaving partial state `[data]`
+- `RATE_LIMITER_THUNDERING_HERD` — Rate limiter thundering herd on window reset `[architectural]`
+- `LEADER_ELECTION_SPLIT_BRAIN` — Leader election split-brain from network partition `[architectural]`
+- `BATCH_JOB_MEMORY_PRESSURE` — Batch job memory pressure from unbounded result set loading `[operational]`
+- `FAN_OUT_AMPLIFICATION` — Fan-out amplification on high-cardinality events `[architectural]`

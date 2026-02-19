@@ -1,0 +1,43 @@
+# MetaBlooms Pattern Alert — BATCH_JOB_MEMORY_PRESSURE
+# Batch job memory pressure from unbounded result set loading
+# Class: operational | Status: ACTIVE | Lag: months (data grows slowly; the failure is a slow-moving cliff)
+#
+# Generated from mpp/patterns/cards/BATCH_JOB_MEMORY_PRESSURE.json
+# Last card review: 2026-02-19
+#
+groups:
+  - name: metablooms.batch_job_memory_pressure
+    rules:
+      - alert: MetaBloomsBatchjobmemorypressure
+        expr: container_memory_working_set_bytes{container="batch-job"} / container_spec_memory_limit_bytes{container="batch-job"} > 0.75
+        for: 5m
+        labels:
+          severity: warning
+          pattern_id: BATCH_JOB_MEMORY_PRESSURE
+          pattern_class: operational
+        annotations:
+          summary: "Batch job memory pressure from unbounded result set loading detected"
+          description: >
+            First signal: Job begins occasionally timing out or taking significantly longer than baseline. GC pressure increases. Heap dumps show large arrays of result set objects.
+            Threshold: 0.75 ratio (gt).
+            Condition type: sustained. Lag to customer impact: months (data grows slowly; the failure is a slow-moving cliff).
+          runbook: |
+            Does every batch job that queries a database have an explicit LIMIT/OFFSET or cursor-based pagination? Does the job's memory usage scale O(1) with respect to input data size, or O(N)? What is the current table size versus the memory limit of the batch process?
+          pattern_card: mpp/patterns/cards/BATCH_JOB_MEMORY_PRESSURE.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules BATCH_JOB_MEMORY_PRESSURE_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f BATCH_JOB_MEMORY_PRESSURE_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.

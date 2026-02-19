@@ -1,0 +1,76 @@
+{
+  "id": "FAN_OUT_AMPLIFICATION",
+  "name": "Fan-out amplification on high-cardinality events",
+  "class": "architectural",
+  "status": "ACTIVE",
+  "tags": ["fan-out", "pub-sub", "notifications", "amplification", "cardinality", "event-driven"],
+  "trigger_shapes": [
+    "event triggers a notification or action for every subscriber or follower of the source",
+    "pub/sub topic where the number of subscribers is unbounded or user-controlled",
+    "social graph operation (follow, post, like) that fan-outs to all connections",
+    "webhook delivery that sends to N registered endpoints on every event",
+    "batch job that generates one downstream task per row in an unbounded table"
+  ],
+  "activation": "An event from a high-cardinality source (a user with millions of followers, a topic with thousands of subscribers, a table with millions of rows) triggers a fan-out operation. The fan-out generates one unit of work per recipient. The total work is O(source_cardinality), not O(1). When a popular source fires frequently, aggregate fan-out load overwhelms the downstream processing capacity.",
+  "mechanism": "User A has 5,000,000 followers. User A posts a tweet. The fanout service enqueues one notification job per follower: 5,000,000 jobs in seconds. Worker pool (100 workers) processes at 1,000 jobs/sec = 5,000 seconds (83 minutes) to drain. While draining, User A posts again: another 5,000,000 jobs added. Queue depth grows unbounded. Notifications for ordinary users (100 followers) arrive immediately; notifications for followers of popular users never arrive — or arrive hours late.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Fan-out queue depth grows during high-cardinality events. Average queue depth looks normal because most users are low-cardinality. P99 latency for notifications is not measured."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Notification delivery latency diverges: low-cardinality users receive instantly, high-cardinality-source followers wait minutes or hours. Queue depth spikes correlate with activity from popular accounts."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Fan-out queue becomes a persistent backlog. Worker fleet cannot keep up. Other event types sharing the same queue are also delayed. SLA for all notifications is breached."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Followers of popular accounts receive notifications hours after the event. System appears broken for high-traffic events precisely when reliability matters most (product launches, breaking news)."
+    }
+  ],
+  "lag": "minutes to hours (depends on source cardinality and worker throughput)",
+  "threshold_estimated": "Fan-out events with cardinality > 10,000 recipients require explicit capacity planning. At 1M followers and 1,000 jobs/sec processing capacity, drain time = 1,000 seconds per event. A second event before the first drains produces unbounded queue growth. Twitter's celebrity problem demonstrated this at scale.",
+  "invisible_because": "Fan-out logic is simple (one notification per follower) and correct for all unit tests. Load tests use synthetic users with equal, small follower counts. The high-cardinality case is never tested because creating 1M test followers is expensive. Queue depth alerts use average or sum, masking the spikes from individual high-cardinality events.",
+  "diagnostic": "What is the maximum fan-out cardinality in production today (max followers, max subscribers, max rows)? Under a simulated high-cardinality event, what is the queue drain time? Is there a separate processing path for high-cardinality events (push model) vs low-cardinality (pull model)?",
+  "countermeasures": [
+    "Use a pull model for high-cardinality sources: store the event once and let followers fetch on next request, rather than pushing to each follower's inbox.",
+    "Implement tiered fan-out: high-cardinality events go to a dedicated high-capacity queue; low-cardinality events go to the standard queue — prevents high-cardinality events from blocking low-cardinality notifications.",
+    "Cap fan-out at a configurable maximum per event (e.g., 10,000 recipients per batch); process the remainder asynchronously with lower priority.",
+    "Monitor queue depth by source cardinality bucket, not average — a 1M-follower event is invisible in averages.",
+    "Apply back-pressure at the event producer: rate-limit high-cardinality sources, or accept that their followers will receive notifications with measured latency SLA degradation."
+  ],
+  "sources": [
+    {
+      "title": "Twitter Engineering — Storing Data with Twitter",
+      "url": "https://blog.twitter.com/engineering/en_us/topics/infrastructure",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Instagram Engineering — Scaling Push Notifications",
+      "url": "https://instagram-engineering.com/",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Martin Fowler — Event-Driven Architecture Fan-Out Pattern",
+      "url": "https://martinfowler.com/articles/201701-event-driven.html",
+      "type": "engineering-blog"
+    }
+  ],
+  "discovered": "2026-02-19",
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "queue_depth",
+    "condition_type": "sustained",
+    "prometheus": {
+      "metric_hint": "sum(rabbitmq_queue_messages) by (queue)",
+      "threshold_value": 100000,
+      "threshold_unit": "messages",
+      "comparison": "gt",
+      "for_duration": "5m",
+      "severity": "warning"
+    }
+  }
+}

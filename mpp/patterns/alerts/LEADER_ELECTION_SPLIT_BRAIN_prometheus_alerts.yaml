@@ -1,0 +1,39 @@
+# MetaBlooms Pattern Alert — LEADER_ELECTION_SPLIT_BRAIN
+# Leader election split-brain from network partition
+# Class: architectural | Status: ACTIVE | Lag: seconds to minutes (window = lease TTL - heartbeat timeout)
+#
+# Generated from mpp/patterns/cards/LEADER_ELECTION_SPLIT_BRAIN.json
+# Last card review: 2026-02-19
+#
+# ── DATA CONSISTENCY PATTERN — NO PROMETHEUS ALERT POSSIBLE ──
+#
+# Pattern 'LEADER_ELECTION_SPLIT_BRAIN' (Leader election split-brain from network partition) cannot be detected by a
+# time-series metric alert. Its first observable signal is:
+#
+#   Downstream systems receive duplicate writes or conflicting updates. Sequence numbers diverge. Lock contention increases.
+#
+# Required check type: reconciliation job
+# A scheduled job must compare state across system boundaries and
+# alert when values diverge. This cannot be expressed as PromQL.
+#
+# Diagnostic:
+#   Does every write from a leader include a monotonically increasing fencing token that the downstream rejects if it is lower than the last accepted token? Under simulated network partition (isolate the leader from the lease store), does the old leader stop writing before the new leader's first write?
+#
+# See card for countermeasures: mpp/patterns/cards/LEADER_ELECTION_SPLIT_BRAIN.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules LEADER_ELECTION_SPLIT_BRAIN_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f LEADER_ELECTION_SPLIT_BRAIN_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.

@@ -1,0 +1,43 @@
+# MetaBlooms Pattern Alert — RATE_LIMITER_THUNDERING_HERD
+# Rate limiter thundering herd on window reset
+# Class: architectural | Status: ACTIVE | Lag: seconds (burst occurs at each window reset)
+#
+# Generated from mpp/patterns/cards/RATE_LIMITER_THUNDERING_HERD.json
+# Last card review: 2026-02-19
+#
+groups:
+  - name: metablooms.rate_limiter_thundering_herd
+    rules:
+      - alert: MetaBloomsRatelimiterthunderingherd
+        expr: rate(http_requests_total{code="429"}[10s]) > 10
+        for: 0s
+        labels:
+          severity: warning
+          pattern_id: RATE_LIMITER_THUNDERING_HERD
+          pattern_class: architectural
+        annotations:
+          summary: "Rate limiter thundering herd on window reset detected"
+          description: >
+            First signal: Spike in request rate at window boundaries (visible as sawtooth pattern in request metrics). Downstream latency spikes at :00 seconds of each minute.
+            Threshold: 10 requests_per_second (gt).
+            Condition type: spike. Lag to customer impact: seconds (burst occurs at each window reset).
+          runbook: |
+            Does the rate limiter use a sliding window or token bucket algorithm, or a fixed-window counter? Under a simulated burst where all clients fire simultaneously at window reset, what is the peak requests-per-second seen by the downstream service?
+          pattern_card: mpp/patterns/cards/RATE_LIMITER_THUNDERING_HERD.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules RATE_LIMITER_THUNDERING_HERD_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f RATE_LIMITER_THUNDERING_HERD_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.

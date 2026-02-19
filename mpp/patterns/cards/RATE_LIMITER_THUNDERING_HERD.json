@@ -1,0 +1,76 @@
+{
+  "id": "RATE_LIMITER_THUNDERING_HERD",
+  "name": "Rate limiter thundering herd on window reset",
+  "class": "architectural",
+  "status": "ACTIVE",
+  "tags": ["rate-limiting", "thundering-herd", "fixed-window", "burst", "stampede", "distributed"],
+  "trigger_shapes": [
+    "fixed-window rate limiter resetting on a clock boundary (minute, hour)",
+    "rate limit counter stored in Redis with TTL expiry",
+    "API quota enforced per calendar minute or per hour across multiple clients",
+    "clients that retry immediately after receiving a 429 Too Many Requests response",
+    "distributed rate limiter without token bucket or sliding window smoothing"
+  ],
+  "activation": "A fixed-window rate limiter resets at a clock boundary (e.g., top of the minute). All clients that were blocked simultaneously become eligible and send their deferred requests at the same instant. The burst load at window reset can equal the total blocked demand — far exceeding the rate limit the limiter was designed to enforce.",
+  "mechanism": "100 clients are each rate-limited to 10 req/min. At 12:00:00 the window resets. All 100 clients fire their first request simultaneously. The downstream receives 100 requests in the first millisecond of the new window — 10x what the rate limit was designed to allow. If clients also retry immediately on 429, the burst is amplified further. Token bucket or sliding window limiters smooth this; fixed-window limiters do not.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Rate limit rejections accumulate just before the window boundary. Each individual client sees expected 429 behavior. Downstream looks healthy."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Spike in request rate at window boundaries (visible as sawtooth pattern in request metrics). Downstream latency spikes at :00 seconds of each minute."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Downstream error rate increases at window reset moments. Database or service behind the rate limiter shows CPU/memory spikes on the minute boundary."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Intermittent failures for all clients at the same time each minute. Retries after 429 worsen the storm. The rate limiter intended to protect the downstream causes more load than unthrottled traffic would."
+    }
+  ],
+  "lag": "seconds (burst occurs at each window reset)",
+  "threshold_estimated": "Sawtooth amplitude > 3x the average request rate at window reset is the signal. With 50+ coordinated clients, a fixed-window limiter provides no effective burst protection. Based on analysis of Redis INCR+EXPIRE pattern vs token bucket implementations.",
+  "invisible_because": "Load tests use steady synthetic traffic, never coordinated bursts at window boundaries. The per-client view shows correct rate limiting behavior — only the aggregate view across all clients reveals the thundering herd. The rate limiter is treated as a solved problem once it correctly rejects over-limit requests.",
+  "diagnostic": "Does the rate limiter use a sliding window or token bucket algorithm, or a fixed-window counter? Under a simulated burst where all clients fire simultaneously at window reset, what is the peak requests-per-second seen by the downstream service?",
+  "countermeasures": [
+    "Use a token bucket or sliding window algorithm instead of a fixed-window counter — these spread demand smoothly across time.",
+    "Add jitter to client retry-after delays: instead of retrying at the exact window reset, retry at reset_time + random(0, window_duration * 0.1).",
+    "Implement client-side rate limiting with leaky bucket so individual clients smooth their own bursts before hitting the shared limiter.",
+    "If fixed-window is required, use a two-window approach (current + previous window weighted) to prevent full burst on reset.",
+    "Monitor request rate at 1-second resolution, not 1-minute averages — minute averages mask burst spikes completely."
+  ],
+  "sources": [
+    {
+      "title": "Stripe Engineering — Scaling Your API with Rate Limiters",
+      "url": "https://stripe.com/blog/rate-limiters",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Cloudflare — How We Rate Limit at Cloudflare",
+      "url": "https://blog.cloudflare.com/counting-things-a-lot-of-different-things/",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Redis — Rate Limiting Patterns",
+      "url": "https://redis.com/glossary/rate-limiting/",
+      "type": "documentation"
+    }
+  ],
+  "discovered": "2026-02-19",
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "error_rate",
+    "condition_type": "spike",
+    "prometheus": {
+      "metric_hint": "rate(http_requests_total{code=\"429\"}[10s])",
+      "threshold_value": 10,
+      "threshold_unit": "requests_per_second",
+      "comparison": "gt",
+      "for_duration": "30s",
+      "severity": "warning"
+    }
+  }
+}

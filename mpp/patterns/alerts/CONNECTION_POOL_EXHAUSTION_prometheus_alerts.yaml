@@ -1,0 +1,43 @@
+# MetaBlooms Pattern Alert — CONNECTION_POOL_EXHAUSTION
+# Connection pool exhaustion from slow consumers
+# Class: operational | Status: ACTIVE | Lag: seconds to minutes
+#
+# Generated from mpp/patterns/cards/CONNECTION_POOL_EXHAUSTION.json
+# Last card review: 2026-02-19
+#
+groups:
+  - name: metablooms.connection_pool_exhaustion
+    rules:
+      - alert: MetaBloomsConnectionpoolexhaustion
+        expr: hikaricp_connections_active / hikaricp_connections_max > 0.8
+        for: 60s
+        labels:
+          severity: warning
+          pattern_id: CONNECTION_POOL_EXHAUSTION
+          pattern_class: operational
+        annotations:
+          summary: "Connection pool exhaustion from slow consumers detected"
+          description: >
+            First signal: Connection acquisition timeout errors appear in logs. A subset of requests fail with 'could not acquire connection within timeout'. Pool utilisation metric (if it exists) shows > 90%.
+            Threshold: 0.8 ratio (gt).
+            Condition type: sustained. Lag to customer impact: seconds to minutes.
+          runbook: |
+            Is pool utilisation (active_connections / max_connections) tracked with an alert threshold? Under simulated slow-query load (add `pg_sleep(5)` to a representative query), does the application degrade gracefully or exhaust the pool within 30 seconds?
+          pattern_card: mpp/patterns/cards/CONNECTION_POOL_EXHAUSTION.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules CONNECTION_POOL_EXHAUSTION_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f CONNECTION_POOL_EXHAUSTION_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.

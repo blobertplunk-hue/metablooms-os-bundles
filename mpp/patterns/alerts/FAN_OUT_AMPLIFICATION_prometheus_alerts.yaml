@@ -1,0 +1,43 @@
+# MetaBlooms Pattern Alert — FAN_OUT_AMPLIFICATION
+# Fan-out amplification on high-cardinality events
+# Class: architectural | Status: ACTIVE | Lag: minutes to hours (depends on source cardinality and worker throughput)
+#
+# Generated from mpp/patterns/cards/FAN_OUT_AMPLIFICATION.json
+# Last card review: 2026-02-19
+#
+groups:
+  - name: metablooms.fan_out_amplification
+    rules:
+      - alert: MetaBloomsFanoutamplification
+        expr: sum(rabbitmq_queue_messages) by (queue) > 100000
+        for: 5m
+        labels:
+          severity: warning
+          pattern_id: FAN_OUT_AMPLIFICATION
+          pattern_class: architectural
+        annotations:
+          summary: "Fan-out amplification on high-cardinality events detected"
+          description: >
+            First signal: Notification delivery latency diverges: low-cardinality users receive instantly, high-cardinality-source followers wait minutes or hours. Queue depth spikes correlate with activity from popular accounts.
+            Threshold: 100000 messages (gt).
+            Condition type: sustained. Lag to customer impact: minutes to hours (depends on source cardinality and worker throughput).
+          runbook: |
+            What is the maximum fan-out cardinality in production today (max followers, max subscribers, max rows)? Under a simulated high-cardinality event, what is the queue drain time? Is there a separate processing path for high-cardinality events (push model) vs low-cardinality (pull model)?
+          pattern_card: mpp/patterns/cards/FAN_OUT_AMPLIFICATION.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules FAN_OUT_AMPLIFICATION_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f FAN_OUT_AMPLIFICATION_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.

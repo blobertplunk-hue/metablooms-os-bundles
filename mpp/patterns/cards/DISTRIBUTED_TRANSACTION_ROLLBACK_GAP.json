@@ -1,0 +1,69 @@
+{
+  "id": "DISTRIBUTED_TRANSACTION_ROLLBACK_GAP",
+  "name": "Distributed transaction rollback gap leaving partial state",
+  "class": "data",
+  "status": "ACTIVE",
+  "tags": ["distributed-systems", "transactions", "consistency", "rollback", "saga", "partial-state"],
+  "trigger_shapes": [
+    "sequence of writes across two or more services or databases with no compensating transaction",
+    "saga pattern where a step fails after prior steps have committed",
+    "two-phase commit participant that crashes between prepare and commit",
+    "multi-service workflow where business logic assumes all-or-nothing but infrastructure guarantees at-least-once",
+    "rollback handler that is not tested or not idempotent"
+  ],
+  "activation": "A multi-step operation commits state in service A, then fails in service B. There is no compensating transaction to undo A's commit. The system is left in a partial state that is neither the intended final state nor the original state — a third, undefined state that was never designed for.",
+  "mechanism": "Step 1 writes to database A (committed). Step 2 writes to service B — network timeout occurs after B receives and commits the request but before the response reaches the caller. Caller interprets the timeout as a failure and initiates rollback. Rollback handler calls A to undo Step 1. B's write is never rolled back because the caller never knew it succeeded. Final state: A is rolled back, B still has the write. Reconciliation discovers the inconsistency hours later — or never.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "The saga or workflow reports a failure and triggers rollback. Rollback appears to succeed (A is undone). No alarm fires. B's committed write is invisible in application logs."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Reconciliation jobs flag a record in B with no corresponding record in A. The orphan record accumulates. Data integrity checks produce mismatches."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Orphan records in B cause downstream processing to fail (foreign key violations, unexpected states in derived data). Customer-facing features that read B show stale or incorrect state."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Customer sees an action as failed (because A was rolled back) but the state in B shows the action as completed — e.g., a payment appears charged in the payment provider but not in the order system."
+    }
+  ],
+  "lag": "minutes to days",
+  "threshold_estimated": "Even one partial-state record per 10,000 transactions is operationally unacceptable for financial or legal compliance systems. The pattern manifests whenever network partitions or process crashes occur during multi-step commits — expected at P99 latency under moderate load.",
+  "invisible_because": "Rollback handlers are rarely tested under failure injection. The timeout scenario (operation succeeded but response lost) is never tested — only the case where the operation itself failed. Reconciliation jobs are written after the fact, not designed before the first deploy. 'The saga will handle it' is assumed without verifying the compensating transactions cover the timeout case.",
+  "diagnostic": "For every multi-step workflow: does the rollback handler explicitly issue compensating transactions to all services that may have committed, not just services that returned success? Is the rollback handler tested with fault injection where a step times out after committing? Does each compensating transaction have an idempotency key?",
+  "countermeasures": [
+    "Design compensating transactions before designing forward transactions — for every step that commits, there must be a tested undo operation.",
+    "Treat timeouts as 'unknown outcome', not 'failure' — before rolling back, query the target service to determine whether the step committed.",
+    "Use the outbox pattern: write intent to a durable outbox before calling downstream; a separate process confirms or compensates based on the outbox state.",
+    "Make all compensating transactions idempotent — the rollback may be called multiple times if the saga coordinator itself fails.",
+    "Build reconciliation as a first-class feature, not a background job: run it in near-real-time and alert on any cross-system state mismatch above zero.",
+    "Consider using a saga orchestrator (Temporal, AWS Step Functions) that provides durable execution with automatic retry and rollback tracking."
+  ],
+  "sources": [
+    {
+      "title": "Microservices Patterns — Saga Pattern (Chris Richardson)",
+      "url": "https://microservices.io/patterns/data/saga.html",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Temporal.io — Designing Durable Workflows to Handle Failures",
+      "url": "https://temporal.io/blog/designing-durable-workflows",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "Klarna Engineering — Handling Distributed Transactions",
+      "url": "https://engineering.klarna.com/",
+      "type": "engineering-blog"
+    }
+  ],
+  "discovered": "2026-02-19",
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "data_consistency",
+    "condition_type": "sustained"
+  }
+}

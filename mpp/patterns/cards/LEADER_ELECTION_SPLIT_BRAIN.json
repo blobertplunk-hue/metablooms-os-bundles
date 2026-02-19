@@ -1,0 +1,68 @@
+{
+  "id": "LEADER_ELECTION_SPLIT_BRAIN",
+  "name": "Leader election split-brain from network partition",
+  "class": "architectural",
+  "status": "ACTIVE",
+  "tags": ["leader-election", "split-brain", "consensus", "distributed-systems", "partition", "fencing"],
+  "trigger_shapes": [
+    "leader election using a lease or heartbeat with a configurable TTL",
+    "distributed lock stored in Redis, ZooKeeper, or etcd with a TTL",
+    "scheduled job or cron that must run on exactly one node",
+    "primary/replica replication where promotion is automatic on heartbeat loss",
+    "cluster node that can become leader without confirming the previous leader is dead"
+  ],
+  "activation": "A network partition separates leader L from follower F and the lease store. F's heartbeat to L times out; F acquires a new lease and declares itself leader. L's lease has not yet expired — L continues writing as leader. Two leaders are now active simultaneously: split-brain. Both write to downstream systems; writes conflict or duplicate.",
+  "mechanism": "Leader L holds lease with TTL=30s. Network partition begins at T=0. L cannot renew the lease (lease store unreachable). F cannot see L's heartbeat. At T=10s, F declares L dead (based on missed heartbeats) and acquires a new lease. At T=0+30s L's lease expires — but between T=10s and T=30s both L and F are active leaders. Any writes during that 20-second window are duplicated or conflicted. After the partition heals, both nodes see conflicting state with no clear winner.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Network partition occurs. Both nodes continue serving requests. No alert fires because each node appears healthy from its own perspective."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Downstream systems receive duplicate writes or conflicting updates. Sequence numbers diverge. Lock contention increases."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Data inconsistency detected by reconciliation. Two nodes claim ownership of the same resource. Writes from the old leader are overwritten by the new leader or vice versa."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Lost writes, duplicated events, or corrupted state visible to customers. Manual intervention required to determine the correct state and discard the conflicting writes."
+    }
+  ],
+  "lag": "seconds to minutes (window = lease TTL - heartbeat timeout)",
+  "threshold_estimated": "The split-brain window equals (lease TTL - heartbeat failure detection timeout). With TTL=30s and detection=10s, the window is 20 seconds. Any writes during this window are at risk. Fencing tokens reduce this to zero for writes that check the token; writes that do not are permanently at risk regardless of TTL.",
+  "invisible_because": "Leader election is treated as solved by the lease/ZooKeeper/etcd implementation. The split-brain window (TTL - detection timeout) is never measured or monitored. Partitions are rare in testing and often heal before detection. Fencing tokens are documented but optional — teams skip them because they complicate the write path.",
+  "diagnostic": "Does every write from a leader include a monotonically increasing fencing token that the downstream rejects if it is lower than the last accepted token? Under simulated network partition (isolate the leader from the lease store), does the old leader stop writing before the new leader's first write?",
+  "countermeasures": [
+    "Use fencing tokens (monotonic lease generation numbers) on every leader write — downstream rejects writes with a token lower than the last accepted, making split-brain writes safe to discard.",
+    "Set the lease TTL long enough that a partitioned leader's writes do not overlap with the new leader's first write (TTL > max_detection_time + max_write_latency).",
+    "Use a consensus algorithm (Raft, Paxos) rather than a simple lease — these provide linearizability guarantees that plain TTL leases do not.",
+    "Require that a leader confirm its lease is still valid before every write, not just at heartbeat intervals.",
+    "Test the split-brain window explicitly: inject a network partition and measure how long two leaders coexist before one yields."
+  ],
+  "sources": [
+    {
+      "title": "Martin Kleppmann — How to do distributed locking (fencing tokens)",
+      "url": "https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "etcd Documentation — Lease and Watch",
+      "url": "https://etcd.io/docs/v3.5/learning/design-learner/",
+      "type": "documentation"
+    },
+    {
+      "title": "Jepsen — Testing Distributed Systems Under Partition",
+      "url": "https://jepsen.io/analyses",
+      "type": "engineering-blog"
+    }
+  ],
+  "discovered": "2026-02-19",
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "data_consistency",
+    "condition_type": "spike"
+  }
+}

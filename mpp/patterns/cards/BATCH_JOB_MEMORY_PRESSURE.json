@@ -1,0 +1,76 @@
+{
+  "id": "BATCH_JOB_MEMORY_PRESSURE",
+  "name": "Batch job memory pressure from unbounded result set loading",
+  "class": "operational",
+  "status": "ACTIVE",
+  "tags": ["batch", "memory", "oom", "pagination", "streaming", "result-set", "jdbc"],
+  "trigger_shapes": [
+    "batch job or ETL that loads a full database table or query result into memory",
+    "ORM query without pagination in a scheduled or background task",
+    "List or array that grows with the number of rows processed",
+    "result set fetched with fetchAll() or equivalent before processing begins",
+    "batch job whose memory usage is not bounded by input data size"
+  ],
+  "activation": "A batch job queries a table or queue and loads all results into memory before processing. The table was small at launch; it grew over months. When the result set exceeds available heap/memory, the process is OOM-killed. The job fails silently or retries, each retry consuming memory until killed again.",
+  "mechanism": "SELECT * FROM events WHERE processed = false — initially returns 10,000 rows (200 MB). Table grows to 2M rows (40 GB) over 18 months. Batch job runs nightly, loads all rows, runs OOM at 3 GB heap limit, is killed by the OS. Job is marked failed; ops team restarts manually. Root cause is the query, not a transient issue. The fix requires pagination or streaming — a code change, not a config change.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Job completes successfully but memory usage climbs each month as the table grows. No memory trend alert exists."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Job begins occasionally timing out or taking significantly longer than baseline. GC pressure increases. Heap dumps show large arrays of result set objects."
+    },
+    {
+      "phase": "escalation",
+      "signal": "Job fails with OOM error. Kubernetes or systemd restarts the pod/process. Each restart triggers the same full-table scan, consuming memory until OOM again."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Batch processing stops entirely. Data derived from the batch (reports, aggregates, emails) becomes stale. Manual intervention required to paginate or stream the result set before the job can run successfully."
+    }
+  ],
+  "lag": "months (data grows slowly; the failure is a slow-moving cliff)",
+  "threshold_estimated": "Memory usage growing > 10% month-over-month in a batch job is the early warning. The failure occurs when the result set size exceeds the process memory limit — often a hard limit (container memory request, JVM -Xmx) that was set at deploy time and never revisited.",
+  "invisible_because": "The job worked correctly at launch — small data, small memory. There are no memory trend alerts for batch jobs (only for live services). The query 'SELECT *' is correct SQL — no linter catches unbounded result sets. Monthly data growth is slow enough to miss in daily operations. The OOM failure looks like an infrastructure issue ('the pod ran out of memory') rather than a code issue ('the query has no LIMIT').",
+  "diagnostic": "Does every batch job that queries a database have an explicit LIMIT/OFFSET or cursor-based pagination? Does the job's memory usage scale O(1) with respect to input data size, or O(N)? What is the current table size versus the memory limit of the batch process?",
+  "countermeasures": [
+    "Use cursor-based pagination (keyset pagination) for all batch queries — never SELECT without LIMIT.",
+    "Use streaming APIs where available (JDBC ResultSet with fetchSize, SQLAlchemy yield_per, Django iterator()) to avoid loading the full result set into memory.",
+    "Add a memory trend alert for batch jobs: alert if peak memory usage is > 50% of the process limit, to catch the problem before OOM.",
+    "Set explicit container memory requests and limits and verify the job can complete within them at 2x current data size.",
+    "Add a row count check at job start: if estimated_rows > SAFE_THRESHOLD, switch to paginated mode automatically."
+  ],
+  "sources": [
+    {
+      "title": "Django Documentation — Iterating Large QuerySets",
+      "url": "https://docs.djangoproject.com/en/stable/ref/models/querysets/#iterator",
+      "type": "documentation"
+    },
+    {
+      "title": "PostgreSQL — Cursors for Large Result Sets",
+      "url": "https://www.postgresql.org/docs/current/plpgsql-cursors.html",
+      "type": "documentation"
+    },
+    {
+      "title": "Shopify Engineering — Streaming Large Datasets",
+      "url": "https://shopify.engineering/",
+      "type": "engineering-blog"
+    }
+  ],
+  "discovered": "2026-02-19",
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "resource_saturation",
+    "condition_type": "sustained",
+    "prometheus": {
+      "metric_hint": "container_memory_working_set_bytes{container=\"batch-job\"} / container_spec_memory_limit_bytes{container=\"batch-job\"}",
+      "threshold_value": 0.75,
+      "threshold_unit": "ratio",
+      "comparison": "gt",
+      "for_duration": "5m",
+      "severity": "warning"
+    }
+  }
+}

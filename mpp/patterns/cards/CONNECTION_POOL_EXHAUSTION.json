@@ -1,0 +1,77 @@
+{
+  "id": "CONNECTION_POOL_EXHAUSTION",
+  "name": "Connection pool exhaustion from slow consumers",
+  "class": "operational",
+  "status": "ACTIVE",
+  "tags": ["connection-pool", "database", "thread-pool", "resource-exhaustion", "latency", "cascading"],
+  "trigger_shapes": [
+    "database connection pool with a fixed max-connections limit",
+    "HTTP connection pool or thread pool servicing downstream requests",
+    "connection acquired inside a try block without a guaranteed release path",
+    "pool size configured once at startup and never adjusted based on load",
+    "slow query or slow downstream causing connections to be held longer than expected"
+  ],
+  "activation": "A slow downstream (database, third-party API, or internal service) causes requests to hold connections longer than normal. The pool drains as in-flight requests accumulate. New requests cannot acquire a connection and queue or fail. The pool stays exhausted until the slow consumers complete — which may never happen if they are themselves waiting for connections.",
+  "mechanism": "Request A acquires a connection; the query runs slowly (bad index, lock contention, or downstream latency spike); while A holds the connection, requests B through N arrive and each acquires a connection; pool reaches max_connections; request N+1 tries to acquire and blocks or raises a timeout exception; blocking requests pile up in thread pools; thread pool exhaustion follows connection pool exhaustion; the application becomes unresponsive even though the root cause was a single slow query.",
+  "signal_sequence": [
+    {
+      "phase": "invisible",
+      "signal": "Query latency p99 rises slightly. Connection wait times increase but connections are still granted. No connection pool metric is watched."
+    },
+    {
+      "phase": "first_anomaly",
+      "signal": "Connection acquisition timeout errors appear in logs. A subset of requests fail with 'could not acquire connection within timeout'. Pool utilisation metric (if it exists) shows > 90%."
+    },
+    {
+      "phase": "escalation",
+      "signal": "All connections exhausted. New requests fail immediately. Thread pool fills with waiting requests. Application health checks begin failing. Dependent services start logging downstream errors."
+    },
+    {
+      "phase": "customer_impact",
+      "signal": "Service returns 503 or 500 for all requests. A restart of the application temporarily recovers the service but the root cause (slow consumer) is still present."
+    }
+  ],
+  "lag": "seconds to minutes",
+  "threshold_estimated": "Pool utilisation > 80% sustained for 60 seconds is the early warning. At > 95% the failure cascade is imminent. Based on common HikariCP and pgBouncer operational defaults (max_connections typically 10–50 for application pools).",
+  "invisible_because": "Connection pool metrics are rarely in the primary dashboard. Developers see 'connection refused' or 'timeout' errors and assume a network issue. The root cause (slow query holding connections) is a level removed from the symptom (new requests failing). Load tests typically run fast queries against a fast database — pool exhaustion under realistic slow-query conditions is never exercised.",
+  "diagnostic": "Is pool utilisation (active_connections / max_connections) tracked with an alert threshold? Under simulated slow-query load (add `pg_sleep(5)` to a representative query), does the application degrade gracefully or exhaust the pool within 30 seconds?",
+  "countermeasures": [
+    "Set connection acquisition timeout (not just query timeout) — requests should fail fast rather than queue indefinitely.",
+    "Size the pool based on measured concurrency, not defaults: pool_size = (number_of_cores * 2) + effective_spindle_count is the HikariCP formula.",
+    "Alert on pool utilisation > 80% sustained, not just on connection errors (which fire too late).",
+    "Use a connection proxy (PgBouncer, ProxySQL) in transaction-mode pooling to share connections across many application threads.",
+    "Add query timeouts at the statement level — a runaway query should not hold a connection indefinitely.",
+    "In circuit breaker logic, treat 'pool exhausted' as a failure signal, not an infrastructure error, so it triggers fast-fail for callers."
+  ],
+  "sources": [
+    {
+      "title": "HikariCP — Pool Sizing Guidance (About Pool Sizing wiki)",
+      "url": "https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing",
+      "type": "documentation"
+    },
+    {
+      "title": "Shopify Engineering — Resiliency Planning for High-Traffic Events",
+      "url": "https://shopify.engineering/resiliency-planning-for-high-traffic-events",
+      "type": "engineering-blog"
+    },
+    {
+      "title": "AWS RDS — Troubleshooting Connection Issues",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Troubleshooting.html",
+      "type": "documentation"
+    }
+  ],
+  "discovered": "2026-02-19",
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "resource_saturation",
+    "condition_type": "sustained",
+    "prometheus": {
+      "metric_hint": "hikaricp_connections_active / hikaricp_connections_max",
+      "threshold_value": 0.8,
+      "threshold_unit": "ratio",
+      "comparison": "gt",
+      "for_duration": "60s",
+      "severity": "warning"
+    }
+  }
+}

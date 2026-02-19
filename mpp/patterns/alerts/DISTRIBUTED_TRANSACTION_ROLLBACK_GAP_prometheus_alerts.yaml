@@ -1,0 +1,39 @@
+# MetaBlooms Pattern Alert — DISTRIBUTED_TRANSACTION_ROLLBACK_GAP
+# Distributed transaction rollback gap leaving partial state
+# Class: data | Status: ACTIVE | Lag: minutes to days
+#
+# Generated from mpp/patterns/cards/DISTRIBUTED_TRANSACTION_ROLLBACK_GAP.json
+# Last card review: 2026-02-19
+#
+# ── DATA CONSISTENCY PATTERN — NO PROMETHEUS ALERT POSSIBLE ──
+#
+# Pattern 'DISTRIBUTED_TRANSACTION_ROLLBACK_GAP' (Distributed transaction rollback gap leaving partial state) cannot be detected by a
+# time-series metric alert. Its first observable signal is:
+#
+#   Reconciliation jobs flag a record in B with no corresponding record in A. The orphan record accumulates. Data integrity checks produce mismatches.
+#
+# Required check type: reconciliation job
+# A scheduled job must compare state across system boundaries and
+# alert when values diverge. This cannot be expressed as PromQL.
+#
+# Diagnostic:
+#   For every multi-step workflow: does the rollback handler explicitly issue compensating transactions to all services that may have committed, not just services that returned success? Is the rollback handler tested with fault injection where a step times out after committing? Does each compensating transaction have an idempotency key?
+#
+# See card for countermeasures: mpp/patterns/cards/DISTRIBUTED_TRANSACTION_ROLLBACK_GAP.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules DISTRIBUTED_TRANSACTION_ROLLBACK_GAP_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f DISTRIBUTED_TRANSACTION_ROLLBACK_GAP_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.
