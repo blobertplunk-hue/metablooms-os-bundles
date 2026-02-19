@@ -16,5 +16,10 @@
   ],
   "known_constraints": ["constraint 1", "constraint 2"],
   "complexity": "STANDARD",
-  "trivial_justification": "(only required if complexity is TRIVIAL)"
+  "trivial_justification": "(only required if complexity is TRIVIAL)",
+  "code_shapes": [
+    "describe the architectural patterns your code uses — e.g. 'retry loop around external API call', 'message queue consumer', 'cache read/write/invalidate'",
+    "each shape triggers a pattern library lookup at MMD; matched patterns must be addressed or waived in MMD_REPORT.json::pattern_checks",
+    "leave as empty list [] if the change has no relevant architectural patterns (e.g. pure refactor, documentation)"
+  ]
 }

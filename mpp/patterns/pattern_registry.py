@@ -213,7 +213,8 @@ Discovered: {card.discovered} | Last reviewed: {card.last_reviewed}
 
     def _load_all(self, cards_dir: Path) -> None:
         violations: List[str] = []
-        for path in sorted(cards_dir.glob("*.json")):
+        for path in sorted(p for p in cards_dir.glob("*.json")
+                           if p.stem.upper() != "TEMPLATE"):
             try:
                 raw = json.loads(path.read_text(encoding="utf-8"))
                 card = _validate_and_parse(raw, path)

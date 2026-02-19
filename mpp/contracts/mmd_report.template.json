@@ -56,5 +56,23 @@
       "contract": "What we expect from this touch point (inputs accepted, outputs returned, side effects)",
       "tested": false
     }
+  ],
+  "pattern_checks": [
+    {
+      "_comment": "One entry required per ACTIVE pattern matched by your code_shapes. To find matches: from mpp.patterns import PatternRegistry; r = PatternRegistry(); r.find_by_trigger('<shape>')",
+      "pattern_id": "RETRY_AMPLIFICATION",
+      "matched_on": "the code_shape string that triggered this match",
+      "addressed": true,
+      "addressed_in": "failure_modes[NAME] or gaps[ID] — wherever in this report the pattern is handled",
+      "waiver": null
+    },
+    {
+      "_comment": "Waived pattern — matched but not applicable. waiver must be a specific reason, not 'N/A'.",
+      "pattern_id": "NONIDEMPOTENT_RETRY",
+      "matched_on": "retry loop around payment processor",
+      "addressed": false,
+      "addressed_in": null,
+      "waiver": "All retried operations pass an idempotency key — verified in SEE_CITATION_MAP::C3"
+    }
   ]
 }
