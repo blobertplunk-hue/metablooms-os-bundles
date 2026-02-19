@@ -1,0 +1,54 @@
+{
+  "problem_statement": "find_by_trigger() uses keyword set-intersection. Turn 001's MMD report documents 5 false positives from 3 innocuous code shapes. These false positives degrade gate credibility and create waiver busywork. Replace with TF-IDF cosine similarity computed at registry load time. Same interface, better signal.",
+
+  "files_touched": [
+    "mpp/patterns/pattern_registry.py"
+  ],
+
+  "prior_solutions_considered": [
+    {
+      "approach": "OpenAI/Anthropic embedding API",
+      "rejected_because": "Requires network call at match time. Hidden constraint: no internet access at match time. Also introduces an external API dependency for a library operation."
+    },
+    {
+      "approach": "sentence-transformers local model",
+      "rejected_because": "Model download required on first use (~90MB). Overkill for a 20-sentence corpus. TF-IDF captures the vocabulary overlap that matters here without the weight."
+    },
+    {
+      "approach": "Retain keyword matching with a stop-word list",
+      "rejected_because": "Would require maintaining a custom stop-word list and re-testing on every new card. The false positive problem is structural, not a list problem. Cosine similarity handles it correctly."
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "TF-IDF cosine similarity will score the turn 001 false positives (e.g. 'reads structured data and produces formatted file output' vs DLQ_ACCUMULATION triggers) below a reasonable threshold"
+    },
+    {
+      "id": "C2",
+      "claim": "TF-IDF cosine similarity will score the true positives (e.g. 'retry loop around external API call' vs RETRY_AMPLIFICATION triggers) above that same threshold"
+    },
+    {
+      "id": "C3",
+      "claim": "scikit-learn TfidfVectorizer and cosine_similarity are sufficient — no GPU, no model download, sub-millisecond at this corpus size"
+    },
+    {
+      "id": "C4",
+      "claim": "The existing find_by_trigger() interface (takes a string, returns a ranked List[PatternCard]) can be preserved exactly while swapping the implementation"
+    }
+  ],
+
+  "known_constraints": [
+    "Same function signature — find_by_trigger(code_description: str) -> List[PatternCard]",
+    "TF-IDF vectors built from trigger_shapes corpus at PatternRegistry.__init__ time",
+    "No network calls at match time",
+    "Threshold must be calibrated against turn 001 false positives before shipping",
+    "scikit-learn is the only new dependency"
+  ],
+
+  "complexity": "STANDARD",
+  "trivial_justification": "",
+
+  "code_shapes": []
+}

@@ -1,0 +1,72 @@
+{
+  "gaps": [
+    {
+      "id": "G1",
+      "severity": "HIGH",
+      "description": "find_by_trigger('') produces undefined cosine similarity (zero vector)",
+      "resolution": "Guard at function entry: if query is empty or whitespace-only, return [] immediately."
+    },
+    {
+      "id": "G2",
+      "severity": "HIGH",
+      "description": "scikit-learn ImportError inside MMD gate crashes pipeline with cryptic error",
+      "resolution": "Wrap TF-IDF import in try/except. If unavailable, fall back to existing keyword matcher with a logged warning. The gate degrades to lower precision, not failure."
+    },
+    {
+      "id": "G3",
+      "severity": "MEDIUM",
+      "description": "threshold=0.15 will drift as library grows — IDF weights shift with corpus size",
+      "resolution": "Document in module docstring: recalibrate after every 10 new cards by re-running the SEE calibration queries."
+    },
+    {
+      "id": "G4",
+      "severity": "MEDIUM",
+      "description": "NONIDEMPOTENT_RETRY vocabulary gap — misses on 'retry loop' queries",
+      "resolution": "Add trigger shape to NONIDEMPOTENT_RETRY card: 'retry loop around an operation that modifies state or has non-idempotent side effects'"
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "scikit-learn",
+      "type": "third-party",
+      "version": ">=1.0",
+      "declared": true
+    }
+  ],
+  "edge_cases": [
+    {
+      "id": "EC1",
+      "input": "Empty string query find_by_trigger('')",
+      "expected_behavior": "Returns [] immediately. No vectorizer call.",
+      "test_exists": false
+    },
+    {
+      "id": "EC2",
+      "input": "Single-token query find_by_trigger('retry')",
+      "expected_behavior": "Returns RETRY_AMPLIFICATION and NONIDEMPOTENT_RETRY ranked by score. No false positives.",
+      "test_exists": false
+    },
+    {
+      "id": "EC3",
+      "input": "scikit-learn not installed",
+      "expected_behavior": "Falls back to keyword matcher. Warning logged. Pipeline continues.",
+      "test_exists": false
+    }
+  ],
+  "failure_modes": [
+    {
+      "name": "SKLEARN_UNAVAILABLE",
+      "trigger": "scikit-learn import fails",
+      "response": "WARN",
+      "message_template": "scikit-learn not available — falling back to keyword matching. Install scikit-learn for semantic matching."
+    }
+  ],
+  "integration_points": [
+    {
+      "target": "s3_mmd._check_pattern_compliance",
+      "contract": "Calls registry.find_by_trigger(shape) for each code_shape. Expects List[PatternCard] return. Interface unchanged.",
+      "tested": false
+    }
+  ],
+  "pattern_checks": []
+}

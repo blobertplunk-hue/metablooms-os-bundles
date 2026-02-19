@@ -1,0 +1,15 @@
+{
+  "must_haves": [
+    "find_by_trigger() interface unchanged — same signature, same return type",
+    "Threshold validated against turn 001's 5 false positives as ground truth",
+    "TF-IDF corpus built at __init__ time — not per-query",
+    "scikit-learn as the only new dependency"
+  ],
+  "must_nots": [
+    "Must not make network calls",
+    "Must not download models",
+    "Must not change the PatternCard dataclass",
+    "Must not break any existing caller of find_by_trigger()"
+  ],
+  "open_questions": []
+}

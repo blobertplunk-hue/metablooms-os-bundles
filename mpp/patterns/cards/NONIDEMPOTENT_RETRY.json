@@ -8,7 +8,8 @@
     "retry around a database write, payment, or email send",
     "retry policy that does not distinguish retryable from non-retryable errors",
     "operation that creates a record or charges a customer wrapped in generic retry logic",
-    "message consumer that reprocesses messages without an idempotency key check"
+    "message consumer that reprocesses messages without an idempotency key check",
+    "retry loop around an operation that modifies state or has non-idempotent side effects"
   ],
   "activation": "A retry is triggered on an operation that has already partially or fully committed state (e.g., a payment was charged, a record was created, an email was sent) due to a transient error in the response path — the operation succeeded but the caller never received confirmation.",
   "mechanism": "Operation executes and commits state; a network failure prevents the success response from reaching the caller; caller's retry policy triggers a second execution; the second execution duplicates the side effect (double charge, duplicate record, second email); neither execution has an idempotency key check to detect the duplicate; reconciliation detects the inconsistency hours or days later.",

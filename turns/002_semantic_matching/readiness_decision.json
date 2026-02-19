@@ -1,0 +1,6 @@
+{
+  "authorized": true,
+  "justification": "One file touched. Interface unchanged. Calibration dataset (turn 001 false positives) exists and is concrete. SEE verifies claims C1 and C2 empirically before CDR.",
+  "complexity": "STANDARD",
+  "trivial_justification": ""
+}

@@ -9,10 +9,13 @@
 #   failure_modes: [CARD_NOT_FOUND, SCHEMA_VIOLATION, CARDS_DIR_MISSING]
 #   invariants: [every loaded card passes schema validation before being returned,
 #                a card with status=DRAFT is loaded but flagged in all outputs,
-#                a card with status=DEPRECATED is loaded but excluded from active index]
-#   evidence: [test output from tests/test_pattern_registry.py]
+#                a card with status=DEPRECATED is loaded but excluded from active index,
+#                find_by_trigger uses TF-IDF cosine similarity when sklearn is available,
+#                falls back to keyword matching when sklearn is absent (logs warning)]
+#   evidence: [test output from tests/test_pattern_registry.py,
+#              turns/002_semantic_matching/see/SEE_EVIDENCE_SUMMARY.md]
 #   aesthetic: cdr/AESTHETIC_CONTRACT.json
-#   last_reviewed: 2026-02-18
+#   last_reviewed: 2026-02-19
 """
 Pattern Registry
 
@@ -37,10 +40,24 @@ Usage:
 from __future__ import annotations
 
 import json
+import logging
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional
+
+try:
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+    _SKLEARN_AVAILABLE = True
+except ImportError:
+    _SKLEARN_AVAILABLE = False
+    logging.getLogger(__name__).warning(
+        "scikit-learn not installed — find_by_trigger() will use keyword matching. "
+        "Install scikit-learn for TF-IDF semantic matching: pip install scikit-learn"
+    )
+
+_TFIDF_THRESHOLD = 0.15
 
 
 CARDS_DIR  = Path(__file__).parent / "cards"
@@ -103,6 +120,7 @@ class PatternRegistry:
             raise FileNotFoundError(f"Pattern cards directory not found: {cards_dir}")
         self._cards: Dict[str, PatternCard] = {}
         self._load_all(cards_dir)
+        self._build_tfidf_index()
 
     # ---- Public API ---------------------------------------------------------
 
@@ -135,22 +153,42 @@ class PatternRegistry:
 
     def find_by_trigger(self, code_description: str) -> List[PatternCard]:
         """
-        Return active cards whose trigger_shapes contain words from code_description.
+        Return active cards whose trigger shapes are semantically similar to code_description.
 
-        This is a keyword-match heuristic, not semantic search. For each card,
-        count how many words from code_description appear in any trigger shape.
-        Return cards with at least one match, ranked by match count descending.
+        Uses TF-IDF cosine similarity (threshold=0.15) when scikit-learn is available.
+        Falls back to keyword set-intersection when sklearn is not installed.
+        Returns cards ranked by similarity score descending.
         """
+        if not code_description.strip():
+            return []
+
+        if _SKLEARN_AVAILABLE and self._tfidf_matrix is not None:
+            return self._find_by_trigger_tfidf(code_description)
+        return self._find_by_trigger_keywords(code_description)
+
+    # ---- Trigger search implementations -------------------------------------
+
+    def _find_by_trigger_tfidf(self, code_description: str) -> List[PatternCard]:
+        query_vec = self._tfidf_vectorizer.transform([code_description.lower()])
+        scores = cosine_similarity(query_vec, self._tfidf_matrix)[0]
+        active = self.all_active()
+        scored = [
+            (float(scores[i]), active[i])
+            for i in range(len(active))
+            if scores[i] >= _TFIDF_THRESHOLD
+        ]
+        scored.sort(key=lambda pair: pair[0], reverse=True)
+        return [card for _, card in scored]
+
+    def _find_by_trigger_keywords(self, code_description: str) -> List[PatternCard]:
         query_words = set(re.findall(r"\w+", code_description.lower()))
         scored: List[tuple[int, PatternCard]] = []
-
         for card in self.all_active():
             trigger_text = " ".join(card.trigger_shapes).lower()
             trigger_words = set(re.findall(r"\w+", trigger_text))
             score = len(query_words & trigger_words)
             if score > 0:
                 scored.append((score, card))
-
         scored.sort(key=lambda pair: pair[0], reverse=True)
         return [card for _, card in scored]
 
@@ -230,6 +268,27 @@ Discovered: {card.discovered} | Last reviewed: {card.last_reviewed}
                 f"{len(violations)} card(s) failed validation:\n"
                 + "\n".join(f"  - {v}" for v in violations)
             )
+
+    def _build_tfidf_index(self) -> None:
+        """Build a TF-IDF matrix over all active cards' trigger shapes at load time."""
+        self._tfidf_vectorizer = None
+        self._tfidf_matrix = None
+
+        if not _SKLEARN_AVAILABLE:
+            return
+
+        active = self.all_active()
+        if not active:
+            return
+
+        corpus = [
+            " ".join(card.trigger_shapes).lower()
+            for card in active
+        ]
+        vectorizer = TfidfVectorizer(ngram_range=(1, 2), stop_words="english")
+        matrix = vectorizer.fit_transform(corpus)
+        self._tfidf_vectorizer = vectorizer
+        self._tfidf_matrix = matrix
 
 
 # ---- Card parsing and validation --------------------------------------------
