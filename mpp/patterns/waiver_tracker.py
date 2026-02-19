@@ -56,14 +56,10 @@ IMPORTANT: accuracy() is advisory. Do not use it as a hard gate.
 
 from __future__ import annotations
 
-import json
-import logging
 import warnings
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Optional
-
-_LOG = logging.getLogger(__name__)
 
 MIN_SAMPLE = 5          # minimum waivers before accuracy() returns a float
 _STALE_WARN_DAYS = 7    # warn if provided timestamp is this many days in the past
@@ -76,22 +72,24 @@ class WaiverTracker:
     """
     Append-only log of pattern waivers and production incidents.
 
-    Thread-safety: append writes are POSIX-atomic for entries under ~4 KB
-    (PIPE_BUF limit). Concurrent processes may rarely produce a malformed
-    line; the reader skips such lines with a warning.
+    Pass a custom `backend` to store entries over HTTP or in any other
+    durable store (see mpp.patterns.backends).  The default backend writes
+    to a local JSONL file which is POSIX-atomic for entries under ~4 KB.
+
+    Backward-compatible: WaiverTracker() and WaiverTracker(log_path=...) still work.
     """
 
-    def __init__(self, log_path: Path = _DEFAULT_LOG_PATH) -> None:
-        self._path = Path(log_path)
-        self._path.parent.mkdir(parents=True, exist_ok=True)
-        # Verify writability on construction — fail loudly, not silently later
-        try:
-            self._path.touch(exist_ok=True)
-        except OSError as exc:
-            raise OSError(
-                f"Cannot write to waiver log: {self._path}. "
-                "Check that the parent directory exists and is writable."
-            ) from exc
+    def __init__(
+        self,
+        log_path: Path = _DEFAULT_LOG_PATH,
+        *,
+        backend=None,
+    ) -> None:
+        if backend is not None:
+            self._backend = backend
+        else:
+            from mpp.patterns.backends.jsonl_backend import JsonlBackend
+            self._backend = JsonlBackend(log_path)
 
     # ---- Write API ----------------------------------------------------------
 
@@ -265,26 +263,10 @@ class WaiverTracker:
     # ---- Internal -----------------------------------------------------------
 
     def _append(self, entry: dict) -> None:
-        with self._path.open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps(entry, separators=(",", ":")) + "\n")
+        self._backend.append(entry)
 
     def _load(self) -> list[dict]:
-        if not self._path.exists():
-            return []
-        entries = []
-        with self._path.open("r", encoding="utf-8") as fh:
-            for lineno, raw in enumerate(fh, start=1):
-                raw = raw.strip()
-                if not raw:
-                    continue
-                try:
-                    entries.append(json.loads(raw))
-                except json.JSONDecodeError as exc:
-                    _LOG.warning(
-                        "Skipping malformed log line %d in %s: %s",
-                        lineno, self._path, exc,
-                    )
-        return entries
+        return self._backend.load()
 
 
 # ---- Helpers ----------------------------------------------------------------
