@@ -54,5 +54,17 @@
     }
   ],
   "discovered": "2026-02-18",
-  "last_reviewed": "2026-02-18"
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "error_rate",
+    "condition_type": "sustained",
+    "prometheus": {
+      "metric_hint": "rate(http_requests_total{code=~\"5..\"}[1m]) / rate(http_requests_total[1m])",
+      "threshold_value": 0.5,
+      "threshold_unit": "ratio",
+      "comparison": "gt",
+      "for_duration": "5m",
+      "severity": "critical"
+    }
+  }
 }

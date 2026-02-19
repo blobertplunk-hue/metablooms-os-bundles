@@ -140,6 +140,62 @@
       "type": "string",
       "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
       "description": "ISO 8601 date of most recent review. Update whenever a source is added or a field is revised."
+    },
+    "alert_metadata": {
+      "type": "object",
+      "description": "Optional. Machine-readable alert parameters for the alert generator. Cards without this field produce FILL_IN templates. Cards with metric_category=data_consistency produce explanatory comments instead of metric alerts.",
+      "required": ["metric_category", "condition_type"],
+      "additionalProperties": false,
+      "properties": {
+        "metric_category": {
+          "type": "string",
+          "enum": ["queue_depth", "consumer_lag", "error_rate", "latency", "data_consistency"],
+          "description": "The class of observable signal. data_consistency means no time-series alert is possible — a reconciliation job is required instead."
+        },
+        "condition_type": {
+          "type": "string",
+          "enum": ["sustained", "spike"],
+          "description": "sustained: condition must persist before alerting (use for: duration). spike: condition may clear instantly (use for: 0s)."
+        },
+        "prometheus": {
+          "type": "object",
+          "description": "Prometheus-specific alert parameters. Omit for data_consistency patterns.",
+          "required": ["metric_hint", "threshold_value", "threshold_unit", "comparison", "for_duration", "severity"],
+          "additionalProperties": false,
+          "properties": {
+            "metric_hint": {
+              "type": "string",
+              "description": "A PromQL metric name or selector fragment. Must not contain comparison operators or boolean literals. The generator validates this before rendering.",
+              "minLength": 3
+            },
+            "threshold_value": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "The numeric threshold at which the alert fires. Must be positive."
+            },
+            "threshold_unit": {
+              "type": "string",
+              "enum": ["messages_per_hour", "ratio", "seconds", "milliseconds", "count"],
+              "description": "Unit of the threshold value. Used in alert annotations for human readability."
+            },
+            "comparison": {
+              "type": "string",
+              "enum": ["gt", "lt", "gte", "lte"],
+              "description": "Comparison operator: gt=greater than, lt=less than, gte/lte=inclusive."
+            },
+            "for_duration": {
+              "type": "string",
+              "pattern": "^[0-9]+(s|m|h)$",
+              "description": "Prometheus for: duration. How long the condition must be true before alerting. E.g. '5m', '30s', '1h'."
+            },
+            "severity": {
+              "type": "string",
+              "enum": ["warning", "critical"],
+              "description": "Alert severity label. critical = page immediately. warning = ticket or Slack."
+            }
+          }
+        }
+      }
     }
   }
 }

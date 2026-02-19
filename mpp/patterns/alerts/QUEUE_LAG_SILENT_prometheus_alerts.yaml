@@ -1,0 +1,43 @@
+# MetaBlooms Pattern Alert — QUEUE_LAG_SILENT
+# Sustained queue lag without a traffic spike
+# Class: architectural | Status: ACTIVE | Lag: hours
+#
+# Generated from mpp/patterns/cards/QUEUE_LAG_SILENT.json
+# Last card review: 2026-02-19
+#
+groups:
+  - name: metablooms.queue_lag_silent
+    rules:
+      - alert: MetaBloomsQueuelagsilent
+        expr: kafka_consumer_group_lag > 300
+        for: 15m
+        labels:
+          severity: warning
+          pattern_id: QUEUE_LAG_SILENT
+          pattern_class: architectural
+        annotations:
+          summary: "Sustained queue lag without a traffic spike detected"
+          description: >
+            First signal: Rising lag metric (consumer group lag or backlog time exceeds threshold). Per-partition skew may hide this in aggregate metrics.
+            Threshold: 300 seconds (gt).
+            Condition type: sustained. Lag to customer impact: hours.
+          runbook: |
+            Does queue monitoring track per-partition consumer lag AND consumer throughput (messages/second) vs. inflow rate? If processing rate < inflow rate at any partition, lag will accumulate regardless of broker health.
+          pattern_card: mpp/patterns/cards/QUEUE_LAG_SILENT.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules QUEUE_LAG_SILENT_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f QUEUE_LAG_SILENT_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.

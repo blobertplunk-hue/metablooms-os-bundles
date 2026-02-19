@@ -75,6 +75,7 @@ class PatternCard:
     sources:             List[Dict[str, str]]
     discovered:          str
     last_reviewed:       str
+    alert_metadata:      Optional[Dict] = None
 
     @property
     def is_active(self) -> bool:
@@ -265,6 +266,7 @@ def _validate_and_parse(raw: object, path: Path) -> PatternCard:
         sources             = raw["sources"],
         discovered          = raw["discovered"],
         last_reviewed       = raw["last_reviewed"],
+        alert_metadata      = raw.get("alert_metadata"),
     )
 
 

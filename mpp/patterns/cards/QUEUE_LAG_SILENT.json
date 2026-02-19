@@ -54,5 +54,17 @@
     }
   ],
   "discovered": "2026-02-18",
-  "last_reviewed": "2026-02-18"
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "consumer_lag",
+    "condition_type": "sustained",
+    "prometheus": {
+      "metric_hint": "kafka_consumer_group_lag",
+      "threshold_value": 300,
+      "threshold_unit": "seconds",
+      "comparison": "gt",
+      "for_duration": "15m",
+      "severity": "warning"
+    }
+  }
 }

@@ -59,5 +59,17 @@
     }
   ],
   "discovered": "2026-02-18",
-  "last_reviewed": "2026-02-18"
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "queue_depth",
+    "condition_type": "sustained",
+    "prometheus": {
+      "metric_hint": "increase(dlq_messages_total[1h])",
+      "threshold_value": 10,
+      "threshold_unit": "messages_per_hour",
+      "comparison": "gt",
+      "for_duration": "1h",
+      "severity": "warning"
+    }
+  }
 }

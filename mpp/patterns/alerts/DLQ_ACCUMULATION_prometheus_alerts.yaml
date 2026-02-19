@@ -1,0 +1,43 @@
+# MetaBlooms Pattern Alert — DLQ_ACCUMULATION
+# Dead letter queue accumulation from persistent errors
+# Class: operational | Status: ACTIVE | Lag: hours to days
+#
+# Generated from mpp/patterns/cards/DLQ_ACCUMULATION.json
+# Last card review: 2026-02-19
+#
+groups:
+  - name: metablooms.dlq_accumulation
+    rules:
+      - alert: MetaBloomsDlqaccumulation
+        expr: increase(dlq_messages_total[1h]) > 10
+        for: 1h
+        labels:
+          severity: warning
+          pattern_id: DLQ_ACCUMULATION
+          pattern_class: operational
+        annotations:
+          summary: "Dead letter queue accumulation from persistent errors detected"
+          description: >
+            First signal: DLQ depth increases. If DLQ alerting is not configured, this phase may not trigger any notification.
+            Threshold: 10 messages_per_hour (gt).
+            Condition type: sustained. Lag to customer impact: hours to days.
+          runbook: |
+            Is DLQ depth alerted on growth rates above 10 messages/hour? When the alert fires, is there an automated sampler that classifies DLQ messages by error type? Without error type classification, DLQ alerts are actionable only after a manual investigation that may take hours.
+          pattern_card: mpp/patterns/cards/DLQ_ACCUMULATION.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules DLQ_ACCUMULATION_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f DLQ_ACCUMULATION_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.

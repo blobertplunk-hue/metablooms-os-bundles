@@ -59,5 +59,9 @@
     }
   ],
   "discovered": "2026-02-18",
-  "last_reviewed": "2026-02-18"
+  "last_reviewed": "2026-02-19",
+  "alert_metadata": {
+    "metric_category": "data_consistency",
+    "condition_type": "sustained"
+  }
 }

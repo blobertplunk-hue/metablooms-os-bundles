@@ -1,0 +1,43 @@
+# MetaBlooms Pattern Alert — RETRY_AMPLIFICATION
+# Retry amplification in call chains
+# Class: architectural | Status: ACTIVE | Lag: minutes
+#
+# Generated from mpp/patterns/cards/RETRY_AMPLIFICATION.json
+# Last card review: 2026-02-19
+#
+groups:
+  - name: metablooms.retry_amplification
+    rules:
+      - alert: MetaBloomsRetryamplification
+        expr: rate(http_requests_total{code=~"5.."}[1m]) / rate(http_requests_total[1m]) > 0.5
+        for: 5m
+        labels:
+          severity: critical
+          pattern_id: RETRY_AMPLIFICATION
+          pattern_class: architectural
+        annotations:
+          summary: "Retry amplification in call chains detected"
+          description: >
+            First signal: Retry count metrics rise in logs. Latency p99 creeps up. Error rates in downstream service increase but stay below alert thresholds.
+            Threshold: 0.5 ratio (gt).
+            Condition type: sustained. Lag to customer impact: minutes.
+          runbook: |
+            Does distributed tracing show a retry fan-out multiplier greater than 1 across more than 2 layers in simulated failure scenarios? Specifically: trigger a single downstream failure and count how many total requests arrive at the downstream service.
+          pattern_card: mpp/patterns/cards/RETRY_AMPLIFICATION.json
+
+# ── HOW TO APPLY ─────────────────────────────────────────────
+#
+# Standalone Prometheus:
+#   1. Copy this file to your Prometheus rules directory
+#   2. Run: promtool check rules RETRY_AMPLIFICATION_prometheus_alerts.yaml
+#   3. Reload Prometheus: curl -X POST http://localhost:9090/-/reload
+#
+# Prometheus Operator (Kubernetes):
+#   Wrap in a PrometheusRule CRD with these required labels:
+#     labels:
+#       release: <your-prometheus-release-name>
+#   kubectl apply -f RETRY_AMPLIFICATION_prometheus_rule.yaml
+#
+# Customize metric_hint for your environment:
+#   The metric name in expr is a hint — replace with the exact
+#   metric your instrumentation exposes.
