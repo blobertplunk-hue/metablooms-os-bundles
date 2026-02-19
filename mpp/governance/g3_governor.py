@@ -52,6 +52,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from mpp.governance.gov_types import GovIssue, GovSeverity, GovStageID, GovStageResult
+from mpp.governance.pattern_context import load_pattern_context
 
 
 def run(turn_dir: str,
@@ -264,9 +265,53 @@ def _build_governor_entry(root: Path, cert_history: List[Dict],
             {"severity": i.severity.value, "description": i.description}
             for i in issues
         ],
+        "lint_accuracy":    _compute_lint_accuracy(root, gov_receipts),
         "health":           "HEALTHY" if not issues else
                             "DEGRADED" if not any(i.severity == GovSeverity.CRITICAL for i in issues)
                             else "CRITICAL",
+    }
+
+
+def _compute_lint_accuracy(root: Path, gov_receipts: Dict) -> Dict[str, Any]:
+    """
+    Compare G0's predicted patterns against what G1 adversarial review found.
+
+    This is the feedback loop that validates the cascade graph over time.
+    If lint repeatedly predicts patterns that G1 never confirms, the trigger
+    shapes on those cards may need revision. If G1 repeatedly finds patterns
+    that lint missed, new trigger shapes or cards are needed.
+
+    Returns an accuracy summary for the current run's governor entry.
+    This is observational — it does not block the pipeline on its own.
+    G3 uses repetition across runs to decide whether to flag drift.
+    """
+    ctx = load_pattern_context(str(root))
+    if ctx is None:
+        return {"status": "no_lint_context"}
+    if not ctx.detected:
+        return {"status": "no_patterns_detected", "predicted": []}
+
+    predicted_ids = [p.pattern_id for p in ctx.detected]
+
+    # Look for pattern IDs mentioned in G1 adversarial gaps.
+    g1_receipt_name = "g1_adversarial_receipt.json"
+    g1 = gov_receipts.get(g1_receipt_name, {})
+    g1_gaps_text = " ".join(str(g) for g in g1.get("new_gaps_found", [])).lower()
+    g1_reviewed  = [str(x) for x in g1.get("misdiagnosis_cards_reviewed", [])]
+
+    confirmed   = [pid for pid in predicted_ids if pid.lower() in g1_gaps_text or pid in g1_reviewed]
+    unconfirmed = [pid for pid in predicted_ids if pid not in confirmed]
+
+    return {
+        "status":       "evaluated",
+        "predicted":    predicted_ids,
+        "confirmed_in_g1": confirmed,
+        "unconfirmed":  unconfirmed,
+        "note": (
+            "unconfirmed patterns are not evidence of a wrong prediction — "
+            "G1 may have addressed them without using the pattern ID. "
+            "Flag for manual review if unconfirmed count exceeds 3 across consecutive runs."
+        ),
     }
 
 

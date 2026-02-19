@@ -48,6 +48,11 @@ from pathlib import Path
 from typing import List
 
 from mpp.governance.gov_types import GovIssue, GovSeverity, GovStageID, GovStageResult
+from mpp.governance.pattern_context import (
+    FINDING_MISSING_CASCADE_NODE_IN_G1,
+    FINDING_MISSING_MISDIAGNOSIS_REVIEW,
+    load_pattern_context,
+)
 
 SIX_REQUIRED_QUESTIONS = [
     "adversarial_input",
@@ -92,6 +97,7 @@ def run(turn_dir: str) -> GovStageResult:
 
     issues += _validate_adversarial_document(doc_path)
     issues += _validate_receipt(receipt_path, root)
+    issues += _validate_pattern_seeding(receipt_path, root)
 
     passed = not any(i.severity in (GovSeverity.CRITICAL, GovSeverity.HIGH) for i in issues)
     notes  = "PASSED" if passed else \
@@ -204,6 +210,75 @@ def _validate_receipt(receipt_path: Path, root: Path) -> List[GovIssue]:
                 "\"new_gaps_added_to_mmd_report\": true in the G1 receipt."
             ),
         ))
+
+    return issues
+
+
+# ---- Pattern seeding validator ----------------------------------------------
+
+def _validate_pattern_seeding(receipt_path: Path, root: Path) -> List[GovIssue]:
+    """
+    Verify the adversarial reviewer was seeded with the G0 pattern context.
+
+    If G0 detected any patterns, the G1 receipt must contain:
+      misdiagnosis_cards_reviewed: [pattern_id, ...]
+      cascade_nodes_addressed:     [pattern_id, ...]
+
+    For block-risk patterns, ALL cascade nodes must appear in
+    cascade_nodes_addressed or the gate blocks.
+    """
+    ctx = load_pattern_context(str(root))
+    if ctx is None or not ctx.detected:
+        return []   # No pattern context — skip gracefully.
+
+    receipt = _load_json(receipt_path)
+    if not isinstance(receipt, dict):
+        return []   # Already caught by _validate_receipt().
+
+    issues: List[GovIssue] = []
+
+    reviewed  = [str(x) for x in receipt.get("misdiagnosis_cards_reviewed", [])]
+    addressed = [str(x) for x in receipt.get("cascade_nodes_addressed", [])]
+
+    # Every detected pattern should appear in misdiagnosis_cards_reviewed.
+    for pattern in ctx.detected:
+        if pattern.pattern_id not in reviewed:
+            issues.append(GovIssue(
+                severity    = GovSeverity.HIGH,
+                location    = "gov/receipts/g1_adversarial_receipt.json",
+                description = (
+                    f"[{FINDING_MISSING_MISDIAGNOSIS_REVIEW}] Pattern '{pattern.pattern_id}' "
+                    "was detected at G0 but is not listed in misdiagnosis_cards_reviewed. "
+                    "The adversarial reviewer must consult the misdiagnosis entries for this pattern "
+                    "to avoid reproducing the same cognitive errors in production incidents."
+                ),
+                remediation = (
+                    f"Add '{pattern.pattern_id}' to misdiagnosis_cards_reviewed in the G1 receipt. "
+                    "Read its misdiagnosis entries in the pattern card before signing. "
+                    "See gov/G0_LINT_REPORT.md for the full pattern list."
+                ),
+            ))
+
+    # For block-risk patterns, all cascade nodes must be addressed.
+    for pattern in ctx.block_patterns:
+        for node_id in pattern.cascade_chain:
+            if node_id not in addressed:
+                issues.append(GovIssue(
+                    severity    = GovSeverity.HIGH,
+                    location    = "gov/receipts/g1_adversarial_receipt.json",
+                    description = (
+                        f"[{FINDING_MISSING_CASCADE_NODE_IN_G1}] Cascade node '{node_id}' "
+                        f"(downstream of block-risk pattern '{pattern.pattern_id}') "
+                        "is not listed in cascade_nodes_addressed. "
+                        "The adversarial reviewer must actively probe whether this cascade node "
+                        "can be triggered by the proposed design under load."
+                    ),
+                    remediation = (
+                        f"Add '{node_id}' to cascade_nodes_addressed in the G1 receipt after "
+                        "explicitly testing whether the design resists this cascade. "
+                        "If it does, document the specific mechanism that prevents it."
+                    ),
+                ))
 
     return issues
 

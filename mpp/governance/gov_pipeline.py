@@ -54,6 +54,7 @@ from typing import Any, Dict, List, Optional
 
 from mpp.governance.gov_types import GovSeverity, GovStageResult
 from mpp.governance import g0_context_brief, g1_adversarial_mmd, g2_behavior_review, g3_governor
+from mpp.governance.pattern_context import load_pattern_context
 from mpp.stages import StageID, StageResult
 from mpp.stages import s1_prve, s2_see, s3_mmd, s4_cdr, s5_ecl, s6_test
 from mpp.stages.s7_recursion import RecursionResult, run as run_recursion
@@ -80,6 +81,8 @@ def main() -> int:
     if not g0_result.passed:
         return _exit_blocked(turn_dir, gov_results, mpp_result,
                              "G0_CONTEXT_BRIEF blocked. Fix the context brief before proceeding.")
+
+    _print_pattern_context_summary(turn_dir)
 
     # ---- MPP S1–S2 (PRVE, SEE) ----------------------------------------------
     s1 = s1_prve.run(turn_dir)
@@ -183,6 +186,23 @@ def main() -> int:
 
 
 # ---- Output helpers ---------------------------------------------------------
+
+def _print_pattern_context_summary(turn_dir: str) -> None:
+    """Print the G0 lint summary so the operator sees what risks were detected."""
+    ctx = load_pattern_context(turn_dir)
+    if ctx is None or not ctx.detected:
+        print("  [Pattern lint] No architectural risk patterns detected in Context Brief.")
+        return
+    print(f"\n  [Pattern lint] {len(ctx.detected)} risk(s) detected:")
+    for p in ctx.detected:
+        risk = p.severity_label.upper()
+        chain = " → ".join([p.pattern_id] + p.cascade_chain) if p.cascade_chain else p.pattern_id
+        print(f"    {risk:8}  {chain}")
+    if ctx.block_patterns:
+        print(f"\n  [Pattern lint] {len(ctx.block_patterns)} block-risk pattern(s) —")
+        print(f"  [Pattern lint] PRVE, G1, MMD, and G2 will enforce cascade coverage.")
+    print()
+
 
 def _print_header(turn_dir: str, max_iterations: int) -> None:
     print(f"\n{'='*60}")

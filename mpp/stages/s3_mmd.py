@@ -51,6 +51,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from mpp.stages import Issue, Severity, StageID, StageResult
+from mpp.governance.pattern_context import (
+    FINDING_MISSING_FAILURE_MODE_PATTERN,
+    load_pattern_context,
+)
 
 EDGE_CASE_MINIMUM = 3
 
@@ -92,6 +96,7 @@ def run(turn_dir: str) -> StageResult:
     issues += _check_failure_modes(report.get("failure_modes", []))
     issues += _check_integration_points(report.get("integration_points", []))
     issues += _check_pattern_compliance(report, root)
+    issues += _check_g0_cascade_coverage(report, root)
 
     passed = not any(i.severity in (Severity.CRITICAL, Severity.HIGH) for i in issues)
     high_count = sum(1 for i in issues if i.severity in (Severity.CRITICAL, Severity.HIGH))
@@ -348,6 +353,81 @@ def _check_pattern_compliance(report: Dict[str, Any], root: Path) -> List[Issue]
                         "Set waiver to a specific reason this pattern is not applicable "
                         "(e.g. 'all writes use idempotency keys — see SEE_CITATION_MAP::C3'). "
                         "'N/A' without a reason is not accepted."
+                    ),
+                ))
+
+    return issues
+
+
+# ---- Sub-check 6b — G0 cascade chain coverage -------------------------------
+
+def _check_g0_cascade_coverage(report: Dict[str, Any], root: Path) -> List[Issue]:
+    """
+    For each deep-cascade or block-risk pattern detected at G0, verify that
+    the MMD report's failure_modes list addresses all cascade nodes — not only
+    the root pattern.
+
+    Sub-check 6 (pattern_compliance) catches direct code-shape matches.
+    This sub-check catches the downstream cascade nodes that sub-check 6
+    doesn't see because they aren't in code_shapes — they're in the
+    architectural dependency graph.
+
+    Example: if G0 detected RETRY_AMPLIFICATION (cascade depth 3), MMD
+    failure_modes must contain entries for CONNECTION_POOL_EXHAUSTION,
+    QUEUE_LAG_SILENT, and DLQ_ACCUMULATION in addition to RETRY_AMPLIFICATION.
+    """
+    ctx = load_pattern_context(str(root))
+    if ctx is None or not ctx.deep_cascade_patterns:
+        return []
+
+    # Index all pattern_ids already declared in failure_modes.
+    # Also accept partial matches: if "CONNECTION_POOL" is in the name of a
+    # failure mode, we count it as addressed.
+    failure_modes = report.get("failure_modes", [])
+    declared_text = " ".join(
+        (str(fm.get("pattern_id", "")) + " " + str(fm.get("name", ""))).lower()
+        for fm in failure_modes
+        if isinstance(fm, dict)
+    )
+
+    # Also index pattern_checks for cross-referencing.
+    pattern_checks = report.get("pattern_checks", [])
+    declared_checks = {
+        str(pc.get("pattern_id", "")).upper()
+        for pc in pattern_checks
+        if isinstance(pc, dict)
+    }
+
+    issues: List[Issue] = []
+
+    for pattern in ctx.deep_cascade_patterns:
+        for node_id in pattern.cascade_chain:
+            node_lower = node_id.lower()
+            # Check if addressed in failure_modes (by pattern_id field or name text).
+            in_failure_modes = (
+                node_lower in declared_text
+                or node_id in declared_checks
+            )
+            if not in_failure_modes:
+                severity = (
+                    Severity.HIGH if pattern.is_blocking_risk
+                    else Severity.MEDIUM
+                )
+                issues.append(Issue(
+                    severity    = severity,
+                    location    = "mmd/MMD_REPORT.json::failure_modes",
+                    description = (
+                        f"[{FINDING_MISSING_FAILURE_MODE_PATTERN}] Cascade node '{node_id}' "
+                        f"(downstream of G0-detected pattern '{pattern.pattern_id}', "
+                        f"depth {pattern.cascade_depth}) is not addressed in failure_modes "
+                        "or pattern_checks."
+                    ),
+                    remediation = (
+                        f"Add a failure_modes entry for '{node_id}': how does this pattern "
+                        "manifest in this design, and what is the response? "
+                        "Alternatively, add a pattern_checks entry with a specific waiver "
+                        "explaining why this cascade node cannot be reached. "
+                        "See gov/G0_LINT_REPORT.md for the full cascade chain."
                     ),
                 ))
 

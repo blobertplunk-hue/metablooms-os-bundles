@@ -42,6 +42,10 @@ from pathlib import Path
 from typing import Any, Dict
 
 from mpp.stages import Issue, Severity, StageID, StageResult
+from mpp.governance.pattern_context import (
+    FINDING_MISSING_DERIVED_CONSTRAINT,
+    load_pattern_context,
+)
 
 REQUIRED_ARTIFACTS = [
     "research_dossier.json",
@@ -107,8 +111,10 @@ def run(turn_dir: str) -> StageResult:
                 remediation = "Either reduce scope to one file or upgrade to STANDARD complexity.",
             ))
 
+    issues += _check_pattern_derived_constraints(root)
+
     passed = not any(i.severity in (Severity.CRITICAL, Severity.HIGH) for i in issues)
-    notes  = "PASSED" if passed else "BLOCKED: authorization or trivial-path violation."
+    notes  = "PASSED" if passed else "BLOCKED: authorization, trivial-path, or missing pattern constraints."
     _write_receipt(root, passed=passed, notes=notes, complexity=complexity)
 
     return StageResult(
@@ -118,6 +124,61 @@ def run(turn_dir: str) -> StageResult:
         issues    = issues,
         notes     = notes,
     )
+
+
+# ---- Pattern constraint validator -------------------------------------------
+
+def _check_pattern_derived_constraints(root: Path) -> List[Issue]:
+    """
+    If G0 detected any patterns, constraint_register.json must contain
+    pattern_derived_constraints with at least one entry per block-risk pattern.
+
+    This converts G0 lint findings into hard constraints that CDR must respect.
+    Constraints without a pattern_id are ignored (they may be operator-stated).
+    """
+    ctx = load_pattern_context(str(root))
+    if ctx is None or not ctx.block_patterns:
+        return []   # No block-risk patterns detected — skip.
+
+    register = _load_json(root / "constraint_register.json") or {}
+    derived  = register.get("pattern_derived_constraints", [])
+
+    if not isinstance(derived, list):
+        return [Issue(
+            severity    = Severity.HIGH,
+            location    = "constraint_register.json::pattern_derived_constraints",
+            description = "'pattern_derived_constraints' must be a list.",
+            remediation = "Set pattern_derived_constraints to a JSON array.",
+        )]
+
+    # Index declared derived constraints by pattern_id.
+    declared_ids = {
+        str(c.get("pattern_id", ""))
+        for c in derived
+        if isinstance(c, dict) and c.get("pattern_id")
+    }
+
+    issues: List[Issue] = []
+    for pattern in ctx.block_patterns:
+        if pattern.pattern_id not in declared_ids:
+            issues.append(Issue(
+                severity    = Severity.HIGH,
+                location    = "constraint_register.json::pattern_derived_constraints",
+                description = (
+                    f"[{FINDING_MISSING_DERIVED_CONSTRAINT}] Block-risk pattern "
+                    f"'{pattern.pattern_id}' ({pattern.name}) was detected at G0 "
+                    "but has no entry in constraint_register.json::pattern_derived_constraints."
+                ),
+                remediation = (
+                    f"Add an entry: "
+                    f'{{ "pattern_id": "{pattern.pattern_id}", '
+                    f'"constraint": "describe the hard constraint this risk imposes, '
+                    f"e.g. 'retry loop must have a circuit breaker and max retry budget'\" }}. "
+                    "This constraint is binding — CDR must demonstrate it is satisfied."
+                ),
+            ))
+
+    return issues
 
 
 # ---- Helpers ----------------------------------------------------------------

@@ -46,6 +46,10 @@ from pathlib import Path
 from typing import List
 
 from mpp.governance.gov_types import GovIssue, GovSeverity, GovStageID, GovStageResult
+from mpp.governance.pattern_context import (
+    FINDING_MISSING_CASCADE_TEST,
+    load_pattern_context,
+)
 
 FIVE_BEHAVIOR_QUESTIONS = [
     "costly bug test",
@@ -89,6 +93,7 @@ def run(turn_dir: str) -> GovStageResult:
 
     issues += _validate_review_document(review_path)
     issues += _validate_receipt(receipt_path)
+    issues += _validate_cascade_test_coverage(receipt_path, root)
 
     passed = not any(i.severity in (GovSeverity.CRITICAL, GovSeverity.HIGH) for i in issues)
     notes  = "PASSED" if passed else \
@@ -198,6 +203,122 @@ def _validate_receipt(receipt_path: Path) -> List[GovIssue]:
             ))
 
     return issues
+
+
+# ---- Cascade test coverage validator ----------------------------------------
+
+def _validate_cascade_test_coverage(receipt_path: Path, root: Path) -> List[GovIssue]:
+    """
+    Verify the test suite covers every pattern node in the cascade chains
+    detected at G0. For block-risk patterns, uncovered root or cascade nodes block.
+
+    The receipt must contain:
+        pattern_cascade_tests_verified: [
+            { "pattern_id": "RETRY_AMPLIFICATION",
+              "test_file": "tests/test_retry.py",
+              "covered": true },
+            { "pattern_id": "CONNECTION_POOL_EXHAUSTION",
+              "test_file": null,
+              "covered": false },
+            ...
+        ]
+    """
+    ctx = load_pattern_context(str(root))
+    if ctx is None or not ctx.detected:
+        return []   # No pattern context — skip gracefully.
+
+    receipt = _load_json(receipt_path)
+    if not isinstance(receipt, dict):
+        return []   # Already caught by _validate_receipt().
+
+    raw_verified = receipt.get("pattern_cascade_tests_verified")
+    if raw_verified is None:
+        # Field is absent — only block for block-risk patterns.
+        issues = []
+        if ctx.block_patterns:
+            issues.append(GovIssue(
+                severity    = GovSeverity.HIGH,
+                location    = "gov/receipts/g2_behavior_receipt.json",
+                description = (
+                    f"[{FINDING_MISSING_CASCADE_TEST}] G0 detected {len(ctx.block_patterns)} "
+                    "block-risk pattern(s) but the G2 receipt has no "
+                    "'pattern_cascade_tests_verified' field. Cascade test coverage cannot "
+                    "be confirmed."
+                ),
+                remediation = (
+                    "Add 'pattern_cascade_tests_verified' to the G2 receipt. "
+                    "For each pattern and cascade node detected in gov/G0_LINT_REPORT.json, "
+                    "list the test file that exercises it and set covered: true/false."
+                ),
+            ))
+        return issues
+
+    # Build lookup: pattern_id → covered status.
+    coverage: dict[str, bool] = {}
+    if isinstance(raw_verified, list):
+        for entry in raw_verified:
+            if isinstance(entry, dict) and "pattern_id" in entry:
+                coverage[str(entry["pattern_id"])] = bool(entry.get("covered", False))
+
+    issues: List[GovIssue] = []
+
+    # Check every required pattern node.
+    for pattern in ctx.detected:
+        # Check the root pattern itself.
+        _check_node_covered(pattern.pattern_id, pattern, coverage, issues)
+
+        # Check cascade nodes for block-risk or deep patterns.
+        if pattern.is_blocking_risk or pattern.cascade_depth >= 3:
+            for node_id in pattern.cascade_chain:
+                _check_node_covered(node_id, pattern, coverage, issues)
+
+    return issues
+
+
+def _check_node_covered(
+    node_id: str,
+    parent_pattern,
+    coverage: dict,
+    issues: List[GovIssue],
+) -> None:
+    if coverage.get(node_id) is True:
+        return  # Covered — no issue.
+
+    is_block = parent_pattern.is_blocking_risk
+    severity = GovSeverity.HIGH if is_block else GovSeverity.MEDIUM
+
+    if node_id not in coverage:
+        issues.append(GovIssue(
+            severity    = severity,
+            location    = "gov/receipts/g2_behavior_receipt.json :: pattern_cascade_tests_verified",
+            description = (
+                f"[{FINDING_MISSING_CASCADE_TEST}] Pattern node '{node_id}' "
+                f"(cascade of '{parent_pattern.pattern_id}', severity: "
+                f"{parent_pattern.severity_label}) has no entry in "
+                "pattern_cascade_tests_verified."
+            ),
+            remediation = (
+                f"Add an entry for '{node_id}' to pattern_cascade_tests_verified. "
+                "If a test exists, set covered: true and name the test file. "
+                "If no test exists, set covered: false — this blocks G2 for block-risk patterns."
+            ),
+        ))
+    else:
+        # Entry exists but covered is false.
+        issues.append(GovIssue(
+            severity    = severity,
+            location    = "gov/receipts/g2_behavior_receipt.json :: pattern_cascade_tests_verified",
+            description = (
+                f"[{FINDING_MISSING_CASCADE_TEST}] Pattern node '{node_id}' "
+                f"(cascade of '{parent_pattern.pattern_id}', severity: "
+                f"{parent_pattern.severity_label}) is listed but covered: false."
+            ),
+            remediation = (
+                f"Write a test that exercises the '{node_id}' failure scenario, "
+                "then set covered: true and add the test file path. "
+                "The test must assert specific observable behavior, not just no-exception."
+            ),
+        ))
 
 
 # ---- Helpers ----------------------------------------------------------------

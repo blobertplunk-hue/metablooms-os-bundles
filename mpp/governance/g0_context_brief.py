@@ -4,14 +4,18 @@
 #   owns: [context quality validation — domain truth must be present and testable before PRVE runs]
 #   does_not: [write the context brief, assess technical correctness, evaluate domain knowledge]
 #   inputs: [turn_dir: str]
-#   outputs: [GovStageResult — passed only when brief is present, receipt is signed, DoD is testable]
-#   side_effects: [filesystem — reads gov/CONTEXT_BRIEF.md and gov/receipts/g0_context_brief_receipt.json]
+#   outputs: [GovStageResult — passed only when brief is present, receipt is signed, DoD is testable,
+#             and any block-risk patterns detected by architectural lint are addressed in the brief]
+#   side_effects: [filesystem — reads gov/CONTEXT_BRIEF.md, gov/receipts/g0_context_brief_receipt.json;
+#                  writes gov/G0_LINT_REPORT.json, gov/G0_LINT_REPORT.md]
 #   failure_modes: [BRIEF_MISSING, RECEIPT_MISSING, RECEIPT_UNSIGNED, DOD_NOT_TESTABLE,
-#                   QUALITY_VERDICT_INSUFFICIENT]
-#   invariants: [never passes if quality_verdict is INSUFFICIENT or definition_of_done_is_testable is false]
-#   evidence: [gov/receipts/g0_context_brief_receipt.json]
+#                   QUALITY_VERDICT_INSUFFICIENT, MISSING_PATTERN_IN_BRIEF, MISSING_CASCADE_IN_BRIEF]
+#   invariants: [never passes if quality_verdict is INSUFFICIENT or definition_of_done_is_testable is false,
+#                never passes if a block-risk pattern is detected but not addressed in the brief,
+#                G0_LINT_REPORT.json is always written (even when empty) so downstream stages can load it]
+#   evidence: [gov/receipts/g0_context_brief_receipt.json, gov/G0_LINT_REPORT.json]
 #   aesthetic: cdr/AESTHETIC_CONTRACT.json
-#   last_reviewed: 2026-02-18
+#   last_reviewed: 2026-02-19
 """
 G0 — Context Brief: Domain Truth Injection Gate
 
@@ -46,6 +50,13 @@ from pathlib import Path
 from typing import List, Optional
 
 from mpp.governance.gov_types import GovIssue, GovSeverity, GovStageID, GovStageResult
+from mpp.governance.pattern_context import (
+    BLOCK_RISK_LEVELS,
+    FINDING_MISSING_CASCADE_IN_BRIEF,
+    FINDING_MISSING_PATTERN_IN_BRIEF,
+    create_pattern_context,
+    save_pattern_context,
+)
 
 
 REQUIRED_BRIEF_SECTIONS = [
@@ -94,6 +105,7 @@ def run(turn_dir: str) -> GovStageResult:
 
     issues += _validate_brief_completeness(brief_path)
     issues += _validate_receipt(receipt_path)
+    issues += _run_lint_and_validate(brief_path, root)
 
     passed = not any(i.severity in (GovSeverity.CRITICAL, GovSeverity.HIGH) for i in issues)
     notes  = "PASSED" if passed else \
@@ -102,7 +114,8 @@ def run(turn_dir: str) -> GovStageResult:
     return GovStageResult(
         stage     = GovStageID.G0,
         passed    = passed,
-        artifacts = ["gov/CONTEXT_BRIEF.md", "gov/receipts/g0_context_brief_receipt.json"],
+        artifacts = ["gov/CONTEXT_BRIEF.md", "gov/receipts/g0_context_brief_receipt.json",
+                     "gov/G0_LINT_REPORT.json", "gov/G0_LINT_REPORT.md"],
         issues    = issues,
         notes     = notes,
     )
@@ -202,6 +215,100 @@ def _validate_receipt(receipt_path: Path) -> List[GovIssue]:
         ))
 
     return issues
+
+
+# ---- Pattern lint validator -------------------------------------------------
+
+def _run_lint_and_validate(brief_path: Path, root: Path) -> List[GovIssue]:
+    """
+    Run architectural_lint() on the Context Brief, write the lint report,
+    and validate that any block-risk patterns are addressed in the brief.
+
+    Always writes G0_LINT_REPORT.json (even when empty) so downstream
+    stages can load it without guarding against a missing file.
+    """
+    issues: List[GovIssue] = []
+    text = brief_path.read_text(encoding="utf-8", errors="replace")
+
+    try:
+        ctx = create_pattern_context(text)
+        save_pattern_context(str(root), ctx)
+    except Exception:
+        # Pattern library failure is non-blocking — the pipeline degrades gracefully.
+        return []
+
+    if not ctx.detected:
+        return []
+
+    text_lower = text.lower()
+
+    # For each block-risk pattern: it must be named in the brief.
+    for pattern in ctx.block_patterns:
+        if not _pattern_mentioned_in_text(pattern.pattern_id, pattern.name, text_lower):
+            severity = (
+                GovSeverity.CRITICAL
+                if pattern.data_integrity_risk == "critical" or pattern.financial_risk == "critical"
+                else GovSeverity.HIGH
+            )
+            issues.append(GovIssue(
+                severity    = severity,
+                location    = "gov/CONTEXT_BRIEF.md :: Failure Cost section",
+                description = (
+                    f"[{FINDING_MISSING_PATTERN_IN_BRIEF}] Pattern '{pattern.pattern_id}' "
+                    f"({pattern.name}) has {pattern.severity_label} risk but is not addressed "
+                    "in the Context Brief."
+                ),
+                remediation = (
+                    f"Add a 'Failure Cost / Critical Risks' section that names "
+                    f"'{pattern.pattern_id}' and describes how it is mitigated or accepted. "
+                    "See gov/G0_LINT_REPORT.md for the full cascade chain and countermeasures."
+                ),
+            ))
+
+    # For deep-cascade patterns: at least one cascade node must be addressed.
+    for pattern in ctx.deep_cascade_patterns:
+        if not pattern.cascade_chain:
+            continue
+        # Skip if the pattern itself was already flagged above.
+        if pattern.is_blocking_risk and not _pattern_mentioned_in_text(
+            pattern.pattern_id, pattern.name, text_lower
+        ):
+            continue  # already caught as MISSING_PATTERN_IN_BRIEF above
+        # Check cascade node coverage.
+        cascade_mentioned = any(
+            node_id.lower() in text_lower or node_id.lower().replace("_", " ") in text_lower
+            for node_id in pattern.cascade_chain
+        )
+        if not cascade_mentioned:
+            issues.append(GovIssue(
+                severity    = GovSeverity.HIGH,
+                location    = "gov/CONTEXT_BRIEF.md :: Failure Cost section",
+                description = (
+                    f"[{FINDING_MISSING_CASCADE_IN_BRIEF}] Pattern '{pattern.pattern_id}' "
+                    f"has a cascade chain of depth {pattern.cascade_depth} "
+                    f"({' → '.join(pattern.cascade_chain)}) but none of the cascade nodes "
+                    "are addressed in the Context Brief."
+                ),
+                remediation = (
+                    "Add a 'Cascade Mitigation' row in the Context Brief naming at least one "
+                    "cascade node and the countermeasure applied to break the chain. "
+                    "See gov/G0_LINT_REPORT.md for the full dependency map."
+                ),
+            ))
+
+    return issues
+
+
+def _pattern_mentioned_in_text(pattern_id: str, pattern_name: str, text_lower: str) -> bool:
+    """Check if a pattern is referenced by ID or by significant words from its name."""
+    if pattern_id.lower() in text_lower:
+        return True
+    # Match on words from the pattern name that are long enough to be diagnostic.
+    name_words = {
+        w for w in pattern_name.lower().split()
+        if len(w) > 4 and w not in {"from", "without", "across", "between", "during"}
+    }
+    return any(word in text_lower for word in name_words)
 
 
 # ---- Helpers ----------------------------------------------------------------
