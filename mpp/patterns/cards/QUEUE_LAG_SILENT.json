@@ -66,5 +66,18 @@
       "for_duration": "15m",
       "severity": "warning"
     }
+  },
+  "cascades_to": ["DLQ_ACCUMULATION"],
+  "misdiagnosis": [
+    "Traffic spike — team scales consumers horizontally before checking whether retry amplification upstream is the actual source of the extra messages",
+    "Slow consumer code — team optimizes message processing logic instead of addressing the upstream pattern filling the queue faster than any consumer count can drain it",
+    "Infrastructure issue — team looks at broker CPU and disk instead of measuring consumer throughput vs enqueue rate"
+  ],
+  "recovery_cost": {
+    "time_without_card": "30-60 minutes (scale consumers, lag continues growing, escalate to infrastructure team)",
+    "time_with_card": "10-15 minutes (check enqueue rate vs consumer rate, identify upstream source, address at origin)",
+    "blast_radius": "all downstream systems consuming from the lagging queue; delayed processing accumulates",
+    "data_integrity_risk": "medium",
+    "financial_risk": "medium"
   }
 }

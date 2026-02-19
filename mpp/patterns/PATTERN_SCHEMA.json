@@ -141,6 +141,28 @@
       "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
       "description": "ISO 8601 date of most recent review. Update whenever a source is added or a field is revised."
     },
+    "cascades_to": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" },
+      "description": "IDs of patterns that commonly follow this one once it manifests. Drives the failure dependency graph. Order is not significant."
+    },
+    "misdiagnosis": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 20 },
+      "description": "Plausible but wrong hypotheses an on-call engineer reaches before correctly identifying this pattern. Each entry is a specific wrong conclusion and why it is reached."
+    },
+    "recovery_cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Estimated cost to diagnose and recover, with and without the card.",
+      "properties": {
+        "time_without_card":   { "type": "string" },
+        "time_with_card":      { "type": "string" },
+        "blast_radius":        { "type": "string" },
+        "data_integrity_risk": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "financial_risk":      { "type": "string", "enum": ["low", "medium", "high", "critical"] }
+      }
+    },
     "alert_metadata": {
       "type": "object",
       "description": "Optional. Machine-readable alert parameters for the alert generator. Cards without this field produce FILL_IN templates. Cards with metric_category=data_consistency produce explanatory comments instead of metric alerts.",

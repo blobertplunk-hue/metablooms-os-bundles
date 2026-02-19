@@ -72,5 +72,6 @@
       "for_duration": "5m",
       "severity": "warning"
     }
-  }
+  },
+  "cascades_to": ["RETRY_AMPLIFICATION", "QUEUE_LAG_SILENT"]
 }

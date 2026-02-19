@@ -64,5 +64,6 @@
   "alert_metadata": {
     "metric_category": "data_consistency",
     "condition_type": "spike"
-  }
+  },
+  "cascades_to": ["DISTRIBUTED_TRANSACTION_ROLLBACK_GAP"]
 }

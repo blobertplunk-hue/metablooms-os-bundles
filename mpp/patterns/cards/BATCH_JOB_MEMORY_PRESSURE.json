@@ -72,5 +72,6 @@
       "for_duration": "5m",
       "severity": "warning"
     }
-  }
+  },
+  "cascades_to": ["CONNECTION_POOL_EXHAUSTION"]
 }

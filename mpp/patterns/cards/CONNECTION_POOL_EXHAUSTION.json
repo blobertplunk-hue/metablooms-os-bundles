@@ -73,5 +73,18 @@
       "for_duration": "60s",
       "severity": "warning"
     }
+  },
+  "cascades_to": ["QUEUE_LAG_SILENT"],
+  "misdiagnosis": [
+    "Network issue — error messages say 'connection refused' which looks identical to a network failure; team investigates networking instead of pool utilisation",
+    "Downstream service crashed — symptoms match a crashed database; team contacts DBA before checking pool metrics",
+    "Application bug — team restarts the application pod, which recovers temporarily until the slow consumer resumes holding connections"
+  ],
+  "recovery_cost": {
+    "time_without_card": "15-45 minutes (restart cycle followed by recurrence when slow query resumes)",
+    "time_with_card": "3-5 minutes (add statement timeout to kill slow query, pool drains within seconds)",
+    "blast_radius": "all requests to that service; 503 on all endpoints once pool is fully exhausted",
+    "data_integrity_risk": "low",
+    "financial_risk": "medium"
   }
 }

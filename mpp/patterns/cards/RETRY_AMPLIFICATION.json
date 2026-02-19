@@ -66,5 +66,18 @@
       "for_duration": "5m",
       "severity": "critical"
     }
+  },
+  "cascades_to": ["CONNECTION_POOL_EXHAUSTION", "QUEUE_LAG_SILENT"],
+  "misdiagnosis": [
+    "Downstream service needs more capacity — team scales horizontally; retry storm follows the new instances at the same amplification ratio",
+    "Network instability — team investigates network metrics instead of the per-service retry multiplier; root cause stays hidden",
+    "Downstream service has a bug — team focuses on fixing the downstream without first capping the inbound retry load that is preventing recovery"
+  ],
+  "recovery_cost": {
+    "time_without_card": "45-90 minutes (multiple restart cycles)",
+    "time_with_card": "5-10 minutes (disable retries via feature flag, load drops immediately)",
+    "blast_radius": "all users if retry amplification reaches the edge service; service-wide 500s",
+    "data_integrity_risk": "low",
+    "financial_risk": "medium"
   }
 }

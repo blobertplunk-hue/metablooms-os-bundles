@@ -63,5 +63,18 @@
   "alert_metadata": {
     "metric_category": "data_consistency",
     "condition_type": "sustained"
+  },
+  "cascades_to": ["DISTRIBUTED_TRANSACTION_ROLLBACK_GAP"],
+  "misdiagnosis": [
+    "Cache TTL is too long — team reduces TTL from 300s to 30s, which bounds the damage window but does not close the race; next high-concurrency write reproduces it",
+    "Async invalidation lag — team adds an explicit cache warm-up job that runs after writes, which introduces a new race on the write path and can overwrite newer values",
+    "Read replica lag — team assumes DB-level inconsistency is the root cause when the cache itself is the staleness source"
+  ],
+  "recovery_cost": {
+    "time_without_card": "90-180 minutes (often 'fixed' by TTL reduction with the race still open; next incident identical)",
+    "time_with_card": "5-10 minutes (flush affected cache namespace; implement version fence or delete-only invalidation)",
+    "blast_radius": "all users reading the affected cache key until TTL expires or cache is flushed; can cause oversell, incorrect permissions, stale pricing",
+    "data_integrity_risk": "high",
+    "financial_risk": "high"
   }
 }

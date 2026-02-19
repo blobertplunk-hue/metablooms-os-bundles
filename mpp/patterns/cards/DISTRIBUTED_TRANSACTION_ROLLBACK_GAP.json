@@ -65,5 +65,18 @@
   "alert_metadata": {
     "metric_category": "data_consistency",
     "condition_type": "sustained"
+  },
+  "cascades_to": [],
+  "misdiagnosis": [
+    "Timeout equals no commit — team does not query the downstream service to verify whether the operation committed before rolling back; phantom charges or orphan records are created and not found until reconciliation",
+    "Saga rollback succeeded — team sees the rollback handler complete without verifying that compensating transactions covered every service that may have committed a write",
+    "Transient network error — team treats the incident as infrastructure noise and closes it; the partial state persists and accumulates until reconciliation detects it days later"
+  ],
+  "recovery_cost": {
+    "time_without_card": "hours to days (phantom charges found in next-day reconciliation; orphan records found in data audit)",
+    "time_with_card": "10-20 minutes (query payment provider or service B directly for uncommitted-but-charged records; issue compensating transactions with idempotency keys)",
+    "blast_radius": "individual affected transactions; financial and legal exposure scales with transaction volume during the incident window",
+    "data_integrity_risk": "critical",
+    "financial_risk": "critical"
   }
 }

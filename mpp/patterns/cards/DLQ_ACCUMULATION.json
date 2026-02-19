@@ -71,5 +71,6 @@
       "for_duration": "1h",
       "severity": "warning"
     }
-  }
+  },
+  "cascades_to": []
 }

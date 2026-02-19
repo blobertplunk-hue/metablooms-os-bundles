@@ -72,5 +72,6 @@
       "for_duration": "30s",
       "severity": "warning"
     }
-  }
+  },
+  "cascades_to": ["RETRY_AMPLIFICATION"]
 }

@@ -92,7 +92,11 @@ class PatternCard:
     sources:             List[Dict[str, str]]
     discovered:          str
     last_reviewed:       str
-    alert_metadata:      Optional[Dict] = None
+    alert_metadata:      Optional[Dict]  = None
+    # Reasoning-engine fields (optional — absent on cards that predate them)
+    cascades_to:         List[str]       = field(default_factory=list)
+    misdiagnosis:        List[str]       = field(default_factory=list)
+    recovery_cost:       Optional[Dict]  = None
 
     @property
     def is_active(self) -> bool:
@@ -101,6 +105,15 @@ class PatternCard:
     @property
     def is_draft(self) -> bool:
         return self.status == "DRAFT"
+
+
+@dataclass
+class PatternHypothesis:
+    """A ranked hypothesis returned by PatternRegistry.diagnose()."""
+    card:             PatternCard
+    phase:            str    # which signal_sequence phase best matches the symptoms
+    confidence:       float  # TF-IDF cosine similarity (0–1); higher = better match
+    matching_signal:  str    # the specific signal text that matched
 
 
 class RegistryValidationError(Exception):
@@ -121,6 +134,7 @@ class PatternRegistry:
         self._cards: Dict[str, PatternCard] = {}
         self._load_all(cards_dir)
         self._build_tfidf_index()
+        self._build_signal_index()
 
     # ---- Public API ---------------------------------------------------------
 
@@ -192,6 +206,64 @@ class PatternRegistry:
         scored.sort(key=lambda pair: pair[0], reverse=True)
         return [card for _, card in scored]
 
+    def diagnose(self, symptoms: List[str], *, top_n: int = 5) -> List[PatternHypothesis]:
+        """
+        Given observed runtime symptoms, return ranked pattern hypotheses.
+
+        Each symptom is a plain-English description of what the engineer sees
+        right now (error messages, metric anomalies, log patterns). The method
+        compares them against every card's signal_sequence and returns the
+        cards whose signal descriptions best match — ranked by confidence.
+
+        The 'phase' field on each hypothesis tells you where in the failure
+        progression you are (invisible → first_anomaly → escalation → customer_impact).
+
+        Args:
+            symptoms: e.g. ["connection timeout errors", "retry count rising in logs",
+                            "p99 latency spike on payment service"]
+            top_n:    maximum hypotheses to return (default 5)
+
+        Returns: list of PatternHypothesis, sorted by confidence descending.
+        """
+        if not symptoms:
+            return []
+        query = " ".join(symptoms).lower()
+
+        if _SKLEARN_AVAILABLE and self._signal_matrix is not None:
+            return self._diagnose_tfidf(query, top_n)
+        return self._diagnose_keywords(query, top_n)
+
+    def _diagnose_tfidf(self, query: str, top_n: int) -> List[PatternHypothesis]:
+        query_vec = self._signal_vectorizer.transform([query])
+        scores = cosine_similarity(query_vec, self._signal_matrix)[0]
+        hypotheses = []
+        for i, card in enumerate(self._signal_cards):
+            score = float(scores[i])
+            if score >= _TFIDF_THRESHOLD:
+                phase, signal = _best_phase_and_signal(query, card)
+                hypotheses.append(PatternHypothesis(
+                    card=card, phase=phase, confidence=score, matching_signal=signal,
+                ))
+        hypotheses.sort(key=lambda h: h.confidence, reverse=True)
+        return hypotheses[:top_n]
+
+    def _diagnose_keywords(self, query: str, top_n: int) -> List[PatternHypothesis]:
+        query_words = set(re.findall(r"\w+", query))
+        results = []
+        for card in self.all_active():
+            all_signal_text = " ".join(s["signal"] for s in card.signal_sequence).lower()
+            signal_words = set(re.findall(r"\w+", all_signal_text))
+            score = len(query_words & signal_words)
+            if score > 0:
+                phase, signal = _best_phase_and_signal(query, card)
+                results.append(PatternHypothesis(
+                    card=card, phase=phase,
+                    confidence=score / max(len(query_words), 1),
+                    matching_signal=signal,
+                ))
+        results.sort(key=lambda h: h.confidence, reverse=True)
+        return results[:top_n]
+
     def render_card(self, card: PatternCard) -> str:
         """Render a card to a human-readable markdown string."""
         signals = "\n".join(
@@ -205,6 +277,29 @@ class PatternRegistry:
             for s in card.sources
         )
         draft_warning = "\n> **DRAFT — not yet reviewed.**\n" if card.is_draft else ""
+
+        misdiagnosis_section = ""
+        if card.misdiagnosis:
+            items = "\n".join(f"  - {m}" for m in card.misdiagnosis)
+            misdiagnosis_section = f"\nCOMMON MISDIAGNOSES (wrong hypotheses engineers reach first):\n{items}\n"
+
+        cascades_section = ""
+        if card.cascades_to:
+            cascades_section = f"\nCASCADES TO: {', '.join(card.cascades_to)}\n"
+
+        recovery_section = ""
+        if card.recovery_cost:
+            rc = card.recovery_cost
+            recovery_section = (
+                f"\nRECOVERY COST:\n"
+                f"  Without card: {rc.get('time_without_card', 'unknown')}\n"
+                f"  With card:    {rc.get('time_with_card', 'unknown')}\n"
+                f"  Blast radius: {rc.get('blast_radius', 'unknown')}\n"
+            )
+            if rc.get("data_integrity_risk"):
+                recovery_section += f"  Data integrity risk: {rc['data_integrity_risk']}\n"
+            if rc.get("financial_risk"):
+                recovery_section += f"  Financial risk: {rc['financial_risk']}\n"
 
         return f"""\
 **PATTERN: {card.name}**{draft_warning}
@@ -227,7 +322,7 @@ THRESHOLD: {card.threshold_estimated}
 INVISIBLE BECAUSE: {card.invisible_because}
 
 DIAGNOSTIC: {card.diagnostic}
-
+{misdiagnosis_section}{cascades_section}{recovery_section}
 COUNTERMEASURES:
 {countermeasures}
 
@@ -290,6 +385,35 @@ Discovered: {card.discovered} | Last reviewed: {card.last_reviewed}
         self._tfidf_vectorizer = vectorizer
         self._tfidf_matrix = matrix
 
+    def _build_signal_index(self) -> None:
+        """
+        Build a TF-IDF matrix over each card's signal_sequence text.
+        Used by diagnose() to match runtime symptoms to pattern phases.
+        """
+        self._signal_vectorizer = None
+        self._signal_matrix = None
+        self._signal_cards: List[PatternCard] = []
+
+        if not _SKLEARN_AVAILABLE:
+            return
+
+        active = self.all_active()
+        if not active:
+            return
+
+        # One document per card = all signal texts concatenated.
+        # Activation text is included to catch early warning signals.
+        corpus = [
+            " ".join(s["signal"] for s in card.signal_sequence).lower()
+            + " " + card.activation.lower()
+            for card in active
+        ]
+        vectorizer = TfidfVectorizer(ngram_range=(1, 2), stop_words="english")
+        matrix = vectorizer.fit_transform(corpus)
+        self._signal_vectorizer = vectorizer
+        self._signal_matrix = matrix
+        self._signal_cards = active
+
 
 # ---- Card parsing and validation --------------------------------------------
 
@@ -326,6 +450,9 @@ def _validate_and_parse(raw: object, path: Path) -> PatternCard:
         discovered          = raw["discovered"],
         last_reviewed       = raw["last_reviewed"],
         alert_metadata      = raw.get("alert_metadata"),
+        cascades_to         = raw.get("cascades_to", []),
+        misdiagnosis        = raw.get("misdiagnosis", []),
+        recovery_cost       = raw.get("recovery_cost"),
     )
 
 
@@ -358,6 +485,22 @@ def _check_signal_sequence(path: Path, sequence: object) -> None:
                 f"{path.name}: signal phase '{entry['phase']}' is not valid. "
                 f"Must be one of {SIGNAL_PHASES_IN_ORDER}."
             )
+
+
+def _best_phase_and_signal(query: str, card: PatternCard) -> tuple[str, str]:
+    """Return the (phase, signal_text) from card.signal_sequence that best matches query."""
+    query_words = set(re.findall(r"\w+", query.lower()))
+    best_phase = card.signal_sequence[0]["phase"]
+    best_signal = card.signal_sequence[0]["signal"]
+    best_score = 0
+    for entry in card.signal_sequence:
+        signal_words = set(re.findall(r"\w+", entry["signal"].lower()))
+        score = len(query_words & signal_words)
+        if score > best_score:
+            best_score = score
+            best_phase = entry["phase"]
+            best_signal = entry["signal"]
+    return best_phase, best_signal
 
 
 def _check_sources_have_postmortem_or_blog(path: Path, sources: object) -> None:
