@@ -1,0 +1,18 @@
+{
+  "must_haves": [
+    "Output is syntactically valid for the target platform — validated by a schema check, not by inspection",
+    "DRAFT card output is always marked with a prominent warning — no silent promotion of unreviewed fields",
+    "Generator reads from PatternRegistry at call time — no cached card data",
+    "Platform adapters are isolated modules — adding Datadog does not touch Prometheus adapter",
+    "FILL_IN markers are syntactically valid in the output format (YAML comments for Prometheus)"
+  ],
+  "must_nots": [
+    "Must not generate a threshold value from threshold_estimated prose without a FILL_IN marker — prose thresholds are estimates, not exact metric values",
+    "Must not silently skip a card field — if a required output field has no source in the card, emit FILL_IN",
+    "Must not require internet access at generation time",
+    "Must not modify pattern card files as a side effect of generation"
+  ],
+  "open_questions": [
+    "Should the generator be callable from gov_pipeline.py as a post-certification step, or standalone only? Deferred to CDR."
+  ]
+}

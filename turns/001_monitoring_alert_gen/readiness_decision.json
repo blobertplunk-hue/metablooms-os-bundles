@@ -1,0 +1,6 @@
+{
+  "authorized": true,
+  "justification": "Context brief is signed SUFFICIENT. Problem is well-defined: card fields → alert config. Constraints are enumerated. The main unknown (whether signal_sequence prose is machine-parseable) will be resolved in SEE by inspecting all 5 cards. If fields are too vague, SEE produces a finding that requires card updates before CDR.",
+  "complexity": "STANDARD",
+  "trivial_justification": ""
+}

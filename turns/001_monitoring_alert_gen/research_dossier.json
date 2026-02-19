@@ -1,0 +1,61 @@
+{
+  "problem_statement": "Pattern cards contain structured signal_sequence, threshold_estimated, lag, and diagnostic fields that describe exactly what to monitor and when — but engineers must manually translate this into alert configurations after the pipeline passes. This creates a gap between 'knowing the pattern applies' (enforced at MMD) and 'having monitoring in place for it' (currently manual, frequently skipped). The generator closes this gap by producing platform-specific alert config files from card fields at pipeline time.",
+
+  "files_touched": [
+    "mpp/patterns/alert_gen.py",
+    "mpp/patterns/platforms/prometheus.py",
+    "mpp/patterns/platforms/__init__.py",
+    "mpp/patterns/__init__.py",
+    "mpp/patterns/cards/*.json"
+  ],
+
+  "prior_solutions_considered": [
+    {
+      "approach": "Embed alert configs directly in each pattern card JSON",
+      "rejected_because": "Tightly couples cards to specific monitoring platforms. Cards would need updating every time a platform's alert schema changes. Cards should describe failure patterns, not monitoring syntax."
+    },
+    {
+      "approach": "Generate alerts from the full card prose using an LLM",
+      "rejected_because": "Introduces non-determinism. The same card produces different outputs on different runs. Alert configs must be stable and diffable — engineers need to see exactly what changed between card versions."
+    },
+    {
+      "approach": "Require engineers to write alert configs manually and store them alongside cards",
+      "rejected_because": "This is exactly the problem we are solving. Manual = skipped."
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "The signal_sequence[first_anomaly].signal field in each card is specific enough to map to a named metric category (error rate, latency, queue depth, etc.) even if not to an exact PromQL expression"
+    },
+    {
+      "id": "C2",
+      "claim": "Prometheus alert rule YAML is the right first platform — it is open-standard, widely used, and its schema is stable and well-documented"
+    },
+    {
+      "id": "C3",
+      "claim": "The lag field ('minutes', 'hours', etc.) can be mapped to a Prometheus 'for:' duration with a reasonable default (minutes → 5m, hours → 30m)"
+    },
+    {
+      "id": "C4",
+      "claim": "A FILL_IN marker pattern is an accepted practice in infrastructure-as-code templates and will not confuse engineers"
+    }
+  ],
+
+  "known_constraints": [
+    "signal_sequence fields are prose — cannot derive exact PromQL expressions without per-pattern human annotation",
+    "Must not generate alerts from DRAFT cards without a prominent warning",
+    "Platform adapters must be pluggable — new platforms added without modifying core generator",
+    "Generator must read from live PatternRegistry, not a static snapshot"
+  ],
+
+  "complexity": "STANDARD",
+  "trivial_justification": "",
+
+  "code_shapes": [
+    "module that reads structured data and produces formatted file output",
+    "plugin architecture with per-platform adapters",
+    "template rendering with conditional FILL_IN markers"
+  ]
+}

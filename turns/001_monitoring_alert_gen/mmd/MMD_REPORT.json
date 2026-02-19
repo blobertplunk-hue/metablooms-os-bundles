@@ -1,0 +1,171 @@
+{
+  "gaps": [
+    {
+      "id": "G1",
+      "severity": "HIGH",
+      "description": "metric_hint field could contain arbitrary PromQL (e.g. '1 == 1') that produces an always-firing alert",
+      "resolution": "Prometheus adapter validates metric_hint: reject strings containing comparison operators (==, !=, >, <), boolean literals, or spaces not part of label matchers. Valid: 'http_requests_total{code=~\"5..\"}'. Invalid: '1 == 1'."
+    },
+    {
+      "id": "G2",
+      "severity": "HIGH",
+      "description": "threshold_value of zero or negative produces always-firing or never-firing alert",
+      "resolution": "Generator rejects threshold_value <= 0 with a hard error before rendering any output."
+    },
+    {
+      "id": "G3",
+      "severity": "HIGH",
+      "description": "FILL_IN markers in expr field may be silently applied as broken alerts",
+      "resolution": "When metric_hint is absent or unparseable, emit expr as an intentionally invalid PromQL string that promtool check rules rejects: 'FILL_IN_METRIC_EXPRESSION'. This string is not valid PromQL, so the file will not load until the engineer completes it."
+    },
+    {
+      "id": "G4",
+      "severity": "HIGH",
+      "description": "lag-to-for duration mapping is wrong for spike-based failures (condition clears before for: elapses)",
+      "resolution": "Add condition_type field to alert_metadata: 'sustained' uses the lag mapping table; 'spike' uses for: 0s. Cards without condition_type default to 'sustained'."
+    },
+    {
+      "id": "G5",
+      "severity": "MEDIUM",
+      "description": "Output path for generated alert files is unspecified — turn dir vs. library",
+      "resolution": "Generated files go to mpp/patterns/alerts/<PATTERN_ID>_<platform>_alerts.yaml and are committed to the library. They represent the canonical alert config for that pattern, shared across all users. Per-service customization is done by the engineer after generation."
+    },
+    {
+      "id": "G6",
+      "severity": "MEDIUM",
+      "description": "Prometheus adapter output does not document how to apply in Prometheus Operator environments",
+      "resolution": "Each generated file includes a header comment block with: (1) standalone Prometheus apply instructions, (2) Prometheus Operator PrometheusRule CRD conversion note with required labels."
+    }
+  ],
+
+  "dependencies": [
+    {
+      "name": "mpp.patterns.pattern_registry",
+      "type": "internal",
+      "version": "any",
+      "declared": true
+    },
+    {
+      "name": "pyyaml",
+      "type": "third-party",
+      "version": ">=6.0",
+      "declared": true
+    }
+  ],
+
+  "edge_cases": [
+    {
+      "id": "EC1",
+      "input": "Pattern card with no alert_metadata field",
+      "expected_behavior": "Generator produces a fully FILL_IN template. All metric fields contain the sentinel string 'FILL_IN_*'. File header says 'This alert requires manual configuration — alert_metadata not present in card.'",
+      "test_exists": false
+    },
+    {
+      "id": "EC2",
+      "input": "DRAFT card passed to generator",
+      "expected_behavior": "Generator produces output with a prominent header: '# WARNING: DRAFT CARD — fields have not passed G2 review. DO NOT APPLY without manual verification.' All values rendered but marked.",
+      "test_exists": false
+    },
+    {
+      "id": "EC3",
+      "input": "alert_metadata.prometheus.metric_hint contains '1 == 1'",
+      "expected_behavior": "Generator raises AlertMetadataValidationError before producing any output. Error message names the invalid field and explains what is required.",
+      "test_exists": false
+    },
+    {
+      "id": "EC4",
+      "input": "Pattern ID that does not exist in the registry",
+      "expected_behavior": "Generator raises PatternNotFoundError with the requested ID. Does not produce partial output.",
+      "test_exists": false
+    },
+    {
+      "id": "EC5",
+      "input": "Platform name not recognized (e.g. --platform splunk)",
+      "expected_behavior": "Generator raises UnsupportedPlatformError listing available platforms. Does not fall back silently to a default platform.",
+      "test_exists": false
+    }
+  ],
+
+  "failure_modes": [
+    {
+      "name": "ALERT_METADATA_VALIDATION_ERROR",
+      "trigger": "metric_hint fails validation (PromQL injection attempt, invalid syntax)",
+      "response": "BLOCK",
+      "message_template": "Invalid metric_hint in {pattern_id}.alert_metadata.prometheus: {reason}. Fix the card before generating alerts."
+    },
+    {
+      "name": "PATTERN_NOT_FOUND",
+      "trigger": "Requested pattern ID not in registry",
+      "response": "BLOCK",
+      "message_template": "Pattern '{pattern_id}' not found in registry. Available: {available_ids}."
+    },
+    {
+      "name": "UNSUPPORTED_PLATFORM",
+      "trigger": "Requested platform has no registered adapter",
+      "response": "BLOCK",
+      "message_template": "No adapter for platform '{platform}'. Available: {available_platforms}."
+    },
+    {
+      "name": "DRAFT_CARD_WARNING",
+      "trigger": "Card status is DRAFT",
+      "response": "WARN",
+      "message_template": "Pattern '{pattern_id}' is DRAFT. Output is marked for manual review before application."
+    }
+  ],
+
+  "integration_points": [
+    {
+      "target": "mpp.patterns.pattern_registry.PatternRegistry",
+      "contract": "Provides PatternCard objects with all fields populated. Registry raises RegistryValidationError on load if any card is malformed. Generator calls registry.get(pattern_id) — returns None if not found.",
+      "tested": false
+    },
+    {
+      "target": "mpp.patterns.PATTERN_SCHEMA.json",
+      "contract": "alert_metadata is a new optional field. Adding it must not break existing card validation. PATTERN_SCHEMA.json must be updated to include alert_metadata as an optional property.",
+      "tested": false
+    },
+    {
+      "target": "promtool check rules (external)",
+      "contract": "Generated Prometheus YAML must pass promtool validation when all FILL_IN markers have been replaced. FILL_IN sentinel strings must cause promtool to fail loudly, not silently.",
+      "tested": false
+    }
+  ],
+
+  "pattern_checks": [
+    {
+      "pattern_id": "RETRY_AMPLIFICATION",
+      "matched_on": "plugin architecture with per-platform adapters",
+      "addressed": false,
+      "addressed_in": null,
+      "waiver": "False positive from keyword matching — 'platform' and 'architecture' appear in trigger shapes for distributed patterns. The alert generator is a file renderer with no external calls, no retry logic, and no distributed components. RETRY_AMPLIFICATION does not apply. This false positive is documented evidence for why semantic matching (feature 2) is needed."
+    },
+    {
+      "pattern_id": "DLQ_ACCUMULATION",
+      "matched_on": "module that reads structured data and produces formatted file output",
+      "addressed": false,
+      "addressed_in": null,
+      "waiver": "False positive — the generator reads JSON card files and writes YAML alert files. There is no message queue, no consumer, and no dead letter queue in this code path. Keyword overlap ('output', 'data') triggered the match."
+    },
+    {
+      "pattern_id": "QUEUE_LAG_SILENT",
+      "matched_on": "module that reads structured data and produces formatted file output",
+      "addressed": false,
+      "addressed_in": null,
+      "waiver": "False positive — same reason as DLQ_ACCUMULATION. No queue in this code path."
+    },
+    {
+      "pattern_id": "CACHE_INVALIDATION_RACE",
+      "matched_on": "template rendering with conditional FILL_IN markers",
+      "addressed": false,
+      "addressed_in": null,
+      "waiver": "False positive — the generator does not read from or write to a cache. It reads card files from disk on each invocation (no caching) and writes alert YAML files. No race condition is possible in a single-process, single-invocation file renderer."
+    },
+    {
+      "pattern_id": "NONIDEMPOTENT_RETRY",
+      "matched_on": "module that reads structured data and produces formatted file output",
+      "addressed": false,
+      "addressed_in": null,
+      "waiver": "False positive — the generator has no retry logic and no stateful side effects beyond writing files. File writes are idempotent (same input produces same output). No retry path exists."
+    }
+  ]
+}
