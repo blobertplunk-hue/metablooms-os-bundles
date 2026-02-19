@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mpp-patterns"
+version = "0.1.0"
+description = "Failure pattern library — semantic matching, Prometheus alert generation, and waiver accuracy tracking"
+readme = "README_PACKAGE.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+keywords = ["reliability", "sre", "patterns", "monitoring", "alerts", "failure"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Quality Assurance",
+    "Programming Language :: Python :: 3",
+]
+dependencies = []
+
+[project.optional-dependencies]
+# Enables TF-IDF semantic matching in find_by_trigger().
+# Without this, find_by_trigger() falls back to keyword matching.
+semantic = ["scikit-learn>=1.0"]
+# Enables the shared waiver log HTTP server.
+server = ["fastapi>=0.100", "uvicorn[standard]>=0.20"]
+
+[project.scripts]
+mpp-alerts  = "mpp.patterns.alert_gen:main"
+mpp-check   = "mpp.patterns.check_hook:main"
+mpp-server  = "mpp.patterns.server:main"
+mpp-pr      = "mpp.patterns.pr_check:main"
+
+[tool.hatchling.build.targets.wheel]
+packages = ["mpp"]
+
+# Hatchling includes VCS-tracked files by default.
+# The JSON cards and YAML alerts are tracked by git and will be bundled.
