@@ -1,0 +1,36 @@
+{
+  "turn": "003_waiver_accuracy",
+  "date": "2026-02-19",
+  "constraints": [
+    {
+      "id": "C1",
+      "constraint": "waiver_log.json is append-only — entries are never mutated after write",
+      "source": "G0 hidden constraint #6",
+      "enforcement": "WaiverTracker only calls json.append(), never json.loads + mutate + json.dumps on existing entries"
+    },
+    {
+      "id": "C2",
+      "constraint": "accuracy() returns None when waiver count < 5",
+      "source": "G0 hidden constraint #2",
+      "enforcement": "Explicit sample size guard before ratio computation"
+    },
+    {
+      "id": "C3",
+      "constraint": "A waiver with no incident in the window is an ACCURATE waiver — increases score, not neutral",
+      "source": "G0 hidden constraint #3",
+      "enforcement": "accuracy = accurate_waivers / total_waivers where accurate means no incident in window"
+    },
+    {
+      "id": "C4",
+      "constraint": "window_days defaults to 90 but is configurable per call",
+      "source": "G0 hidden constraint #4",
+      "enforcement": "window_days parameter on accuracy() and waivers_before_incident() with default=90"
+    },
+    {
+      "id": "C5",
+      "constraint": "run_id is the waiver key, not timestamp",
+      "source": "G0 hidden constraint #1",
+      "enforcement": "record_waiver() requires run_id; waivers_before_incident() returns run_id in results"
+    }
+  ]
+}

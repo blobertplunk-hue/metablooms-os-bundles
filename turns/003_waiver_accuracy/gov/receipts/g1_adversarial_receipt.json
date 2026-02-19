@@ -1,0 +1,19 @@
+{
+  "gate": "G1",
+  "turn": "003_waiver_accuracy",
+  "date": "2026-02-19",
+  "verdict": "PASS_WITH_GAPS",
+  "gaps_added_to_mmd": [
+    "G1: timestamp injection — warn if timestamp > 7 days in past",
+    "G2: team=falsy guard — raise ValueError",
+    "G3: keyword-only parameters after path",
+    "G4: default storage path gov/waiver_log.jsonl; accept constructor override",
+    "G5: add all_teams() and all_patterns() query methods",
+    "G6: skip malformed JSONL lines with warning (crash-safe reader)"
+  ],
+  "no_action_items": [
+    "Concurrent write atomicity — POSIX guarantee sufficient; skip-on-parse handles failure",
+    "Pattern ID validation — intentionally out of scope for WaiverTracker"
+  ],
+  "notes": "6 real gaps found. All are implementation-level, not design-level. Design is sound. Proceeding to MMD."
+}

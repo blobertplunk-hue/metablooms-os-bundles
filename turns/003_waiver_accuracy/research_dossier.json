@@ -1,0 +1,45 @@
+{
+  "turn": "003_waiver_accuracy",
+  "date": "2026-02-19",
+  "feature": "Waiver Accuracy Tracking",
+  "prior_art": [
+    {
+      "source": "G3 Governor (g3_governor.py)",
+      "finding": "Already tracks pipeline-level gaming signals across runs using an append-only GOVERNOR_LOG.md. The storage pattern (append-only, structured entries, never mutate) is the right model for waiver records.",
+      "relevance": "Reuse the same append-only log contract for waiver_log.json."
+    },
+    {
+      "source": "s3_mmd.py pattern_checks section",
+      "finding": "Every MMD_REPORT.json already has a pattern_checks array with {pattern_id, addressed, waiver_reason} per pattern match. This is the natural source of waiver events — we do not need a new input surface.",
+      "relevance": "WaiverTracker.record_waiver() can be called directly by s3_mmd after pattern_checks parsing. The data is already there."
+    },
+    {
+      "source": "gov/GOVERNOR_LOG.md convention",
+      "finding": "Append-only, human+machine readable, structured JSON entries per run. Corrections are separate entries, not edits.",
+      "relevance": "waiver_log.json follows same contract."
+    }
+  ],
+  "code_shapes": [
+    "append-only log file with JSON entries",
+    "accuracy ratio computation over a filtered time window",
+    "query for records matching team + pattern_id + timestamp range"
+  ],
+  "key_decisions": [
+    {
+      "decision": "Store waivers and incidents in a single append-only file (waiver_log.json) with an entry type field",
+      "rationale": "Waivers and incidents are correlated events — they must be queried together. Separate files require joins. Single file with type: waiver | incident | correction is simpler and consistent with Governor Log pattern."
+    },
+    {
+      "decision": "accuracy() returns None when waiver count < MIN_SAMPLE (5)",
+      "rationale": "A team with 2 waivers and 1 incident has a 50% accuracy score that looks meaningful but isn't. Returning None forces the caller to handle the insufficient-data case explicitly."
+    },
+    {
+      "decision": "Window-based incident matching (default 90 days) not lifetime",
+      "rationale": "A waiver from 3 years ago should not count against a team for an incident today — the system and team have changed. The window is the claim horizon: 'this pattern will not cause an incident in the next N days.' If it does, the waiver was wrong."
+    },
+    {
+      "decision": "No integration with s3_mmd.py in this turn — WaiverTracker is a standalone library",
+      "rationale": "MPP sub-check 6 integration is a separate change with its own gate chain. This turn builds and tests the core library only."
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "gaps": [
+    {
+      "id": "G1",
+      "severity": "HIGH",
+      "description": "team=None or '' creates entries under a blank key — silent no-op, misleading queries",
+      "resolution": "Guard in record_waiver() and record_incident(): raise ValueError if team is falsy."
+    },
+    {
+      "id": "G2",
+      "severity": "HIGH",
+      "description": "Constructor does not specify a default storage path — callers must always supply one",
+      "resolution": "Default path: gov/waiver_log.jsonl relative to repo root. Constructor accepts override. Extension .jsonl signals JSONL format."
+    },
+    {
+      "id": "G3",
+      "severity": "MEDIUM",
+      "description": "Parameters after path are positional — junior engineers pass reason as team by mistake",
+      "resolution": "Make all parameters keyword-only after the first argument in record_waiver() and record_incident()."
+    },
+    {
+      "id": "G4",
+      "severity": "MEDIUM",
+      "description": "No way to enumerate all teams or patterns with waivers — dashboard use case blocked",
+      "resolution": "Add all_teams() and all_patterns() methods returning sorted sets from log scan."
+    },
+    {
+      "id": "G5",
+      "severity": "MEDIUM",
+      "description": "Malformed JSONL lines (from rare concurrent write race) crash reader",
+      "resolution": "Skip lines that fail json.loads() with a logged warning. Log remains usable."
+    },
+    {
+      "id": "G6",
+      "severity": "LOW",
+      "description": "Timestamp injection: caller can pass old timestamp to inflate accuracy",
+      "resolution": "Warn (but do not reject) if timestamp is more than 7 days in the past. Document the limitation."
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "Python stdlib only",
+      "type": "stdlib",
+      "version": ">=3.9",
+      "declared": true
+    }
+  ],
+  "edge_cases": [
+    {
+      "id": "EC1",
+      "input": "accuracy() called when waiver count < MIN_SAMPLE (5)",
+      "expected_behavior": "Returns None. Caller must handle None explicitly.",
+      "test_exists": false
+    },
+    {
+      "id": "EC2",
+      "input": "Waiver and incident have identical timestamps",
+      "expected_behavior": "waivers_before_incident includes the waiver (boundary is inclusive). accuracy() counts it as inaccurate.",
+      "test_exists": false
+    },
+    {
+      "id": "EC3",
+      "input": "Empty waiver_log.jsonl (new installation)",
+      "expected_behavior": "all_teams() and all_patterns() return empty sets. accuracy() returns None.",
+      "test_exists": false
+    },
+    {
+      "id": "EC4",
+      "input": "Malformed line in JSONL file",
+      "expected_behavior": "Line skipped with warning. All other entries loaded normally.",
+      "test_exists": false
+    }
+  ],
+  "failure_modes": [
+    {
+      "name": "TEAM_EMPTY",
+      "trigger": "team is None or ''",
+      "response": "RAISE",
+      "message_template": "team must be a non-empty string, got: {team!r}"
+    },
+    {
+      "name": "LOG_UNWRITABLE",
+      "trigger": "waiver_log.jsonl path is not writable (permissions, missing parent dir)",
+      "response": "RAISE",
+      "message_template": "Cannot write to waiver log: {path}. Check that the parent directory exists and is writable."
+    },
+    {
+      "name": "MALFORMED_LOG_LINE",
+      "trigger": "A JSONL line fails json.loads()",
+      "response": "WARN",
+      "message_template": "Skipping malformed log line {line_number} in {path}: {error}"
+    }
+  ],
+  "integration_points": [
+    {
+      "target": "s3_mmd._check_pattern_compliance",
+      "contract": "Future integration: after parsing pattern_checks, call tracker.record_waiver() for each addressed=false entry. Out of scope for this turn.",
+      "tested": false
+    },
+    {
+      "target": "g3_governor.py",
+      "contract": "Future integration: Governor reads accuracy scores as gaming signal. Out of scope for this turn.",
+      "tested": false
+    }
+  ],
+  "pattern_checks": [
+    {
+      "pattern_id": "NONIDEMPOTENT_RETRY",
+      "addressed": false,
+      "waiver_reason": "WaiverTracker is a log and query library. It does not perform retries or mutate state on failure. The code shape is a plain append operation — no retry logic present.",
+      "code_shape_that_triggered": "append-only log file with JSON entries"
+    }
+  ]
+}

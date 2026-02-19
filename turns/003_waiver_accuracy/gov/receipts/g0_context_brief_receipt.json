@@ -1,0 +1,12 @@
+{
+  "gate": "G0",
+  "turn": "003_waiver_accuracy",
+  "date": "2026-02-19",
+  "verdict": "PASS",
+  "checks": {
+    "who_and_frustration": "PASS — engineering leads; frustration is waivers never validated against incidents",
+    "done_definition": "PASS — runnable acceptance test with specific assertions on accuracy() and waivers_before_incident()",
+    "hidden_constraints": "PASS — 6 constraints documented: run_id keying, MIN_SAMPLE, accurate-waiver accounting, configurable window, manual incident entry, append-only storage"
+  },
+  "notes": "All three G0 questions answered specifically. No vague answers. Proceeding to PRVE."
+}
