@@ -8,8 +8,8 @@
 set -euo pipefail
 
 # ── colours ───────────────────────────────────────────────────────────────────
-R='\033[0;31m' G='\033[0;32m' Y='\033[1;33m'
-B='\033[0;34m' C='\033[0;36m' W='\033[1;37m' N='\033[0m'
+R=$'\033[0;31m' G=$'\033[0;32m' Y=$'\033[1;33m'
+B=$'\033[0;34m' C=$'\033[0;36m' W=$'\033[1;37m' N=$'\033[0m'
 
 # ── hardcoded account ─────────────────────────────────────────────────────────
 GITHUB_USER="blobert-hue"
@@ -214,7 +214,7 @@ run_setup() {
   local me code
   me=$(gh_api "https://api.github.com/user" 2>/dev/null) || me="{}"
   code=$(curl -s -o /dev/null -w "%{http_code}" \
-    -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/user")
+    -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/user") || code="000"
   if [[ "$code" == "200" ]]; then
     ok "Authenticated as: $(jq -r '.login' <<< "$me")"
   else
