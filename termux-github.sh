@@ -54,57 +54,100 @@ banner() {
   echo -e "${N}"
 }
 
-# ── token resolution (auto-detect, never ask twice) ───────────────────────────
+# ── token resolution ───────────────────────────────────────────────────────────
 resolve_token() {
-  # 1. Already loaded from config or env
-  [[ -n "${GITHUB_TOKEN:-}" ]] && return 0
+  # ── auto-detected sources — announce so user always knows what's in use ──
+  if [[ -n "${GITHUB_TOKEN:-}" ]]; then
+    return 0   # already resolved this session
+  fi
 
-  # 2. Standard env vars set by the user in ~/.bashrc
   if [[ -n "${GH_TOKEN:-}" ]]; then
     GITHUB_TOKEN="$GH_TOKEN"
-    info "Token loaded from \$GH_TOKEN."
+    ok "Token from \$GH_TOKEN env var  (${GITHUB_TOKEN:0:4}••••••••)"
     return 0
   fi
 
-  # 3. GitHub CLI (gh) if installed
   if command -v gh &>/dev/null; then
-    local t
-    t=$(gh auth token 2>/dev/null) && [[ -n "$t" ]] && {
+    local t gh_user
+    t=$(gh auth token 2>/dev/null) || t=""
+    if [[ -n "$t" ]]; then
+      gh_user=$(gh api user --jq .login 2>/dev/null) || gh_user="unknown"
       GITHUB_TOKEN="$t"
-      info "Token loaded from 'gh' CLI."
+      ok "Token from gh CLI — logged in as: ${C}${gh_user}${N}  (${GITHUB_TOKEN:0:4}••••••••)"
       return 0
-    }
+    fi
   fi
 
-  # 4. Prompt — only reached if token is completely absent
+  # ── nothing found: prompt the user ─────────────────────────────────────────
   echo
   echo -e "  ${Y}No GitHub token found.${N}"
   echo -e "  Create one at: ${B}https://github.com/settings/tokens${N}"
-  echo -e "  Required scope: ${C}repo${N}\n"
-  read -rsp "  Paste your Personal Access Token: " GITHUB_TOKEN; echo
-  [[ -z "$GITHUB_TOKEN" ]] && die "Token is required."
+  echo -e "  Scopes needed: ${C}repo${N}  (or ${C}public_repo${N} for public repos only)\n"
 
-  # Offer to persist it so this prompt never appears again
+  local attempts=0
+  while true; do
+    # /dev/tty ensures the prompt always reaches the terminal even in subshells
+    IFS= read -rsp "  Paste your Personal Access Token: " GITHUB_TOKEN </dev/tty
+    printf '\n'   # silent read suppresses the newline — restore it
+
+    if [[ -z "$GITHUB_TOKEN" ]]; then
+      warn "Token cannot be empty."
+      (( ++attempts >= 3 )) && die "Too many empty attempts."
+      continue
+    fi
+
+    # Validate immediately — don't let a bad token get saved
+    info "Checking token with GitHub..."
+    local code login
+    code=$(curl -s -o /dev/null -w "%{http_code}" \
+      -H "Authorization: token $GITHUB_TOKEN" \
+      "https://api.github.com/user") || code="000"
+
+    if [[ "$code" == "200" ]]; then
+      login=$(curl -sf -H "Authorization: token $GITHUB_TOKEN" \
+        "https://api.github.com/user" | jq -r '.login') || login="unknown"
+      ok "Token valid — authenticated as: ${C}${login}${N}"
+      break
+    elif [[ "$code" == "000" ]]; then
+      warn "Can't reach GitHub right now — token saved unverified."
+      break
+    else
+      err "GitHub rejected that token (HTTP $code). Double-check and try again."
+      GITHUB_TOKEN=""
+      (( ++attempts >= 3 )) && die "Too many failed attempts."
+    fi
+  done
+
+  # ── offer to save ───────────────────────────────────────────────────────────
   echo
   echo -e "  ${W}Save token so you never need to enter it again?${N}"
-  echo "   1) Save to ~/.termux_github_config  (recommended — private file)"
-  echo "   2) Also export in ~/.bashrc          (available to all scripts)"
-  echo "   3) Neither (token used this session only)"
+  echo "   1) ~/.termux_github_config        (private file — recommended)"
+  echo "   2) ~/.termux_github_config + ~/.bashrc  (also loads in new sessions)"
+  command -v gh &>/dev/null && \
+    echo "   3) gh auth login --with-token  (let gh CLI manage storage)"
+  echo "   n) This session only"
   echo
-  read -rp "  Choice [1]: " tsave; tsave="${tsave:-1}"
+  local tsave
+  IFS= read -rp "  Choice [1]: " tsave </dev/tty
+  tsave="${tsave:-1}"
 
-  if [[ "$tsave" == "1" || "$tsave" == "2" ]]; then
-    save_config
-    ok "Token saved to $CONFIG_FILE"
-  fi
-  if [[ "$tsave" == "2" ]]; then
-    {
-      echo ""
-      echo "# GitHub token — added by termux-github.sh"
-      echo "export GITHUB_TOKEN=\"$GITHUB_TOKEN\""
-    } >> "$HOME/.bashrc"
-    ok "Token exported in ~/.bashrc — run 'source ~/.bashrc' or open a new session."
-  fi
+  case "$tsave" in
+    1) save_config
+       ok "Saved to $CONFIG_FILE" ;;
+    2) save_config
+       printf '\n# GitHub token — added by termux-github.sh\nexport GITHUB_TOKEN="%s"\n' \
+         "$GITHUB_TOKEN" >> "$HOME/.bashrc"
+       ok "Saved to $CONFIG_FILE and ~/.bashrc — open a new session to activate." ;;
+    3) if command -v gh &>/dev/null; then
+         printf '%s' "$GITHUB_TOKEN" | gh auth login --with-token 2>/dev/null \
+           && ok "Stored via gh CLI." \
+           || { warn "gh auth login failed — saving to config instead."; save_config; }
+       else
+         warn "gh not installed — saving to config instead."
+         save_config
+       fi ;;
+    *) info "Token kept in memory for this session only." ;;
+  esac
 }
 
 # ── GitHub API wrapper ────────────────────────────────────────────────────────
@@ -311,8 +354,8 @@ do_extract() {
 do_upload() {
   local src="$1"
   [[ -e "$src" ]] || die "Path not found: $src"
-  [[ -n "$GITHUB_TOKEN" ]] || die "Not configured — run setup first."
-  [[ -n "$GITHUB_REPO"  ]] || die "No repo selected — run setup first."
+  resolve_token
+  [[ -n "$GITHUB_REPO" ]] || die "No repo selected — run setup first (option 1)."
 
   local repo_url="https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/${GITHUB_USER}/${GITHUB_REPO}.git"
   local clone_dir
@@ -362,8 +405,8 @@ do_upload() {
 do_api_upload() {
   local src="$1"
   [[ -f "$src" ]] || die "File not found: $src"
-  [[ -n "$GITHUB_TOKEN" ]] || die "Not configured — run setup first."
-  [[ -n "$GITHUB_REPO"  ]] || die "No repo selected — run setup first."
+  resolve_token
+  [[ -n "$GITHUB_REPO" ]] || die "No repo selected — run setup first (option 1)."
 
   local size
   size=$(stat -c%s "$src" 2>/dev/null || stat -f%z "$src")
@@ -408,8 +451,8 @@ do_api_upload() {
 
 # ── list repo contents ─────────────────────────────────────────────────────────
 do_list() {
-  [[ -n "$GITHUB_TOKEN" ]] || die "Not configured — run setup first."
-  [[ -n "$GITHUB_REPO"  ]] || die "No repo selected — run setup first."
+  resolve_token
+  [[ -n "$GITHUB_REPO" ]] || die "No repo selected — run setup first (option 1)."
   local path="${1:-$UPLOAD_DIR}"
   info "Listing ${GITHUB_USER}/${GITHUB_REPO}/${path} (${GITHUB_BRANCH})..."
   gh_api "https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${path}?ref=${GITHUB_BRANCH}" \
@@ -476,7 +519,6 @@ main_menu() {
 # ── entry point ────────────────────────────────────────────────────────────────
 load_config
 check_deps
-resolve_token
 
 case "${1:-menu}" in
   setup)       run_setup ;;
