@@ -58,7 +58,8 @@ banner() {
 resolve_token() {
   # ── auto-detected sources — announce so user always knows what's in use ──
   if [[ -n "${GITHUB_TOKEN:-}" ]]; then
-    return 0   # already resolved this session
+    ok "Token already set (${GITHUB_TOKEN:0:4}••••••••)"
+    return 0
   fi
 
   if [[ -n "${GH_TOKEN:-}" ]]; then
@@ -216,8 +217,12 @@ pick_branch() {
 
 pick_file() {
   local path
-  read -rp "  ${1:-Path}: " path
-  path="${path/#\~/$HOME}"
+  while true; do
+    read -rp "  ${1:-Path}: " path
+    path="${path/#\~/$HOME}"
+    [[ -e "$path" ]] && break
+    warn "Path does not exist: $path"
+  done
   echo "$path"
 }
 
@@ -466,7 +471,7 @@ do_list() {
 
 # ── interactive menu ───────────────────────────────────────────────────────────
 show_config_summary() {
-  local tok_hint="(none)"
+  local tok_hint="(not set)"
   [[ -n "$GITHUB_TOKEN" ]] && tok_hint="${GITHUB_TOKEN:0:4}••••••••"
   if [[ -n "$GITHUB_REPO" ]]; then
     echo -e "  ${C}User:${N} $GITHUB_USER  ${C}Repo:${N} $GITHUB_REPO  ${C}Branch:${N} $GITHUB_BRANCH  ${C}Folder:${N} /${UPLOAD_DIR:-}  ${C}LFS:${N} $USE_LFS"
