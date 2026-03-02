@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "axe-core": "^4.11.1",
+    "html-validate": "^10.9.0"
+  }
+}
