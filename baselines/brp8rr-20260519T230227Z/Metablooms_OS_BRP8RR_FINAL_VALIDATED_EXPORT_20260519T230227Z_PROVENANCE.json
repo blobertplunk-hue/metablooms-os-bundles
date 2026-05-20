@@ -1,0 +1,24 @@
+{
+  "artifact": "Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z.zip",
+  "artifact_sha256": "70c2e88614107a0a69acd01b3e2d35ca7eaad4fa7d88f236851c8677ac9369d2",
+  "build_type": "metablooms.root-content.zip.repair.wrapper-purge.v1",
+  "builder": {
+    "environment": "ChatGPT sandbox",
+    "method": "python3 -S zipfile root-content deterministic rebuild excluding archive-root wrapper directory",
+    "root": "/mnt/data/Metablooms_OS"
+  },
+  "created_utc": "20260519T230227Z",
+  "external_parameters": {
+    "archive_layout": "root-content-no-wrapper-directory",
+    "baseline_promotion_status": "not_promoted_until_BRP8_9_retry",
+    "required_absent_prefixes": ["Metablooms_OS/"],
+    "required_archive_members": [
+      "scripts/mpp/mpp.sh",
+      "METABLOOMS_PREBOOT_RESCUE_v1.sh",
+      "runtime/evals/sandbox_governance/H0B2_PORTABLE_VERIFIER_SMOKE_RESULTS.json.sha256"
+    ]
+  },
+  "sidecar": "Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z.zip.sha256",
+  "source_worktree": "/mnt/data/Metablooms_OS",
+  "stage": "BRP8-8RR_REMOVE_STRAY_WRAPPER_MEMBERS_AND_RESEAL_EXPORT"
+}
