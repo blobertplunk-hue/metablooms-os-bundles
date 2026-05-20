@@ -1,0 +1,29 @@
+{
+  "status": "FILTERED_BACKUP_BRANCH_CREATED_CORE_RECOVERY_SET_PRESENT",
+  "repository": "blobertplunk-hue/metablooms-os-bundles",
+  "branch": "backup/brp8rr-20260519T230227Z-filtered",
+  "baseline_sha256": "70c2e88614107a0a69acd01b3e2d35ca7eaad4fa7d88f236851c8677ac9369d2",
+  "baseline_zip": "Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z.zip",
+  "core_files_expected": [
+    "README.md",
+    "BRP8RR_BASELINE_ZIP_SHA256.txt",
+    "Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z_PROVENANCE.json",
+    "CURRENT_REPLACEMENT_BASELINE_POINTER_v1.json",
+    "BRP8_9_FINAL_BASELINE_PROMOTION_RECEIPT.json"
+  ],
+  "not_committed_to_git": [
+    {
+      "file": "Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z.zip",
+      "reason": "large binary approximately 136MB; should remain release/sandbox artifact or Git LFS asset, not ordinary Git file"
+    },
+    {
+      "file": "POST_BRP8RR_BASELINE_PROMOTION_EVIDENCE_20260519T231552Z.zip.b64",
+      "reason": "connector write did not complete; core restore-critical metadata already committed"
+    }
+  ],
+  "known_local_hygiene_issue": {
+    "active_tracker_preview": "stale at BRP8-4 in current worktree after post-promotion boot; should be repaired in a later hygiene stage"
+  },
+  "created_by_stage": "POST_BRP8RR_BACKUP_BRANCH_MANIFEST_AND_FILTERED_BATCH_PUSH",
+  "created_utc": "2026-05-20T00:40:00Z"
+}

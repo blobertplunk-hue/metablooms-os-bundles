@@ -1,0 +1,24 @@
+{
+  "artifact_type": "CURRENT_REPLACEMENT_BASELINE_POINTER_v1",
+  "decision": "ACTIVE_REPLACEMENT_BASELINE_EXPORTED_WITH_SHA_AND_PROVENANCE",
+  "export_filename": "Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z.zip",
+  "external_provenance_required": true,
+  "external_sha_sidecar_required": true,
+  "next_authorized_stage": "POST_BRP8_BASELINE_OPERATIONS_OR_USER_SELECTED_WORKFLOW",
+  "selected_authority_provenance": "/mnt/data/Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z_PROVENANCE.json",
+  "selected_authority_sha256": "70c2e88614107a0a69acd01b3e2d35ca7eaad4fa7d88f236851c8677ac9369d2",
+  "selected_authority_sha256_sidecar": "/mnt/data/Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z.zip.sha256",
+  "selected_authority_zip": "/mnt/data/Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z.zip",
+  "stage_id": "BRP8-9_BASELINE_PROMOTION_AND_COLD_REBOOT_SMOKE_RETRY_FINAL",
+  "status": "BRP8RR_FINAL_BASELINE_ACTIVE",
+  "updated_utc": "2026-05-19T23:09:55Z",
+  "validated_invariants": {
+    "archive_root_boot_script": true,
+    "archive_root_rescue_script": true,
+    "cold_boot_pass": true,
+    "cold_extract_root_layout": true,
+    "provenance_binds_digest": true,
+    "root_layout_no_wrapper_members": true,
+    "zip_sha_sidecar_match": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "artifact_type": "BRP8_9_FINAL_BASELINE_PROMOTION_RECEIPT",
+  "stage": "BRP8-9_BASELINE_PROMOTION_AND_COLD_REBOOT_SMOKE_RETRY_FINAL",
+  "status": "BASELINE_PROMOTED",
+  "decision": "PASS",
+  "updated_utc": "2026-05-19T23:11:55Z",
+  "cold_boot_rc": "0",
+  "final_lint_decision": "PASS",
+  "ecig_decision": "PASS",
+  "zip_member_count": 20790,
+  "promoted_baseline": {
+    "export_filename": "Metablooms_OS_BRP8RR_FINAL_VALIDATED_EXPORT_20260519T230227Z.zip",
+    "selected_authority_sha256": "70c2e88614107a0a69acd01b3e2d35ca7eaad4fa7d88f236851c8677ac9369d2",
+    "status": "BRP8RR_FINAL_BASELINE_ACTIVE"
+  },
+  "validation_summary": {
+    "archive_root_boot_script": true,
+    "archive_root_rescue_script": true,
+    "cold_boot_pass": true,
+    "cold_extract_root_layout": true,
+    "provenance_binds_digest": true,
+    "root_layout_no_wrapper_members": true,
+    "zip_sha_sidecar_match": true
+  }
+}
