@@ -1,0 +1,73 @@
+{
+  "schema": "metablooms.repo_delta_backup.v1",
+  "stage": "REPO-DELTA-BACKUP-1_POINTER_AND_LOCAL_RECEIPTS",
+  "created_at_utc": "2026-05-21T01:23:50Z",
+  "source_stage": "CLEAN-EXPORT-1_FULL_EXPORT_AND_COLD_RESTORE_PROOF",
+  "source_status": "PASS_CLEAN_EXPORT_1_COLD_RESTORE_PROVEN_NO_PUBLIC_RELEASE",
+  "repository_target": "blobertplunk-hue/metablooms-os-bundles",
+  "backup_kind": "repo_pointer_manifest_plus_local_binary_artifacts",
+  "large_binary_upload_status": "NOT_ATTEMPTED_VIA_TEXT_CONNECTOR_SIZE_UNSUITABLE",
+  "large_binary_upload_note": "GitHub connector exposes text/file-content APIs; 151MB ZST and 391MB ZIP are retained as ChatGPT artifacts/local /mnt/data files, while this repo delta records hashes, provenance, and restore instructions.",
+  "artifacts": [
+    {
+      "name": "METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.zst",
+      "path": "/mnt/data/METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.zst",
+      "size_bytes": 157535864,
+      "sha256": "a239bed870a413a9a5a61d2f010d6dff9d0823fd88423dacf87afacf7afa45da"
+    },
+    {
+      "name": "METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.zst.sha256",
+      "path": "/mnt/data/METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.zst.sha256",
+      "size_bytes": 144,
+      "sha256": "d7d9cecf7f09851ab1de13ef23e0f55b42aaf23ad35b93e850dc193eb9737209"
+    },
+    {
+      "name": "METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.zst.provenance.json",
+      "path": "/mnt/data/METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.zst.provenance.json",
+      "size_bytes": 610,
+      "sha256": "b323dcaf2e0f0e3fd7641d4a19a43f01826fac837fab7fa09c4684c94db0b3d3"
+    },
+    {
+      "name": "METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip",
+      "path": "/mnt/data/METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip",
+      "size_bytes": 409858548,
+      "sha256": "4c5bd706a37ec9b1cea528bb8f4d74980731025c73ef1b41718892b587a3c03c"
+    },
+    {
+      "name": "METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.sha256",
+      "path": "/mnt/data/METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.sha256",
+      "size_bytes": 130,
+      "sha256": "d20ef9eb6c8719fb6e785d53666fa07c15f357863854b1454157fb6ed70c8106"
+    },
+    {
+      "name": "METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.provenance.json",
+      "path": "/mnt/data/METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.provenance.json",
+      "size_bytes": 657,
+      "sha256": "c18842816288eb599e08c27c7c85c2591102fe248750002a2e4a4500799ddbb2"
+    },
+    {
+      "name": "CLEAN_EXPORT_1_20260521T010420Z_RECEIPTS.zip",
+      "path": "/mnt/data/CLEAN_EXPORT_1_20260521T010420Z_RECEIPTS.zip",
+      "size_bytes": 100839,
+      "sha256": "93ece81cf25192430a2b24a1ac16029d9672e6e8bfedf0b0f0b6682ae3e04824"
+    },
+    {
+      "name": "CLEAN_EXPORT_1_20260521T010420Z_RECEIPTS.zip.sha256",
+      "path": "/mnt/data/CLEAN_EXPORT_1_20260521T010420Z_RECEIPTS.zip.sha256",
+      "size_bytes": 121,
+      "sha256": "58ba804858916c6d5d993859f1b0fa0bc055674a95cbbfcf6b6ba34b4a793baa"
+    },
+    {
+      "name": "CLEAN_EXPORT_1_20260521T010420Z_RECEIPTS.zip.provenance.json",
+      "path": "/mnt/data/CLEAN_EXPORT_1_20260521T010420Z_RECEIPTS.zip.provenance.json",
+      "size_bytes": 353,
+      "sha256": "2bdffbd3fd983446463f6fa54e9fbe6b6f35cb97c0514f01846fb3a0ca76820a"
+    }
+  ],
+  "restore_priority": [
+    "Use ZST if available and sha256 matches",
+    "Fallback to raw ZIP if ZST unavailable",
+    "Use receipt bundle for audit trail"
+  ],
+  "next_optional": "GitHub Release/LFS upload of ZST outside this connector if durable binary storage is required"
+}
