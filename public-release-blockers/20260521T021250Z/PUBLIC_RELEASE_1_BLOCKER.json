@@ -1,0 +1,23 @@
+{
+  "schema": "metablooms.public_release_blocker.v1",
+  "stage": "PUBLIC-RELEASE-1_GITHUB_RELEASE_OR_LFS_BINARY_UPLOAD",
+  "created_at_utc": "2026-05-21T02:12:50Z",
+  "decision": "BLOCKED_NO_RELEASE_UPLOAD_CAPABILITY_IN_AVAILABLE_GITHUB_CONNECTOR",
+  "official_github_release_capacity": {
+    "release_asset_per_file_limit": "under 2 GiB",
+    "asset_count_per_release_limit": 1000,
+    "source": "GitHub Docs - About releases"
+  },
+  "artifact_to_publish": {
+    "name": "METABLOOMS_OS_CLEAN_EXPORT_1_FINAL_PATCHED_20260521T010420Z.zip.zst",
+    "size_bytes": 157535864,
+    "sha256": "a239bed870a413a9a5a61d2f010d6dff9d0823fd88423dacf87afacf7afa45da"
+  },
+  "fallback_available": "repo pointer backup committed at repo-delta-backups/20260521T012350Z/",
+  "non_claims": [
+    "No GitHub Release was created",
+    "No Git LFS object was uploaded",
+    "No public binary URL was produced"
+  ],
+  "required_external_action": "Use GitHub web UI, gh release upload, or API endpoint with upload_url-capable token to attach the ZST artifact to a release."
+}
